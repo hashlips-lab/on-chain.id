@@ -1,0 +1,5 @@
+{
+  "solidity.packageDefaultDependenciesDirectory": "hardhat/node_modules",
+  "solidity.compileUsingRemoteVersion": "0.8.11",
+  "editor.tabSize": 2
+}

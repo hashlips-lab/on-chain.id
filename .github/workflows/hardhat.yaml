@@ -1,0 +1,31 @@
+name: Hardhat tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/hardhat.yaml"
+      - "hardhat/**"
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          cache: yarn
+          cache-dependency-path: hardhat/yarn.lock
+
+      - name: Yarn install
+        run: cd ./hardhat && yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run tests
+        run: cd ./hardhat && yarn hardhat test

@@ -1,0 +1,13 @@
+{
+  "name": "@hashlips-lab/on-chain-id",
+  "description": "A proof of concept for an on-chain identity service on the OASIS Network",
+  "author": "Marco Lipparini <developer@liarco.net>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hashlips-lab/on-chain.id.git"
+  },
+  "scripts": {
+    "build": "cd ./nextjs; yarn; yarn build; yarn next export"
+  }
+}
