@@ -150,8 +150,8 @@ describe("OnChainId", function () {
 
       // Adding two entries at once
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
       ]);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(GITHUB_HASH);
@@ -162,8 +162,8 @@ describe("OnChainId", function () {
 
       // Adding two entries at once (with an already existing one)
       await contractU1.writeMultipleData([
-        { key: GITHUB_HASH, data: "OpenCoder92" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: GITHUB_HASH, data: "OpenCoder92" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
@@ -175,9 +175,9 @@ describe("OnChainId", function () {
 
       // Updating all entries at once
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#4567" },
-        { key: GITHUB_HASH, data: "OpenCoder98" },
-        { key: THIRD_PARTY_DATA_HASH, data: "42" },
+        { key: DISCORD_HASH, data: "MyUsername#4567" },
+        { key: GITHUB_HASH, data: "OpenCoder98" },
+        { key: THIRD_PARTY_DATA_HASH, data: "42" },
       ]);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
@@ -278,9 +278,9 @@ describe("OnChainId", function () {
       const contractU1 = onChainId.connect(user1);
 
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#4567" },
-        { key: GITHUB_HASH, data: "OpenCoder98" },
-        { key: THIRD_PARTY_DATA_HASH, data: "42" },
+        { key: DISCORD_HASH, data: "MyUsername#4567" },
+        { key: GITHUB_HASH, data: "OpenCoder98" },
+        { key: THIRD_PARTY_DATA_HASH, data: "42" },
       ]);
 
       // Adding providers
@@ -316,9 +316,9 @@ describe("OnChainId", function () {
       const contractU1 = onChainId.connect(user1);
 
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
 
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(0);
@@ -408,16 +408,16 @@ describe("OnChainId", function () {
 
       // User 1
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
 
       // User 2
       await contractU2.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#4567" },
-        { key: GITHUB_HASH, data: "OpenCoder92" },
-        { key: THIRD_PARTY_DATA_HASH, data: "42" },
+        { key: DISCORD_HASH, data: "MyUsername#4567" },
+        { key: GITHUB_HASH, data: "OpenCoder92" },
+        { key: THIRD_PARTY_DATA_HASH, data: "42" },
       ]);
       await contractU2.writePermissions(provider1.getAddress(), [
         { key: DISCORD_HASH, canRead: true },
@@ -493,9 +493,9 @@ describe("OnChainId", function () {
 
       // User 1
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
 
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(0);
