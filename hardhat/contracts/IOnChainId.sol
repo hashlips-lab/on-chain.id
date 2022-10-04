@@ -49,7 +49,7 @@ interface IOnChainId {
 
   function getLastDataEntry() external view returns(bytes32);
 
-  function getDataEntries(bytes32 _startKey, uint256 _maxResults) external view returns(PrivateDataValue[] memory);
+  function getDataEntries(bytes32 _previousKey, uint256 _maxResults) external view returns(PrivateDataValue[] memory);
 
   function writePermissions(address _provider, PermissionValue[] memory _permissions, uint64 _expiration) external;
 
@@ -63,7 +63,7 @@ interface IOnChainId {
 
   function getLastPermissionsEntry() external view returns(address);
 
-  function getAllowedProviders(address _startProvider, uint256 _maxResults) external view returns(address[] memory);
+  function getAllowedProviders(address _previousProvider, uint256 _maxResults) external view returns(address[] memory);
 
   function getExpiration(address _provider) external view returns(uint64);
 

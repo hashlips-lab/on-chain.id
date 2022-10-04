@@ -107,10 +107,10 @@ contract OnChainId is IOnChainId {
     return privateDataLastEntry[msg.sender];
   }
 
-  function getDataEntries(bytes32 _startKey, uint256 _maxResults) public view returns(PrivateDataValue[] memory) {
+  function getDataEntries(bytes32 _previousKey, uint256 _maxResults) public view returns(PrivateDataValue[] memory) {
     PrivateDataValue[] memory entries = new PrivateDataValue[](_maxResults);
     uint256 currentEntryIndex = 0;
-    bytes32 currentKey = _startKey;
+    bytes32 currentKey = _previousKey == 0 ? getFirstDataEntry() : privateDataStorage[msg.sender][_previousKey].next;
     PrivateDataEntry memory currentPrivateData = privateDataStorage[msg.sender][currentKey];
 
     while (_isValidKey(currentKey) && !_isPrivateDataEmpty(currentPrivateData) && currentEntryIndex < _maxResults) {
@@ -194,10 +194,10 @@ contract OnChainId is IOnChainId {
     return permissionsLastEntry[msg.sender];
   }
 
-  function getAllowedProviders(address _startProvider, uint256 _maxResults) public view returns(address[] memory) {
+  function getAllowedProviders(address _previousProvider, uint256 _maxResults) public view returns(address[] memory) {
     address[] memory entries = new address[](_maxResults);
     uint256 currentProviderIndex = 0;
-    address currentProvider = _startProvider;
+    address currentProvider = _previousProvider == address(0) ? getFirstPermissionsEntry() : permissionsStorage[msg.sender][_previousProvider].next;
 
     while (
       _isValidProvider(currentProvider) &&
@@ -223,12 +223,12 @@ contract OnChainId is IOnChainId {
 
   function getPermissions(
     address _provider,
-    bytes32 _startKey,
+    bytes32 _previousKey,
     uint256 _maxResults
   ) public view returns(PermissionValue[] memory) {
     PermissionValue[] memory entries = new PermissionValue[](_maxResults);
     uint256 currentEntryIndex = 0;
-    bytes32 currentKey = _startKey;
+    bytes32 currentKey = _previousKey == 0 ? getFirstDataEntry() : privateDataStorage[msg.sender][_previousKey].next;
     PrivateDataEntry memory currentPrivateData = privateDataStorage[msg.sender][currentKey];
 
     while (_isValidKey(currentKey) && !_isPrivateDataEmpty(currentPrivateData) && currentEntryIndex < _maxResults) {

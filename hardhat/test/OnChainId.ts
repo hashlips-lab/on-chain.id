@@ -47,13 +47,13 @@ describe("OnChainId", function () {
 
       expect(await contractU1.getFirstDataEntry()).eq(ethers.constants.HashZero);
       expect(await contractU1.getLastDataEntry()).eq(ethers.constants.HashZero);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([]);
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([]);
 
       // Adding Discord entry
       await contractU1.writeData(DISCORD_HASH, "MyUsername#1234");
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(DISCORD_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
       ]);
 
@@ -61,7 +61,7 @@ describe("OnChainId", function () {
       await contractU1.writeData(GITHUB_HASH, "OpenCoder90");
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(GITHUB_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
         [GITHUB_HASH, "OpenCoder90"],
       ]);
@@ -70,24 +70,24 @@ describe("OnChainId", function () {
       await contractU1.writeData(THIRD_PARTY_DATA_HASH, "12");
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
         [GITHUB_HASH, "OpenCoder90"],
         [THIRD_PARTY_DATA_HASH, "12"],
       ]);
 
       // Check partial retrivial
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 1)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 1)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
       ]);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 2)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 2)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
         [GITHUB_HASH, "OpenCoder90"],
       ]);
-      expect(await contractU1.getDataEntries(contractU1.getLastDataEntry(), 2)).deep.eq([
+      expect(await contractU1.getDataEntries(GITHUB_HASH, 2)).deep.eq([
         [THIRD_PARTY_DATA_HASH, "12"],
       ]);
-      expect(await contractU1.getDataEntries(GITHUB_HASH, 2)).deep.eq([
+      expect(await contractU1.getDataEntries(DISCORD_HASH, 2)).deep.eq([
         [GITHUB_HASH, "OpenCoder90"],
         [THIRD_PARTY_DATA_HASH, "12"],
       ]);
@@ -96,7 +96,7 @@ describe("OnChainId", function () {
       await contractU1.deleteData(GITHUB_HASH);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
         [THIRD_PARTY_DATA_HASH, "12"],
       ]);
@@ -105,7 +105,7 @@ describe("OnChainId", function () {
       await contractU1.deleteData(DISCORD_HASH);
       expect(await contractU1.getFirstDataEntry()).eq(THIRD_PARTY_DATA_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [THIRD_PARTY_DATA_HASH, "12"],
       ]);
 
@@ -113,7 +113,7 @@ describe("OnChainId", function () {
       await contractU1.deleteData(THIRD_PARTY_DATA_HASH);
       expect(await contractU1.getFirstDataEntry()).eq(ethers.constants.HashZero);
       expect(await contractU1.getLastDataEntry()).eq(ethers.constants.HashZero);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([]);
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([]);
     });
 
     it("Using invalid keys", async function () {
@@ -150,24 +150,24 @@ describe("OnChainId", function () {
 
       // Adding two entries at once
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
       ]);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(GITHUB_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
         [GITHUB_HASH, "OpenCoder90"],
       ]);
 
       // Adding two entries at once (with an already existing one)
       await contractU1.writeMultipleData([
-        { key: GITHUB_HASH, data: "OpenCoder92" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: GITHUB_HASH, data: "OpenCoder92" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#1234"],
         [GITHUB_HASH, "OpenCoder92"],
         [THIRD_PARTY_DATA_HASH, "12"],
@@ -175,13 +175,13 @@ describe("OnChainId", function () {
 
       // Updating all entries at once
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#4567" },
-        { key: GITHUB_HASH, data: "OpenCoder98" },
-        { key: THIRD_PARTY_DATA_HASH, data: "42" },
+        { key: DISCORD_HASH, data: "MyUsername#4567" },
+        { key: GITHUB_HASH, data: "OpenCoder98" },
+        { key: THIRD_PARTY_DATA_HASH, data: "42" },
       ]);
       expect(await contractU1.getFirstDataEntry()).eq(DISCORD_HASH);
       expect(await contractU1.getLastDataEntry()).eq(THIRD_PARTY_DATA_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [DISCORD_HASH, "MyUsername#4567"],
         [GITHUB_HASH, "OpenCoder98"],
         [THIRD_PARTY_DATA_HASH, "42"],
@@ -191,7 +191,7 @@ describe("OnChainId", function () {
       await contractU1.deleteMultipleData([DISCORD_HASH, THIRD_PARTY_DATA_HASH]);
       expect(await contractU1.getFirstDataEntry()).eq(GITHUB_HASH);
       expect(await contractU1.getLastDataEntry()).eq(GITHUB_HASH);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([
         [GITHUB_HASH, "OpenCoder98"],
       ]);
 
@@ -199,7 +199,7 @@ describe("OnChainId", function () {
       await contractU1.deleteMultipleData([GITHUB_HASH]);
       expect(await contractU1.getFirstDataEntry()).eq(ethers.constants.HashZero);
       expect(await contractU1.getLastDataEntry()).eq(ethers.constants.HashZero);
-      expect(await contractU1.getDataEntries(contractU1.getFirstDataEntry(), 100)).deep.eq([]);
+      expect(await contractU1.getDataEntries(ethers.constants.HashZero, 100)).deep.eq([]);
     });
 
     it("Adding/removing providers", async function () {
@@ -212,7 +212,7 @@ describe("OnChainId", function () {
 
       expect(await contractU1.getFirstPermissionsEntry()).eq(ethers.constants.AddressZero);
       expect(await contractU1.getLastPermissionsEntry()).eq(ethers.constants.AddressZero);
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([]);
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([]);
 
       // Adding provider1
       await contractU1.writePermissions(provider1.getAddress(), [
@@ -220,7 +220,7 @@ describe("OnChainId", function () {
       ], await contractU1.NO_EXPIRATION_VALUE());
       expect(await contractU1.getFirstPermissionsEntry()).eq(await provider1.getAddress());
       expect(await contractU1.getLastPermissionsEntry()).eq(await provider1.getAddress());
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([
         await provider1.getAddress(),
       ]);
 
@@ -230,7 +230,7 @@ describe("OnChainId", function () {
       ], await contractU1.NO_EXPIRATION_VALUE());
       expect(await contractU1.getFirstPermissionsEntry()).eq(await provider1.getAddress());
       expect(await contractU1.getLastPermissionsEntry()).eq(await provider2.getAddress());
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([
         await provider1.getAddress(),
         await provider2.getAddress(),
       ]);
@@ -242,7 +242,7 @@ describe("OnChainId", function () {
       ], await contractU1.NO_EXPIRATION_VALUE());
       expect(await contractU1.getFirstPermissionsEntry()).eq(await provider1.getAddress());
       expect(await contractU1.getLastPermissionsEntry()).eq(await provider3.getAddress());
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([
         await provider1.getAddress(),
         await provider2.getAddress(),
         await provider3.getAddress(),
@@ -252,7 +252,7 @@ describe("OnChainId", function () {
       await contractU1.disableProvider(provider2.getAddress());
       expect(await contractU1.getFirstPermissionsEntry()).eq(await provider1.getAddress());
       expect(await contractU1.getLastPermissionsEntry()).eq(await provider3.getAddress());
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([
         await provider1.getAddress(),
         await provider3.getAddress(),
       ]);
@@ -261,7 +261,7 @@ describe("OnChainId", function () {
       await contractU1.disableProvider(provider1.getAddress());
       expect(await contractU1.getFirstPermissionsEntry()).eq(await provider3.getAddress());
       expect(await contractU1.getLastPermissionsEntry()).eq(await provider3.getAddress());
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([
         await provider3.getAddress(),
       ]);
 
@@ -269,7 +269,7 @@ describe("OnChainId", function () {
       await contractU1.disableProvider(provider3.getAddress());
       expect(await contractU1.getFirstPermissionsEntry()).eq(ethers.constants.AddressZero);
       expect(await contractU1.getLastPermissionsEntry()).eq(ethers.constants.AddressZero);
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([]);
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([]);
     });
 
     it("Adding/removing multiple providers", async function () {
@@ -278,9 +278,9 @@ describe("OnChainId", function () {
       const contractU1 = onChainId.connect(user1);
 
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#4567" },
-        { key: GITHUB_HASH, data: "OpenCoder98" },
-        { key: THIRD_PARTY_DATA_HASH, data: "42" },
+        { key: DISCORD_HASH, data: "MyUsername#4567" },
+        { key: GITHUB_HASH, data: "OpenCoder98" },
+        { key: THIRD_PARTY_DATA_HASH, data: "42" },
       ]);
 
       // Adding providers
@@ -299,7 +299,7 @@ describe("OnChainId", function () {
       await contractU1.disableProviders([provider1.getAddress(), provider3.getAddress()]);
       expect(await contractU1.getFirstPermissionsEntry()).eq(await provider2.getAddress());
       expect(await contractU1.getLastPermissionsEntry()).eq(await provider2.getAddress());
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([
         await provider2.getAddress(),
       ]);
 
@@ -307,7 +307,7 @@ describe("OnChainId", function () {
       await contractU1.disableProviders([provider2.getAddress()]);
       expect(await contractU1.getFirstPermissionsEntry()).eq(ethers.constants.AddressZero);
       expect(await contractU1.getLastPermissionsEntry()).eq(ethers.constants.AddressZero);
-      expect(await contractU1.getAllowedProviders(contractU1.getFirstPermissionsEntry(), 100)).deep.eq([]);
+      expect(await contractU1.getAllowedProviders(ethers.constants.AddressZero, 100)).deep.eq([]);
     });
 
     it("Fetching data (user)", async function () {
@@ -316,16 +316,16 @@ describe("OnChainId", function () {
       const contractU1 = onChainId.connect(user1);
 
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
 
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(0);
 
       expect(await contractU1.getPermissions(
         provider1.getAddress(),
-        await contractU1.getFirstDataEntry(),
+        ethers.constants.HashZero,
       100)).deep.eq([
         [DISCORD_HASH, false],
         [GITHUB_HASH, false],
@@ -340,7 +340,7 @@ describe("OnChainId", function () {
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(await contractU1.NO_EXPIRATION_VALUE());
       expect(await contractU1.getPermissions(
         provider1.getAddress(),
-        await contractU1.getFirstDataEntry(),
+        ethers.constants.HashZero,
       100)).deep.eq([
         [DISCORD_HASH, true],
         [GITHUB_HASH, true],
@@ -350,7 +350,7 @@ describe("OnChainId", function () {
       // Fetching partial result
       expect(await contractU1.getPermissions(
         provider1.getAddress(),
-        await contractU1.getFirstDataEntry(),
+        ethers.constants.HashZero,
       2)).deep.eq([
         [DISCORD_HASH, true],
         [GITHUB_HASH, true],
@@ -359,14 +359,13 @@ describe("OnChainId", function () {
         provider1.getAddress(),
         GITHUB_HASH,
       2)).deep.eq([
-        [GITHUB_HASH, true],
         [THIRD_PARTY_DATA_HASH, false],
       ]);
       expect(await contractU1.getPermissions(
         provider1.getAddress(),
         DISCORD_HASH,
       1)).deep.eq([
-        [DISCORD_HASH, true],
+        [GITHUB_HASH, true],
       ]);
 
       // Updating permissions
@@ -377,7 +376,7 @@ describe("OnChainId", function () {
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(await contractU1.NO_EXPIRATION_VALUE());
       expect(await contractU1.getPermissions(
         provider1.getAddress(),
-        await contractU1.getFirstDataEntry(),
+        ethers.constants.HashZero,
       100)).deep.eq([
         [DISCORD_HASH, false],
         [GITHUB_HASH, true],
@@ -389,7 +388,7 @@ describe("OnChainId", function () {
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(0);
       expect(await contractU1.getPermissions(
         provider1.getAddress(),
-        await contractU1.getFirstDataEntry(),
+        ethers.constants.HashZero,
       100)).deep.eq([
         [DISCORD_HASH, false],
         [GITHUB_HASH, true],
@@ -408,16 +407,16 @@ describe("OnChainId", function () {
 
       // User 1
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
 
       // User 2
       await contractU2.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#4567" },
-        { key: GITHUB_HASH, data: "OpenCoder92" },
-        { key: THIRD_PARTY_DATA_HASH, data: "42" },
+        { key: DISCORD_HASH, data: "MyUsername#4567" },
+        { key: GITHUB_HASH, data: "OpenCoder92" },
+        { key: THIRD_PARTY_DATA_HASH, data: "42" },
       ]);
       await contractU2.writePermissions(provider1.getAddress(), [
         { key: DISCORD_HASH, canRead: true },
@@ -493,9 +492,9 @@ describe("OnChainId", function () {
 
       // User 1
       await contractU1.writeMultipleData([
-        { key: DISCORD_HASH, data: "MyUsername#1234" },
-        { key: GITHUB_HASH, data: "OpenCoder90" },
-        { key: THIRD_PARTY_DATA_HASH, data: "12" },
+        { key: DISCORD_HASH, data: "MyUsername#1234" },
+        { key: GITHUB_HASH, data: "OpenCoder90" },
+        { key: THIRD_PARTY_DATA_HASH, data: "12" },
       ]);
 
       expect(await contractU1.getExpiration(provider1.getAddress())).eq(0);
