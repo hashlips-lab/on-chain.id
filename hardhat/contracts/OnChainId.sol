@@ -223,12 +223,12 @@ contract OnChainId is IOnChainId {
 
   function getPermissions(
     address _provider,
-    bytes32 _startKey,
+    bytes32 _previousKey,
     uint256 _maxResults
   ) public view returns(PermissionValue[] memory) {
     PermissionValue[] memory entries = new PermissionValue[](_maxResults);
     uint256 currentEntryIndex = 0;
-    bytes32 currentKey = _startKey;
+    bytes32 currentKey = _previousKey == 0 ? getFirstDataEntry() : privateDataStorage[msg.sender][_previousKey].next;
     PrivateDataEntry memory currentPrivateData = privateDataStorage[msg.sender][currentKey];
 
     while (_isValidKey(currentKey) && !_isPrivateDataEmpty(currentPrivateData) && currentEntryIndex < _maxResults) {
