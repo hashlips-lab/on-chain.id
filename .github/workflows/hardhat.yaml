@@ -8,6 +8,9 @@ on:
       - ".github/workflows/hardhat.yaml"
       - "hardhat/**"
   pull_request:
+    paths:
+      - ".github/workflows/nextjs-build.yaml"
+      - "nextjs/**"
 
 jobs:
   tests:
