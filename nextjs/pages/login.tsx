@@ -26,7 +26,12 @@ const Login: NextPage = () => {
         <div className={styles.logo_section}>
           <div className={styles.welcome}>Welcome to</div>
           <div className={styles.logo}>
-            <Image src="./images/logo.svg" width={261} height={222} />
+            <Image
+              src="./images/logo.svg"
+              width={261}
+              height={222}
+              alt="On chain ID"
+            />
           </div>
           <div className={styles.questions}>Questions?</div>
           <div className={styles.faq}>
@@ -37,8 +42,8 @@ const Login: NextPage = () => {
       <div className={styles.right_content}>
         <h1>Sign in with your wallet</h1>
         <p>
-          If you don't have a wallet yet, you can select a provider and create
-          one now.
+          If you don&#39;t have a wallet yet, you can select a provider and
+          create one now.
         </p>
 
         <ul>
@@ -46,7 +51,7 @@ const Login: NextPage = () => {
             return (
               <li className={styles.wallet} key={i}>
                 <div className={styles.icon}>
-                  <Image src={icon} width={36} height={36} />
+                  <Image src={icon} width={36} height={36} alt={description} />
                 </div>
 
                 <div>{description}</div>
