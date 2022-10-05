@@ -11,7 +11,7 @@ const UnsavedModal = () => {
         </p>
 
         <div className={styles.buttonWrapper}>
-          <button className={styles.redBorderWhiteBgBtn}>IT’s FINE</button>
+          <button className={styles.redBorderWhiteBgBtn}>IT’S FINE</button>
           <button className={styles.blueWhiteTextBtn}>TAKE ME BACK</button>
         </div>
       </div>

@@ -5,6 +5,11 @@
 
   @screen lg {
     @apply flex-row;
+    @apply h-auto;
+  }
+
+  @screen xl {
+    @apply flex-row;
     @apply h-screen;
   }
 
@@ -23,7 +28,7 @@
     }
 
     .welcome {
-      @apply font-semibold text-[2.25rem] leading-[3.375rem] font-poppins;
+      @apply font-semibold text-[2.25rem] leading-[3.375rem] font-poppins text-white;
       @apply mb-[1.5rem];
     }
 
@@ -32,12 +37,12 @@
     }
 
     .questions {
-      @apply font-semibold text-[1.5rem] leading-[2.25rem] font-poppins;
+      @apply font-semibold text-[1.5rem] leading-[2.25rem] font-poppins text-white;
       @apply mb-[0.75rem]
     }
 
     .faq {
-      @apply font-urbanist text-[1.5rem] leading-[1.8125rem] font-normal;
+      @apply font-urbanist text-[1.5rem] leading-[1.8125rem] font-normal text-white;
 
       a {
         @apply font-bold;
@@ -49,7 +54,11 @@
     @apply bg-white;
     @apply flex flex-col justify-center;
     @apply min-w-[70%];
-    @apply px-[6.875rem] py-[9.1875rem];
+    @apply px-[3.125rem] py-[4.6875rem];
+
+    @screen xl {
+      @apply px-[6.875rem] py-[9.1875rem];
+    }
 
     h1 {
       @apply font-poppins font-semibold text-center text-[3rem] leading-[4.5rem] text-[#000];
