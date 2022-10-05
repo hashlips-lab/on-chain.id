@@ -23,23 +23,23 @@
     }
 
     .welcome {
-      @apply font-semibold text-[36px] leading-[54px] font-poppins;
-      @apply mb-[24px];
+      @apply font-semibold text-[2.25rem] leading-[3.375rem] font-poppins;
+      @apply mb-[1.5rem];
     }
 
     .logo {
-      @apply mb-[72px];
+      @apply mb-[4.5rem];
     }
 
     .questions {
-      @apply font-semibold text-[24px] leading-[36px] font-poppins;
-      @apply mb-[12px]
+      @apply font-semibold text-[1.5rem] leading-[2.25rem] font-poppins;
+      @apply mb-[0.75rem]
     }
 
     .faq {
-      @apply font-urbanist text-[24px] leading-[29px] font-normal;
+      @apply font-urbanist text-[1.5rem] leading-[1.8125rem] font-normal;
 
-      span {
+      a {
         @apply font-bold;
       }
     }
@@ -49,36 +49,36 @@
     @apply bg-white;
     @apply flex flex-col justify-center;
     @apply min-w-[70%];
-    @apply px-[110px] py-[147px];
+    @apply px-[6.875rem] py-[9.1875rem];
 
     h1 {
-      @apply font-poppins font-semibold text-center text-[48px] leading-[72px] text-[#000];
-      @apply mb-[12px];
+      @apply font-poppins font-semibold text-center text-[3rem] leading-[4.5rem] text-[#000];
+      @apply mb-[0.75rem];
     }
 
     p {
-      @apply font-urbanist text-center text-[24px] text-[#000] leading-[29px] font-normal;
-      @apply mb-[36px];
-      @apply max-w-[581px];
+      @apply font-urbanist text-center text-[1.5rem] text-[#000] leading-[1.8125rem] font-normal;
+      @apply mb-[2.25rem];
+      @apply max-w-[36.3125rem];
       @apply flex justify-center items-center self-center;
     }
 
     ul {
-      @apply mb-[36px];
+      @apply mb-[2.25rem];
 
       button {
-        @apply rounded-[12px];
-        @apply border-[#939393] border-[2px];
-        @apply w-[100%] h-[60px];
+        @apply rounded-[0.75rem];
+        @apply border-[#939393] border-[0.125rem];
+        @apply w-[100%] h-[3.75rem];
         @apply flex items-center;
-        @apply px-[24px] py-[12px] mb-[12px];
-        @apply leading-[21px];
+        @apply px-[1.5rem] py-[0.75rem] mb-[0.75rem];
+        @apply leading-[1.3125rem];
 
         &.wallet {
 
           .icon {
             @apply flex;
-            @apply mr-[24px]
+            @apply mr-[1.5rem]
           }
 
           div {
@@ -94,7 +94,7 @@
     }
 
     .error {
-      @apply font-urbanist font-semibold text-[#ff0000] text-[24px] leading-[29px] text-center;
+      @apply font-urbanist font-semibold text-[#ff0000] text-[1.5rem] leading-[1.8125rem] text-center;
     }
   }
 }
