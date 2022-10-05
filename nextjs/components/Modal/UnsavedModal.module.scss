@@ -2,13 +2,18 @@
   @apply w-screen h-screen;
   @apply bg-[#0075FFCC];
   @apply flex justify-center items-center;
+  @apply p-[40px];
 
   .modal {
     @apply flex flex-col;
     @apply bg-white;
     @apply max-w-[921px];
-    @apply px-[170px] py-[110px];
+    @apply px-[30px] py-[20px];
     @apply rounded-[12px];
+
+    @screen sm {
+      @apply px-[170px] py-[110px];
+    }
 
     h1 {
       @apply text-[#0075FF] font-poppins text-[48px] leading-[72px] font-semibold text-center;
@@ -22,21 +27,25 @@
     }
 
     .buttonWrapper {
+      @apply max-w-[581px];
+      @apply flex justify-between;
+
       button {
         @apply px-[24px] py-[19px];
-        @apply w-[284px];
+        @apply w-full;
+        @apply w-[calc(50%-6px)];
 
         &.redBorderWhiteBgBtn {
           @apply border-[2px] border-[#FF0000] rounded-[12px];
           @apply font-urbanist font-black text-[18px] leading-[22px] text-[#FF0000];
-          @apply mr-[6px];
+          @apply mr-0;
         }
 
         &.blueWhiteTextBtn {
           @apply bg-[#0075FF];
           @apply border-[2px] border-[#0075FF] rounded-[12px];
           @apply font-urbanist font-black text-[18px] leading-[22px] text-[#fff];
-          @apply ml-[6px];
+          @apply ml-0;
         }
       }
     }
