@@ -5,6 +5,7 @@
 
   @screen lg {
     @apply flex-row;
+    @apply h-screen;
   }
 
   .left_content {
@@ -65,7 +66,7 @@
     ul {
       @apply mb-[36px];
 
-      li {
+      button {
         @apply rounded-[12px];
         @apply border-[#939393] border-[2px];
         @apply w-[100%] h-[60px];

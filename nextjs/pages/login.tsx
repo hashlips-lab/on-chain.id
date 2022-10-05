@@ -35,7 +35,7 @@ const Login: NextPage = () => {
           </div>
           <div className={styles.questions}>Questions?</div>
           <div className={styles.faq}>
-            Check out our <span>FAQs</span>
+            Check out our <a href="#">FAQs</a>
           </div>
         </div>
       </div>
@@ -49,17 +49,26 @@ const Login: NextPage = () => {
         <ul>
           {WALLET_LIST.map(({ icon, description }, i) => {
             return (
-              <li className={styles.wallet} key={i}>
-                <div className={styles.icon}>
-                  <Image src={icon} width={36} height={36} alt={description} />
-                </div>
+              <li key={i}>
+                <button className={styles.wallet}>
+                  <div className={styles.icon}>
+                    <Image
+                      src={icon}
+                      width={36}
+                      height={36}
+                      alt={description}
+                    />
+                  </div>
 
-                <div>{description}</div>
+                  <div>{description}</div>
+                </button>
               </li>
             );
           })}
 
-          <li className={styles.moreOption}>SHOW MORE OPTIONS</li>
+          <li>
+            <button className={styles.moreOption}>SHOW MORE OPTIONS</button>
+          </li>
         </ul>
 
         <div className={styles.error}>
