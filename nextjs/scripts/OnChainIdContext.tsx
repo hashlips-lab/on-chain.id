@@ -87,18 +87,17 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getPrivateDataProgress?.isLoading === true) {
-        const privateData = (await getDataEntries()).data as { key: string, data: string }[];
+        const [ privateData, nextStartKey ] = (await getDataEntries()).data as [ { key: string, data: string }[], string ];
 
         if (privateData === undefined) {
           throw new Error('Something went wrong...');
         }
 
-        const isLoading = privateData.length > 0;
         const normalizedPrivateData = privateData.map(entry => ({ key: PrivateDataKey.from(entry.key), data: entry.data }));
 
         setGetPrivateDataProgress({
-          isLoading,
-          nextStartKey: isLoading ? normalizedPrivateData[normalizedPrivateData.length - 1].key.getKey() : ethers.constants.HashZero,
+          isLoading: nextStartKey !== ethers.constants.HashZero,
+          nextStartKey,
           entriesPerPage: getPrivateDataProgress.entriesPerPage,
           currentData: getPrivateDataProgress.currentData.concat(normalizedPrivateData),
         });
@@ -125,17 +124,15 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getAllowedProvidersProgress?.isLoading === true) {
-        const allowedProviders = (await getAllowedProviders()).data as string[];
+        const [ allowedProviders, nextStartProvider ] = (await getAllowedProviders()).data as [ string[], string ];
 
         if (allowedProviders === undefined) {
           throw new Error('Something went wrong...');
         }
 
-        const isLoading = allowedProviders.length > 0;
-
         setGetAllowedProvidersProgress({
-          isLoading,
-          nextStartProvider: isLoading ? allowedProviders[allowedProviders.length - 1] : ethers.constants.HashZero,
+          isLoading: nextStartProvider !== ethers.constants.AddressZero,
+          nextStartProvider,
           providersPerPage: getAllowedProvidersProgress.providersPerPage,
           currentData: getAllowedProvidersProgress.currentData.concat(allowedProviders),
         });
@@ -167,19 +164,18 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getPermissionsProgress?.isLoading === true) {
-        const permissions = (await getPermissions()).data as { key: string, canRead: boolean }[];
+        const [ permissions, nextStartKey ] = (await getPermissions()).data as [ { key: string, canRead: boolean }[], string ];
 
         if (permissions === undefined) {
           throw new Error('Something went wrong...');
         }
 
-        const isLoading = permissions.length > 0;
         const normalizedPrivateData = permissions.map(entry => ({ key: PrivateDataKey.from(entry.key), canRead: entry.canRead }));
 
         setGetPermissionsProgress({
-          isLoading,
+          isLoading: nextStartKey !== ethers.constants.HashZero,
           provider: getPermissionsProgress.provider,
-          nextStartKey: isLoading ? normalizedPrivateData[normalizedPrivateData.length - 1].key.getKey() : ethers.constants.HashZero,
+          nextStartKey,
           entriesPerPage: getPermissionsProgress.entriesPerPage,
           currentData: getPermissionsProgress.currentData.concat(normalizedPrivateData),
         });
