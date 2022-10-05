@@ -8,11 +8,6 @@
     @apply h-auto;
   }
 
-  @screen xl {
-    @apply flex-row;
-    @apply h-screen;
-  }
-
   .left_content {
     @apply flex justify-center items-center;
     @apply bg-[#0075FF] min-w-[30%] h-screen;
@@ -20,7 +15,6 @@
 
     @screen lg {
       @apply h-auto;
-      @apply min-h-full;
     }
 
     .logo_section {
