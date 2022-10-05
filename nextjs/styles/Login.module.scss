@@ -1,0 +1,99 @@
+.container {
+  @apply w-full;
+  @apply flex flex-col;
+  @apply p-0;
+
+  @screen lg {
+    @apply flex-row;
+  }
+
+  .left_content {
+    @apply flex justify-center items-center;
+    @apply bg-[#0075FF] min-w-[30%] h-screen;
+    @apply text-center;
+
+    @screen lg {
+      @apply h-auto;
+      @apply min-h-full;
+    }
+
+    .logo_section {
+      @apply flex flex-col;
+    }
+
+    .welcome {
+      @apply font-semibold text-[36px] leading-[54px] font-poppins;
+      @apply mb-[24px];
+    }
+
+    .logo {
+      @apply mb-[72px];
+    }
+
+    .questions {
+      @apply font-semibold text-[24px] leading-[36px] font-poppins;
+      @apply mb-[12px]
+    }
+
+    .faq {
+      @apply font-urbanist text-[24px] leading-[29px] font-normal;
+
+      span {
+        @apply font-bold;
+      }
+    }
+  }
+
+  .right_content {
+    @apply bg-white;
+    @apply flex flex-col justify-center;
+    @apply min-w-[70%];
+    @apply px-[110px] py-[147px];
+
+    h1 {
+      @apply font-poppins font-semibold text-center text-[48px] leading-[72px] text-[#000];
+      @apply mb-[12px];
+    }
+
+    p {
+      @apply font-urbanist text-center text-[24px] text-[#000] leading-[29px] font-normal;
+      @apply mb-[36px];
+      @apply max-w-[581px];
+      @apply flex justify-center items-center self-center;
+    }
+
+    ul {
+      @apply mb-[36px];
+
+      li {
+        @apply rounded-[12px];
+        @apply border-[#939393] border-[2px];
+        @apply w-[100%] h-[60px];
+        @apply flex items-center;
+        @apply px-[24px] py-[12px] mb-[12px];
+        @apply leading-[21px];
+
+        &.wallet {
+
+          .icon {
+            @apply flex;
+            @apply mr-[24px]
+          }
+
+          div {
+            @apply font-urbanist font-black text-[#000]
+          }
+        }
+
+        &.moreOption {
+          @apply font-urbanist font-black text-[#0075FF];
+          @apply flex justify-center;
+        }
+      }
+    }
+
+    .error {
+      @apply font-urbanist font-semibold text-[#ff0000] text-[24px] leading-[29px] text-center;
+    }
+  }
+}
