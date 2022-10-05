@@ -1,7 +1,7 @@
-import { ethers } from "hardhat";
+import { ethers } from 'hardhat';
 
 async function main() {
-  const OnChainId = await ethers.getContractFactory("OnChainId");
+  const OnChainId = await ethers.getContractFactory('OnChainId');
   const onChainId = await OnChainId.deploy();
 
   await onChainId.deployed();
