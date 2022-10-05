@@ -1,0 +1,45 @@
+.overlay {
+  @apply w-screen h-screen;
+  @apply bg-[#0075FFCC];
+  @apply flex justify-center items-center;
+
+  .modal {
+    @apply flex flex-col;
+    @apply bg-white;
+    @apply max-w-[921px];
+    @apply px-[170px] py-[110px];
+    @apply rounded-[12px];
+
+    h1 {
+      @apply text-[#0075FF] font-poppins text-[48px] leading-[72px] font-semibold text-center;
+      @apply mb-[10px];
+    }
+
+    p {
+      @apply font-urbanist text-[#000] font-semibold text-center text-[26px] leading-[34px];
+      @apply max-w-[581px];
+      @apply mb-[36px];
+    }
+
+    .buttonWrapper {
+      button {
+        @apply px-[24px] py-[19px];
+        @apply w-[284px];
+
+        &.redBorderWhiteBgBtn {
+          @apply border-[2px] border-[#FF0000] rounded-[12px];
+          @apply font-urbanist font-black text-[18px] leading-[22px] text-[#FF0000];
+          @apply mr-[6px];
+        }
+
+        &.blueWhiteTextBtn {
+          @apply bg-[#0075FF];
+          @apply border-[2px] border-[#0075FF] rounded-[12px];
+          @apply font-urbanist font-black text-[18px] leading-[22px] text-[#fff];
+          @apply ml-[6px];
+        }
+      }
+    }
+
+  }
+}
