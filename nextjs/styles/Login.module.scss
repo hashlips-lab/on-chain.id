@@ -1,0 +1,100 @@
+.container {
+  @apply w-full;
+  @apply flex flex-col;
+  @apply p-0;
+
+  @screen lg {
+    @apply flex-row;
+    @apply h-screen;
+  }
+
+  .left_content {
+    @apply flex justify-center items-center;
+    @apply bg-[#0075FF] min-w-[30%] h-screen;
+    @apply text-center;
+
+    @screen lg {
+      @apply h-auto;
+      @apply min-h-full;
+    }
+
+    .logo_section {
+      @apply flex flex-col;
+    }
+
+    .welcome {
+      @apply font-semibold text-[2.25rem] leading-[3.375rem] font-poppins;
+      @apply mb-[1.5rem];
+    }
+
+    .logo {
+      @apply mb-[4.5rem];
+    }
+
+    .questions {
+      @apply font-semibold text-[1.5rem] leading-[2.25rem] font-poppins;
+      @apply mb-[0.75rem]
+    }
+
+    .faq {
+      @apply font-urbanist text-[1.5rem] leading-[1.8125rem] font-normal;
+
+      a {
+        @apply font-bold;
+      }
+    }
+  }
+
+  .right_content {
+    @apply bg-white;
+    @apply flex flex-col justify-center;
+    @apply min-w-[70%];
+    @apply px-[6.875rem] py-[9.1875rem];
+
+    h1 {
+      @apply font-poppins font-semibold text-center text-[3rem] leading-[4.5rem] text-[#000];
+      @apply mb-[0.75rem];
+    }
+
+    p {
+      @apply font-urbanist text-center text-[1.5rem] text-[#000] leading-[1.8125rem] font-normal;
+      @apply mb-[2.25rem];
+      @apply max-w-[36.3125rem];
+      @apply flex justify-center items-center self-center;
+    }
+
+    ul {
+      @apply mb-[2.25rem];
+
+      button {
+        @apply rounded-[0.75rem];
+        @apply border-[#939393] border-[0.125rem];
+        @apply w-[100%] h-[3.75rem];
+        @apply flex items-center;
+        @apply px-[1.5rem] py-[0.75rem] mb-[0.75rem];
+        @apply leading-[1.3125rem];
+
+        &.wallet {
+
+          .icon {
+            @apply flex;
+            @apply mr-[1.5rem]
+          }
+
+          div {
+            @apply font-urbanist font-black text-[#000]
+          }
+        }
+
+        &.moreOption {
+          @apply font-urbanist font-black text-[#0075FF];
+          @apply flex justify-center;
+        }
+      }
+    }
+
+    .error {
+      @apply font-urbanist font-semibold text-[#ff0000] text-[1.5rem] leading-[1.8125rem] text-center;
+    }
+  }
+}
