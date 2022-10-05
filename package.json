@@ -8,6 +8,6 @@
     "url": "https://github.com/hashlips-lab/on-chain.id.git"
   },
   "scripts": {
-    "build": "cd ./nextjs; yarn; yarn build; yarn next export"
+    "build": "cd ./hardhat && yarn && yarn hardhat compile && cd ../nextjs && yarn && yarn build && yarn next export"
   }
 }
