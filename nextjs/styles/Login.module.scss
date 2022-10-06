@@ -6,6 +6,7 @@
   @screen lg {
     @apply flex-row;
     @apply h-auto;
+    @apply min-h-screen;
   }
 
   .left_content {
