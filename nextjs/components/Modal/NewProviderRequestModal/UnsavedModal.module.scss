@@ -1,24 +1,5 @@
 .overlay {
-  @apply w-screen h-screen;
-  @apply bg-[#0075FFCC];
-  @apply flex justify-center items-center;
-  @apply p-[2.5rem];
-
   .modal {
-    @apply flex flex-col;
-    @apply bg-white;
-    @apply max-w-[57.5625rem];
-    @apply px-[1.875rem] py-[1.25rem];
-    @apply rounded-[0.75rem];
-
-    @screen md {
-      @apply px-[6.25rem] py-[3.75rem];
-    }
-
-    @screen lg {
-      @apply px-[10.625rem] py-[6.875rem];
-    }
-
     h1 {
       @apply text-[#0075FF] font-poppins text-[3rem] leading-[4.5rem] font-semibold text-center;
       @apply mb-[0.625rem];
