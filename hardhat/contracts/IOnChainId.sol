@@ -35,7 +35,7 @@ interface IOnChainId {
   error AccessDenied(uint64 expiration);
   error DataAccessDenied();
 
-  function NO_EXPIRATION_VALUE() external returns(uint64);
+  function NO_EXPIRATION_VALUE() external view returns(uint64);
 
   function writeData(bytes32 _key, string memory _data) external;
 
