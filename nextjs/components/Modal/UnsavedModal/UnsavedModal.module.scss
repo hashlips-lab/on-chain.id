@@ -1,32 +1,29 @@
-.overlay {
-  .modal {
-    h1 {
-      @apply text-[#0075FF] font-poppins text-[3rem] leading-[4.5rem] font-semibold text-center;
+.modalBody {
+  h1 {
+    @apply text-[#0075FF] font-poppins text-[3rem] leading-[4.5rem] font-semibold text-center;
+    @apply mb-[0.625rem];
+  }
+
+  p {
+    @apply font-urbanist text-[#000] font-semibold text-center text-[1.625rem] leading-[2.125rem];
+    @apply max-w-[36.3125rem];
+    @apply mb-[2.25rem];
+  }
+
+  .buttonWrapper {
+    @apply flex justify-between flex-col;
+
+    @screen sm {
+      @apply flex-row;
+    }
+
+    button {
       @apply mb-[0.625rem];
-    }
-
-    p {
-      @apply font-urbanist text-[#000] font-semibold text-center text-[1.625rem] leading-[2.125rem];
-      @apply max-w-[36.3125rem];
-      @apply mb-[2.25rem];
-    }
-
-    .buttonWrapper {
-      @apply flex justify-between flex-col;
 
       @screen sm {
-        @apply flex-row;
-      }
-
-      button {
-        @apply mb-[0.625rem];
-
-        @screen sm {
-          @apply w-[calc(50%-0.375rem)];
-          @apply mb-0;
-        }
+        @apply w-[calc(50%-0.375rem)];
+        @apply mb-0;
       }
     }
-
   }
 }
