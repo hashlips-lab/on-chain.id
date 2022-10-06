@@ -25,6 +25,7 @@ interface Props {
 }
 
 interface OnChainIdInterface {
+  noExpirationValue?: BigNumber;
   privateData: PrivateData[];
   refreshPrivateData: (entriesPerPage?: number) => void;
   isPrivateDataRefreshing: boolean;
@@ -69,6 +70,11 @@ export function OnChainIdProvider({ children }: Props) {
   const [ getPrivateDataProgress, setGetPrivateDataProgress ] = useState<GetPrivateDataProgress>();
   const [ getAllowedProvidersProgress, setGetAllowedProvidersProgress ] = useState<GetAllowedProvidersProgress>();
   const [ getPermissionsProgress, setGetPermissionsProgress ] = useState<GetPermissionsProgress>();
+
+  const { data: noExpirationValue } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'NO_EXPIRATION_VALUE',
+    watch: false,
+  }));
 
   // Private data
   const { refetch: getDataEntries } = useContractRead(onChainIdContractConfigBuilder({
@@ -186,6 +192,7 @@ export function OnChainIdProvider({ children }: Props) {
   }, [ getPermissionsProgress ]);
 
   const value: OnChainIdInterface = {
+    noExpirationValue: noExpirationValue as BigNumber | undefined,
     privateData: getPrivateDataProgress?.currentData === undefined ? []: getPrivateDataProgress.currentData,
     refreshPrivateData,
     isPrivateDataRefreshing: getPrivateDataProgress?.isLoading === true,
