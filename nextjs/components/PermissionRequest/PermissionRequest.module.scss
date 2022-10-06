@@ -1,30 +1,30 @@
 .permissionRequest {
 
   h1 {
-    @apply font-poppins font-semibold text-[48px] leading-[72px] text-center;
-    @apply mb-[12px];
+    @apply font-poppins font-semibold text-[3rem] leading-[4.5rem] text-center;
+    @apply mb-[0.75rem];
   }
 
   .publicKey {
     @apply flex;
-    @apply font-urbanist text-[#0075FF] font-semibold text-[24px] leading-[29px] text-center;
-    @apply mb-[12px];
+    @apply font-urbanist text-[#0075FF] font-semibold text-[1.5rem] leading-[1.8125rem] text-center;
+    @apply mb-[0.75rem];
     @apply break-all;
 
   }
 
   .listTitle {
     @apply flex;
-    @apply font-urbanist font-semibold text-[28px] leading-[34px];
-    @apply mb-[12px];
+    @apply font-urbanist font-semibold text-[1.75rem] leading-[2.125rem];
+    @apply mb-[0.75rem];
   }
 
   ul {
-    @apply p-[12px];
+    @apply p-[0.75rem];
 
     li {
       @apply flex;
-      @apply mb-[24px];
+      @apply mb-[1.5rem];
 
       .socialList {
         @apply flex flex-row justify-between;
@@ -32,7 +32,7 @@
 
         .socialIcon {
           @apply flex items-center;
-          @apply mr-[24px];
+          @apply mr-[1.5rem];
         }
 
         .socialBox {
@@ -41,7 +41,7 @@
 
           .socialName {
             @apply flex items-center justify-start;
-            @apply font-urbanist font-normal text-[24px] leading-[29px];
+            @apply font-urbanist font-normal text-[1.5rem] leading-[1.8125rem];
           }
 
           .socialStatus {
@@ -55,7 +55,7 @@
 
   .buttonWrapper {
     @apply flex justify-between flex-col;
-    @apply mb-[36px];
+    @apply mb-[2.25rem];
 
     @screen sm {
       @apply flex-row;
@@ -72,7 +72,7 @@
   }
 
   p {
-    @apply font-urbanist text-[18px] leading-[22px] text-[#939393] italic;
+    @apply font-urbanist text-[1.125rem] leading-[1.375rem] text-[#939393] italic;
 
     span {
       @apply font-bold;
