@@ -35,6 +35,8 @@ interface OnChainIdInterface {
   permissions: PermissionsEntry[];
   refreshPermissions: (provider: string, providersPerPage?: number) => void;
   arePermissionsRefreshing: boolean;
+  providerExpiration: BigNumber | undefined;
+  refreshProviderExpiration: (provider: string) => void;
 }
 
 interface GetPrivateDataProgress {
@@ -67,13 +69,26 @@ export function useOnChainIdContext() {
 
 export function OnChainIdProvider({ children }: Props) {
   const { onChainIdContractConfigBuilder } = useContractContext();
+  const [ getExpirationAddress, setGetExpirationAddress ] = useState('');
   const [ getPrivateDataProgress, setGetPrivateDataProgress ] = useState<GetPrivateDataProgress>();
   const [ getAllowedProvidersProgress, setGetAllowedProvidersProgress ] = useState<GetAllowedProvidersProgress>();
   const [ getPermissionsProgress, setGetPermissionsProgress ] = useState<GetPermissionsProgress>();
 
+  // Debouncers
+  const [ debouncedGetExpirationAddress ] = useDebounce(getExpirationAddress, 500);
+
+  // NO_EXPIRATION_VALUE
   const { data: noExpirationValue } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'NO_EXPIRATION_VALUE',
     watch: false,
+  }));
+
+  // getExpiration
+  const { data: getExpiration } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'getExpiration',
+    args: [ debouncedGetExpirationAddress ],
+    watch: true,
+    enabled: ethers.utils.isAddress(debouncedGetExpirationAddress),
   }));
 
   // Private data
@@ -202,6 +217,8 @@ export function OnChainIdProvider({ children }: Props) {
     permissions: getPermissionsProgress?.currentData === undefined ? []: getPermissionsProgress.currentData,
     refreshPermissions,
     arePermissionsRefreshing: getPermissionsProgress?.isLoading === true,
+    providerExpiration: getExpiration as BigNumber | undefined,
+    refreshProviderExpiration: setGetExpirationAddress,
   };
 
   return (
