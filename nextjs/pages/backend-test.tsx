@@ -7,7 +7,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useAccount } from 'wagmi';
-import { useOnChainIdContext } from '../scripts/OnChainIdContext';
+import { useOnChainIdContext, AccessDenied } from '../scripts/OnChainIdContext';
 
 const BackEndTest: NextPage = () => {
   const { isConnected } = useAccount();
@@ -29,7 +29,8 @@ const BackEndTest: NextPage = () => {
     providerExpiration,
     refreshProviderExpiration,
     userData,
-    refreshUserData
+    refreshUserData,
+    getUserDataError,
   } = useOnChainIdContext();
 
   useEffect(() => {
@@ -52,38 +53,38 @@ const BackEndTest: NextPage = () => {
         <ConnectButton />
 
         {walletIsConnected ? <>
-          <hr className="mt-8 w-96 border"/>
+          <hr className="mt-8 w-96 border border-black"/>
 
           <h2 className="mt-4 text-xl font-bold">Private data:</h2>
-          <button className="px-2 py-1 border rounded disabled:bg-red-800" onClick={() => refreshPrivateData()} disabled={isPrivateDataRefreshing}>Refresh</button>
+          <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={() => refreshPrivateData()} disabled={isPrivateDataRefreshing}>Refresh</button>
           <ul className="my-4">
             {privateData.map((data, index) =>
-              <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border rounded">
+              <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
                 <strong>{data.data}</strong>
                 <code className="text-xs">{data.key.getName()}</code>
               </li>
             )}
           </ul>
 
-          <hr className="w-96 border"/>
+          <hr className="w-96 border border-black"/>
 
           <h2 className="mt-4 text-xl font-bold">Allowed providers:</h2>
-          <button className="px-2 py-1 border rounded disabled:bg-red-800" onClick={() => refreshAllowedProviders()} disabled={areAllowedProvidersRefreshing}>Refresh</button>
+          <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={() => refreshAllowedProviders()} disabled={areAllowedProvidersRefreshing}>Refresh</button>
           <ul className="my-4">
             {allowedProviders.map((provider, index) =>
-              <li key={`allowed-providers-${index}`} className="flex flex-col mb-4 p-2 border rounded">
-                <code className="text-xs">{provider}</code> <button className="px-2 py-1 border rounded disabled:bg-red-800" onClick={() => refreshPermissions(provider)} disabled={arePermissionsRefreshing}>Show permissions</button>
+              <li key={`allowed-providers-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
+                <code className="text-xs">{provider}</code> <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={() => refreshPermissions(provider)} disabled={arePermissionsRefreshing}>Show permissions</button>
               </li>
             )}
           </ul>
 
-          <hr className="w-96 border" />
+          <hr className="w-96 border border-black" />
 
+          <h2 className="mt-4 text-xl font-bold">Permissions:</h2>
           {permissions.length > 0 && <>
-            <h2 className="mt-4 text-xl font-bold">Permissions:</h2>
             <ul className="my-4">
               {permissions.map((permissionsEntry, index) =>
-                <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border rounded">
+                <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
                   <strong>Access {permissionsEntry.canRead ? <span className="text-green-700">granted</span> : <span className="text-red-700">denied</span>}</strong>
                   <code className="text-xs">{permissionsEntry.key.getName()}</code>
                 </li>
@@ -91,27 +92,29 @@ const BackEndTest: NextPage = () => {
             </ul>
           </>}
 
-          <hr className="w-96 border" />
+          <hr className="w-96 border border-black" />
 
           {noExpirationValue && <>
             <h2 className="mt-4 text-xl font-bold">No Expiration Value:</h2>
             <strong>{noExpirationValue.toNumber()}</strong>
           </>}
 
-          <hr className="w-96 border" />
+          <hr className="w-96 border border-black" />
 
           <h2 className="mt-4 text-xl font-bold">Provider Expiration:</h2>
-          <input className="border mt-1 mb-4 w-96 text-sm" type="text" placeholder='Provider address' onChange={(e) => setProviderAddress(e.target.value)} />
-          <button className="px-2 py-1 border rounded" onClick={() => refreshProviderExpiration(providerAddress)}>Get expiration for provider</button>
+          <small className="font-normal italic">(current user context)</small>
+          <input className="border border-black mt-1 mb-4 w-96 text-sm" type="text" placeholder='Provider address' onChange={(e) => setProviderAddress(e.target.value)} />
+          <button className="px-2 py-1 border border-black rounded" onClick={() => refreshProviderExpiration(providerAddress)}>Get expiration for provider</button>
           {providerExpiration && <strong>{providerExpiration.toNumber()}</strong>}
 
-          <hr className="w-96 border" />
+          <hr className="w-96 border border-black" />
 
           <h2 className="mt-4 text-xl font-bold">Data:</h2>
-          <input className="border mt-1 mb-4 w-96 text-sm" type="text" placeholder='User address' onChange={(e) => setUserAddress(e.target.value)} />
-          <input className="border mt-1 mb-4 w-96 text-sm" type="text" placeholder='Key' onChange={(e) => setUserKey(e.target.value)} />
-          <button className="px-2 py-1 border rounded" onClick={() => refreshUserData(userAddress, userKey)}>Get data</button>
+          <input className="border border-black mt-1 mb-4 w-96 text-sm" type="text" placeholder='User address' onChange={(e) => setUserAddress(e.target.value)} />
+          <input className="border border-black mt-1 mb-4 w-96 text-sm" type="text" placeholder='Key' onChange={(e) => setUserKey(e.target.value)} />
+          <button className="px-2 py-1 border border-black rounded" onClick={() => refreshUserData(userAddress, userKey)}>Get data</button>
           {userData && <strong>{userData}</strong>}
+          {getUserDataError && <span className="text-red-500">{ getUserDataError.name === AccessDenied ? `Access denied or expired: ${String(getUserDataError.expiration)}` : `Access denied to this information` }</span>}
 
         </> : <>Please connect wallet</>}
       </main>

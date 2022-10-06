@@ -8,6 +8,9 @@ import { SendTransactionResult } from '@wagmi/core';
 import { useContractContext } from './ContractConfigContext';
 import PrivateDataKey from './lib/OnChainId/types/PrivateDataKey';
 
+export const AccessDenied = 'AccessDenied';
+export const DataAccessDenied = 'DataAccessDenied';
+
 const DEFAULT_PAGINATION_VALUE = 10;
 
 interface PrivateData {
@@ -39,6 +42,7 @@ interface OnChainIdInterface {
   refreshProviderExpiration: (providerAddress: string) => void;
   userData: string | undefined;
   refreshUserData: (userAddress: string, key: string) => void;
+  getUserDataError?: { name: string, expiration?: BigNumber };
 }
 
 interface GetPrivateDataProgress {
@@ -85,6 +89,8 @@ export function OnChainIdProvider({ children }: Props) {
   const { data: noExpirationValue } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'NO_EXPIRATION_VALUE',
     watch: false,
+    // Using the zero address avoids signing TX when reading public data
+    overrides: { from: ethers.constants.AddressZero },
   }));
 
   // getExpiration
@@ -102,7 +108,7 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   // getData
-  const { data: getData } = useContractRead(onChainIdContractConfigBuilder({
+  const { data: getData, error: getDataError } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getData',
     args: [ debouncedGetDataArgs?.userAddress, debouncedGetDataArgs?.key.getKey() ],
     watch: false,
@@ -246,6 +252,10 @@ export function OnChainIdProvider({ children }: Props) {
     refreshProviderExpiration,
     userData: getData as string | undefined,
     refreshUserData,
+    getUserDataError: getDataError === null ? undefined : {
+      name: (getDataError as any).errorName,
+      expiration: (getDataError as any)?.errorArgs[0] as BigNumber | undefined,
+    },
   };
 
   return (

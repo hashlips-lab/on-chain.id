@@ -6,7 +6,6 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 import { UseContractProvider as ContractConfigProvider } from '../scripts/ContractConfigContext';
@@ -14,7 +13,7 @@ import { OnChainIdProvider } from '../scripts/OnChainIdContext';
 
 const { chains, provider } = configureChains(
   [ chain.hardhat ],
-  [ alchemyProvider(), publicProvider() ],
+  [ publicProvider() ],
 );
 
 const { connectors } = getDefaultWallets({
