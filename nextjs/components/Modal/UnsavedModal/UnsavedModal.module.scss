@@ -18,7 +18,9 @@
         @apply flex-row;
       }
 
-      .button {
+      button {
+        @apply mb-[0.625rem];
+
         @screen sm {
           @apply w-[calc(50%-0.375rem)];
           @apply mb-0;

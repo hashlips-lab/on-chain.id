@@ -1,7 +1,5 @@
 .button {
-  @apply px-[1.5rem] py-[1.1875rem];
   @apply w-full;
-  @apply mb-[0.625rem];
 
   &.borderRedBgWhiteTextRed {
     @apply border-[0.125rem] border-[#FF0000] rounded-[0.75rem];
@@ -12,5 +10,9 @@
     @apply bg-[#0075FF];
     @apply border-[0.125rem] border-[#0075FF] rounded-[0.75rem];
     @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem] text-[#fff];
+  }
+
+  &.lg {
+    @apply px-[1.5rem] py-[1.1875rem];
   }
 }
