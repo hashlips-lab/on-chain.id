@@ -99,18 +99,10 @@ contract OnChainId is IOnChainId {
     }
   }
 
-  function getFirstDataEntry() public view returns(bytes32) {
-    return privateDataFirstEntry[msg.sender];
-  }
-
-  function getLastDataEntry() public view returns(bytes32) {
-    return privateDataLastEntry[msg.sender];
-  }
-
-  function getDataEntries(bytes32 _previousKey, uint256 _maxResults) public view returns(PrivateDataValue[] memory) {
-    PrivateDataValue[] memory entries = new PrivateDataValue[](_maxResults);
+  function getDataEntries(bytes32 _startKey, uint256 _maxResults) public view returns(PrivateDataValue[] memory entries, bytes32 nextKey) {
+    entries = new PrivateDataValue[](_maxResults);
     uint256 currentEntryIndex = 0;
-    bytes32 currentKey = _previousKey == 0 ? getFirstDataEntry() : privateDataStorage[msg.sender][_previousKey].next;
+    bytes32 currentKey = _startKey == 0 ? privateDataFirstEntry[msg.sender] : _startKey;
     PrivateDataEntry memory currentPrivateData = privateDataStorage[msg.sender][currentKey];
 
     while (_isValidKey(currentKey) && !_isPrivateDataEmpty(currentPrivateData) && currentEntryIndex < _maxResults) {
@@ -125,7 +117,7 @@ contract OnChainId is IOnChainId {
       mstore(entries, currentEntryIndex)
     }
 
-    return entries;
+    return (entries, currentKey);
   }
 
   function writePermissions(
@@ -186,35 +178,27 @@ contract OnChainId is IOnChainId {
     permissionsStorage[msg.sender][_provider].expiration = _expiration;
   }
 
-  function getFirstPermissionsEntry() public view returns(address) {
-    return permissionsFirstEntry[msg.sender];
-  }
-
-  function getLastPermissionsEntry() public view returns(address) {
-    return permissionsLastEntry[msg.sender];
-  }
-
-  function getAllowedProviders(address _previousProvider, uint256 _maxResults) public view returns(address[] memory) {
-    address[] memory entries = new address[](_maxResults);
+  function getAllowedProviders(address _startProvider, uint256 _maxResults) public view returns(address[] memory providers, address nextProvider) {
+    providers = new address[](_maxResults);
     uint256 currentProviderIndex = 0;
-    address currentProvider = _previousProvider == address(0) ? getFirstPermissionsEntry() : permissionsStorage[msg.sender][_previousProvider].next;
+    address currentProvider = _startProvider == address(0) ? permissionsFirstEntry[msg.sender] : _startProvider;
 
     while (
       _isValidProvider(currentProvider) &&
       !_arePermissionsEmpty(permissionsStorage[msg.sender][currentProvider]) &&
       currentProviderIndex < _maxResults
     ) {
-      entries[currentProviderIndex] = currentProvider;
+      providers[currentProviderIndex] = currentProvider;
 
       currentProvider = permissionsStorage[msg.sender][currentProvider].next;
       currentProviderIndex++;
     }
 
     assembly {
-      mstore(entries, currentProviderIndex)
+      mstore(providers, currentProviderIndex)
     }
 
-    return entries;
+    return (providers, currentProvider);
   }
 
   function getExpiration(address _provider) public view returns(uint64) {
@@ -223,16 +207,16 @@ contract OnChainId is IOnChainId {
 
   function getPermissions(
     address _provider,
-    bytes32 _previousKey,
+    bytes32 _startKey,
     uint256 _maxResults
-  ) public view returns(PermissionValue[] memory) {
-    PermissionValue[] memory entries = new PermissionValue[](_maxResults);
+  ) public view returns(PermissionValue[] memory permissions, bytes32 nextKey) {
+    permissions = new PermissionValue[](_maxResults);
     uint256 currentEntryIndex = 0;
-    bytes32 currentKey = _previousKey == 0 ? getFirstDataEntry() : privateDataStorage[msg.sender][_previousKey].next;
+    bytes32 currentKey = _startKey == 0 ? privateDataFirstEntry[msg.sender] : _startKey;
     PrivateDataEntry memory currentPrivateData = privateDataStorage[msg.sender][currentKey];
 
     while (_isValidKey(currentKey) && !_isPrivateDataEmpty(currentPrivateData) && currentEntryIndex < _maxResults) {
-      entries[currentEntryIndex] = PermissionValue(
+      permissions[currentEntryIndex] = PermissionValue(
         currentKey,
         permissionsStorage[msg.sender][_provider].canRead[currentKey]
       );
@@ -243,10 +227,10 @@ contract OnChainId is IOnChainId {
     }
 
     assembly {
-      mstore(entries, currentEntryIndex)
+      mstore(permissions, currentEntryIndex)
     }
 
-    return entries;
+    return (permissions, currentKey);
   }
 
   function getData(address _owner, bytes32 _key) public view returns(string memory) {
