@@ -2,7 +2,9 @@ import { ethers, BytesLike } from 'ethers';
 
 const _constructorGuard = { };
 
-export default class PrivateDataKey {
+export type PrivateDataKeyLike = string | BytesLike | PrivateDataKey;
+
+export class PrivateDataKey {
   private key: BytesLike;
   private name: string;
 
@@ -25,7 +27,11 @@ export default class PrivateDataKey {
     return this.name;
   }
 
-  static from(value: string | BytesLike): PrivateDataKey {
+  static from(value: PrivateDataKeyLike): PrivateDataKey {
+    if (value instanceof PrivateDataKey) {
+      return value;
+    }
+
     let name: string | undefined;
     let key: string | undefined;
 

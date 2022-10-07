@@ -3,10 +3,10 @@
 import { ethers, BigNumber, BytesLike } from 'ethers';
 import { useDebounce } from 'use-debounce';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { useContractRead, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { SendTransactionResult } from '@wagmi/core';
 import { useContractContext } from './ContractConfigContext';
-import PrivateDataKey from './lib/OnChainId/types/PrivateDataKey';
+import { PrivateDataKey, PrivateDataKeyLike } from './lib/OnChainId/types/PrivateDataKey';
 
 export const AccessDenied = 'AccessDenied';
 export const DataAccessDenied = 'DataAccessDenied';
@@ -41,8 +41,11 @@ interface OnChainIdInterface {
   providerExpiration: BigNumber | undefined;
   refreshProviderExpiration: (providerAddress: string) => void;
   userData: string | undefined;
-  refreshUserData: (userAddress: string, key: string) => void;
+  refreshUserData: (userAddress: string, key: PrivateDataKeyLike) => void;
   getUserDataError?: { name: string, expiration?: BigNumber };
+  deleteUserData: (key: PrivateDataKey) => void;
+  deleteDataResult?: ethers.providers.TransactionReceipt;
+  isDeleteUserDataLoading: boolean;
 }
 
 interface GetPrivateDataProgress {
@@ -75,15 +78,6 @@ export function useOnChainIdContext() {
 
 export function OnChainIdProvider({ children }: Props) {
   const { onChainIdContractConfigBuilder } = useContractContext();
-  const [ getExpirationArgs, setGetExpirationArgs ] = useState<{ providerAddress: string }>();
-  const [ getDataArgs, setGetDataArgs ] = useState<{ userAddress: string, key: PrivateDataKey }>();
-  const [ getPrivateDataProgress, setGetPrivateDataProgress ] = useState<GetPrivateDataProgress>();
-  const [ getAllowedProvidersProgress, setGetAllowedProvidersProgress ] = useState<GetAllowedProvidersProgress>();
-  const [ getPermissionsProgress, setGetPermissionsProgress ] = useState<GetPermissionsProgress>();
-
-  // Debouncers
-  const [ debouncedGetExpirationArgs ] = useDebounce(getExpirationArgs, 500);
-  const [ debouncedGetDataArgs ] = useDebounce(getDataArgs, 500);
 
   // NO_EXPIRATION_VALUE
   const { data: noExpirationValue } = useContractRead(onChainIdContractConfigBuilder({
@@ -94,6 +88,8 @@ export function OnChainIdProvider({ children }: Props) {
   }));
 
   // getExpiration
+  const [ getExpirationArgs, setGetExpirationArgs ] = useState<{ providerAddress: string }>();
+  const [ debouncedGetExpirationArgs ] = useDebounce(getExpirationArgs, 500);
   const { data: getExpiration } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getExpiration',
     args: [ debouncedGetExpirationArgs?.providerAddress ],
@@ -108,6 +104,8 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   // getData
+  const [ getDataArgs, setGetDataArgs ] = useState<{ userAddress: string, key: PrivateDataKey }>();
+  const [ debouncedGetDataArgs ] = useDebounce(getDataArgs, 500);
   const { data: getData, error: getDataError } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getData',
     args: [ debouncedGetDataArgs?.userAddress, debouncedGetDataArgs?.key.getKey() ],
@@ -115,7 +113,7 @@ export function OnChainIdProvider({ children }: Props) {
     enabled: Boolean(debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress)),
   }));
 
-  const refreshUserData = (userAddress: string, key: string) => {
+  const refreshUserData = (userAddress: string, key: PrivateDataKeyLike) => {
     setGetDataArgs({
       userAddress,
       key: PrivateDataKey.from(key),
@@ -123,9 +121,13 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   // Private data
+  const [ getPrivateDataProgress, setGetPrivateDataProgress ] = useState<GetPrivateDataProgress>();
   const { refetch: getDataEntries } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getDataEntries',
-    args: [ getPrivateDataProgress?.nextStartKey ?? ethers.constants.HashZero, getPrivateDataProgress == undefined ? 0 : getPrivateDataProgress.entriesPerPage ],
+    args: [
+      getPrivateDataProgress?.nextStartKey ?? ethers.constants.HashZero,
+      getPrivateDataProgress == undefined ? 0 : getPrivateDataProgress.entriesPerPage,
+    ],
     enabled: false,
   }));
 
@@ -141,7 +143,10 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getPrivateDataProgress?.isLoading === true) {
-        const [ privateData, nextStartKey ] = (await getDataEntries()).data as [ { key: string, data: string }[], string ];
+        const [ privateData, nextStartKey ] = (await getDataEntries()).data as [
+          { key: PrivateDataKeyLike, data: string }[],
+          string,
+        ];
 
         if (privateData === undefined) {
           throw new Error('Something went wrong...');
@@ -160,9 +165,13 @@ export function OnChainIdProvider({ children }: Props) {
   }, [ getPrivateDataProgress ]);
 
   // Allowed providers
+  const [ getAllowedProvidersProgress, setGetAllowedProvidersProgress ] = useState<GetAllowedProvidersProgress>();
   const { refetch: getAllowedProviders } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getAllowedProviders',
-    args: [ getAllowedProvidersProgress?.nextStartProvider ?? ethers.constants.AddressZero, getAllowedProvidersProgress == undefined ? 0 : getAllowedProvidersProgress.providersPerPage ],
+    args: [
+      getAllowedProvidersProgress?.nextStartProvider ?? ethers.constants.AddressZero,
+      getAllowedProvidersProgress == undefined ? 0 : getAllowedProvidersProgress.providersPerPage,
+    ],
     enabled: false,
   }));
 
@@ -194,7 +203,8 @@ export function OnChainIdProvider({ children }: Props) {
     })();
   }, [ getAllowedProvidersProgress ]);
 
-  // Private data
+  // Get permissions
+  const [ getPermissionsProgress, setGetPermissionsProgress ] = useState<GetPermissionsProgress>();
   const { refetch: getPermissions } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getPermissions',
     args: [
@@ -218,13 +228,19 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getPermissionsProgress?.isLoading === true) {
-        const [ permissions, nextStartKey ] = (await getPermissions()).data as [ { key: string, canRead: boolean }[], string ];
+        const [ permissions, nextStartKey ] = (await getPermissions()).data as [
+          { key: PrivateDataKeyLike, canRead: boolean }[],
+          string,
+        ];
 
         if (permissions === undefined) {
           throw new Error('Something went wrong...');
         }
 
-        const normalizedPrivateData = permissions.map(entry => ({ key: PrivateDataKey.from(entry.key), canRead: entry.canRead }));
+        const normalizedPrivateData = permissions.map(entry => ({
+          key: PrivateDataKey.from(entry.key),
+          canRead: entry.canRead
+        }));
 
         setGetPermissionsProgress({
           isLoading: nextStartKey !== ethers.constants.HashZero,
@@ -236,6 +252,34 @@ export function OnChainIdProvider({ children }: Props) {
       }
     })();
   }, [ getPermissionsProgress ]);
+
+  // Delete data
+  const [ writeDeleteDataArgs, setWriteDeleteDataArgs ] = useState<{ key?: BytesLike }>();
+  const [ debouncedDeleteDataArgs ] = useDebounce(writeDeleteDataArgs, 500);
+  const { config: deleteDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
+    functionName: 'deleteData',
+    args: [ debouncedDeleteDataArgs?.key ],
+    enabled: Boolean(debouncedDeleteDataArgs?.key),
+  }));
+  const { write: deleteDataWrite, isLoading: deleteDataIsLoading, data: deleteDataTx } = useContractWrite(deleteDataConfig);
+  const { data: deleteDataResult } = useWaitForTransaction({ hash: deleteDataTx?.hash });
+
+  const deleteData = (key: PrivateDataKeyLike) => {
+    setWriteDeleteDataArgs({ key: PrivateDataKey.from(key).getKey() });
+  };
+
+  useEffect(() => {
+    if (debouncedDeleteDataArgs?.key) {
+      deleteDataWrite?.();
+    }
+  }, [ debouncedDeleteDataArgs ]);
+
+  useEffect(() => {
+    if (deleteDataResult) {
+      setWriteDeleteDataArgs({ key: undefined });
+      refreshPrivateData();
+    }
+  }, [ deleteDataResult ]);
 
   const value: OnChainIdInterface = {
     noExpirationValue: noExpirationValue as BigNumber | undefined,
@@ -256,6 +300,9 @@ export function OnChainIdProvider({ children }: Props) {
       name: (getDataError as any).errorName,
       expiration: (getDataError as any)?.errorArgs[0] as BigNumber | undefined,
     },
+    deleteUserData: deleteData,
+    deleteDataResult,
+    isDeleteUserDataLoading: deleteDataIsLoading,
   };
 
   return (

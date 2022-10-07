@@ -17,20 +17,29 @@ const BackEndTest: NextPage = () => {
   const [ userKey, setUserKey ] = useState('');
   const {
     noExpirationValue,
+  
     privateData,
     refreshPrivateData,
     isPrivateDataRefreshing,
+
     allowedProviders,
     refreshAllowedProviders,
     areAllowedProvidersRefreshing,
+
     permissions,
     refreshPermissions,
     arePermissionsRefreshing,
+
     providerExpiration,
     refreshProviderExpiration,
+
     userData,
     refreshUserData,
     getUserDataError,
+
+    deleteUserData,
+    deleteDataResult,
+    isDeleteUserDataLoading,
   } = useOnChainIdContext();
 
   useEffect(() => {
@@ -62,6 +71,7 @@ const BackEndTest: NextPage = () => {
               <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
                 <strong>{data.data}</strong>
                 <code className="text-xs">{data.key.getName()}</code>
+                <button className="px-2 py-1 text-xs border border-black rounded disabled:bg-red-800" onClick={() => deleteUserData(data.key)} disabled={isDeleteUserDataLoading}>🗑 Delete</button>
               </li>
             )}
           </ul>
