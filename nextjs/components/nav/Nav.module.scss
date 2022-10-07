@@ -1,10 +1,18 @@
 .nav {
   @apply flex;
   @apply bg-[#0075FF];
-  @apply min-h-screen;
   @apply px-[24px] py-[36px];
 
+  @screen xl {
+    @apply min-h-screen;
+  }
+
   ul {
-    @apply flex flex-col justify-between;
+    @apply flex flex-row justify-between;
+    @apply w-full;
+
+    @screen xl {
+      @apply flex-col;
+    }
   }
 }

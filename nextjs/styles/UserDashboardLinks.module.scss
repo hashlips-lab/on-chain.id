@@ -1,5 +1,9 @@
 .userDashboardLinks {
-  @apply flex;
+  @apply flex flex-col-reverse;
+
+  @screen xl {
+    @apply flex-row;
+  }
 
   .title {
     @apply font-poppins font-semibold text-[24px] leading-[36px];
@@ -7,16 +11,29 @@
   }
 
   .midContent {
-    @apply flex justify-between;
+    @apply flex flex-col items-center;
+
+    @screen xl {
+      @apply flex-row items-start;
+    }
 
     .leftSide {
       @apply max-w-[666px];
-      @apply mr-[18px];
+      @apply mb-[30px];
+
+      @screen xl {
+        @apply mr-[18px] mb-0;
+
+      }
+
     }
 
     .rightSide {
-      @apply max-w-[600px];
-      @apply ml-[18px];
+      @apply max-w-[666px];
+
+      @screen xl {
+        @apply ml-[18px];
+      }
 
       .rightSideContentWrapper {
         @apply px-[24px] py-[60px];
