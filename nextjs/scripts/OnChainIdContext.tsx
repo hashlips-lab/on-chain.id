@@ -13,6 +13,12 @@ export const DataAccessDenied = 'DataAccessDenied';
 
 const DEFAULT_PAGINATION_VALUE = 10;
 
+interface WritePermissionsArgs {
+  providerAddress: string;
+  updatedPermissions: PermissionsEntry[];
+  expiration: BigNumber;
+}
+
 interface PrivateData {
   key: PrivateDataKey;
   data: string;
@@ -29,23 +35,33 @@ interface Props {
 
 interface OnChainIdInterface {
   noExpirationValue?: BigNumber;
+
   privateData: PrivateData[];
   refreshPrivateData: (entriesPerPage?: number) => void;
   isPrivateDataRefreshing: boolean;
+
   allowedProviders: string[];
   refreshAllowedProviders: (providersPerPage?: number) => void;
   areAllowedProvidersRefreshing: boolean;
-  permissions: PermissionsEntry[];
-  refreshPermissions: (provider: string, providersPerPage?: number) => void;
-  arePermissionsRefreshing: boolean;
+
+  onChainPermissions: PermissionsEntry[];
+  refreshOnChainPermissions: (provider: string, providersPerPage?: number) => void;
+  areOnChainPermissionsRefreshing: boolean;
+
   providerExpiration: BigNumber | undefined;
   refreshProviderExpiration: (providerAddress: string) => void;
+
   userData: string | undefined;
   refreshUserData: (userAddress: string, key: PrivateDataKeyLike) => void;
   getUserDataError?: { name: string, expiration?: BigNumber };
+
   deleteUserData: (key: PrivateDataKey) => void;
   deleteDataResult?: ethers.providers.TransactionReceipt;
   isDeleteUserDataLoading: boolean;
+
+  writePermissions: (newPermissions: WritePermissionsArgs) => void;
+  writePermissionsResult?: ethers.providers.TransactionReceipt;
+  writePermissionsDataIsLoading?: boolean;
 }
 
 interface GetPrivateDataProgress {
@@ -215,7 +231,7 @@ export function OnChainIdProvider({ children }: Props) {
     enabled: false,
   }));
 
-  const refreshPermissions = (provider: string, entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
+  const refreshOnChainPermissions = (provider: string, entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
     setGetPermissionsProgress({
       isLoading: true,
       provider, 
@@ -254,7 +270,7 @@ export function OnChainIdProvider({ children }: Props) {
   }, [ getPermissionsProgress ]);
 
   // Delete data
-  const [ writeDeleteDataArgs, setWriteDeleteDataArgs ] = useState<{ key?: BytesLike }>();
+  const [ writeDeleteDataArgs, setWriteDeleteDataArgs ] = useState<{ key: BytesLike }>();
   const [ debouncedDeleteDataArgs ] = useDebounce(writeDeleteDataArgs, 500);
   const { config: deleteDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
     functionName: 'deleteData',
@@ -269,17 +285,102 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   useEffect(() => {
-    if (debouncedDeleteDataArgs?.key) {
+    if (debouncedDeleteDataArgs) {
       deleteDataWrite?.();
     }
   }, [ debouncedDeleteDataArgs ]);
 
   useEffect(() => {
     if (deleteDataResult) {
-      setWriteDeleteDataArgs({ key: undefined });
-      refreshPrivateData();
+      setWriteDeleteDataArgs(undefined);
+      refreshPrivateData(getPrivateDataProgress?.entriesPerPage);
     }
   }, [ deleteDataResult ]);
+
+  // Write permissions
+  const filterUpdatedPermissions = (newPermissions?: PermissionsEntry[]): PermissionsEntry[] => {
+    const onChainPermissions = getPermissionsProgress?.currentData;
+
+    if (!onChainPermissions || !newPermissions) {
+      return [];
+    }
+
+    const updatedPermissions: PermissionsEntry[] = [];
+    const onChainPermissionsMap: Map<string, boolean> = new Map(onChainPermissions.map(
+      entry => [ entry.key.getName(), entry.canRead ],
+    ));
+
+    let matchingEntriesCounter = 0;
+
+    newPermissions.map(newEntry => {
+      if (onChainPermissionsMap.has(newEntry.key.getName())) {
+        if (onChainPermissionsMap.get(newEntry.key.getName()) !== newEntry.canRead) {
+          updatedPermissions.push(newEntry);
+        }
+
+        matchingEntriesCounter++;
+      } 
+    });
+
+    if (onChainPermissions.length !== matchingEntriesCounter) {
+      throw new Error('Editable permissions MUST include at least all the on-chain entries.');
+    }
+
+    return updatedPermissions;
+  }
+  const [ writePermissionsArgs, setWritePermissionsArgs ] = useState<WritePermissionsArgs>();
+  const [ debouncedWritePermissionsArgs ] = useDebounce(writePermissionsArgs, 500);
+  const { config: writePermissionsConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
+    functionName: 'writePermissions',
+    args: [
+      debouncedWritePermissionsArgs?.providerAddress ?? ethers.constants.AddressZero,
+      debouncedWritePermissionsArgs?.updatedPermissions,
+      debouncedWritePermissionsArgs?.expiration ?? 0,
+    ],
+    enabled: Boolean(debouncedWritePermissionsArgs && debouncedWritePermissionsArgs?.updatedPermissions.length != 0),
+  }));
+  const { write: writePermissionsWrite, isLoading: writePermissionsIsLoading, data: writePermissionsTx } = useContractWrite(writePermissionsConfig);
+  const { data: writePermissionsResult } = useWaitForTransaction({ hash: writePermissionsTx?.hash });
+
+  const writePermissions = (newWritePermissionsArgs: WritePermissionsArgs) => {
+    if (!newWritePermissionsArgs) {
+      setWritePermissionsArgs(undefined);
+
+      return;
+    }
+
+    if (newWritePermissionsArgs.providerAddress === ethers.constants.AddressZero) {
+      throw new Error('Invalid provider address (zero address).');
+    }
+
+    if (
+      newWritePermissionsArgs.expiration.lt(Math.floor(Date.now() / 1000)) &&
+      (noExpirationValue === undefined || !newWritePermissionsArgs.expiration.eq(noExpirationValue))
+    ) {
+      throw new Error('Invalid expiration date.');
+    }
+
+    newWritePermissionsArgs.updatedPermissions = filterUpdatedPermissions(newWritePermissionsArgs.updatedPermissions);
+
+    setWritePermissionsArgs(newWritePermissionsArgs);
+  };
+
+  useEffect(() => {
+    if (writePermissionsArgs) {
+      writePermissionsWrite?.();
+    }
+  }, [ writePermissionsArgs ]);
+
+  useEffect(() => {
+    if (writePermissionsResult) {
+      const updatedProviderAddress = writePermissionsArgs?.providerAddress;
+      setWritePermissionsArgs(undefined);
+
+      if (updatedProviderAddress) {
+        refreshOnChainPermissions(updatedProviderAddress, getPermissionsProgress?.entriesPerPage);
+      }
+    }
+  }, [ writePermissionsResult ]);
 
   const value: OnChainIdInterface = {
     noExpirationValue: noExpirationValue as BigNumber | undefined,
@@ -289,9 +390,9 @@ export function OnChainIdProvider({ children }: Props) {
     allowedProviders: getAllowedProvidersProgress?.currentData === undefined ? []: getAllowedProvidersProgress.currentData,
     refreshAllowedProviders,
     areAllowedProvidersRefreshing: getAllowedProvidersProgress?.isLoading === true,
-    permissions: getPermissionsProgress?.currentData === undefined ? []: getPermissionsProgress.currentData,
-    refreshPermissions,
-    arePermissionsRefreshing: getPermissionsProgress?.isLoading === true,
+    onChainPermissions: getPermissionsProgress?.currentData === undefined ? []: getPermissionsProgress.currentData,
+    refreshOnChainPermissions,
+    areOnChainPermissionsRefreshing: getPermissionsProgress?.isLoading === true,
     providerExpiration: getExpiration as BigNumber | undefined,
     refreshProviderExpiration,
     userData: getData as string | undefined,
@@ -303,6 +404,9 @@ export function OnChainIdProvider({ children }: Props) {
     deleteUserData: deleteData,
     deleteDataResult,
     isDeleteUserDataLoading: deleteDataIsLoading,
+    writePermissions,
+    writePermissionsResult,
+    writePermissionsDataIsLoading: writePermissionsIsLoading,
   };
 
   return (
