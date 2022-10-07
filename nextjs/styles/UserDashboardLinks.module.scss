@@ -1,4 +1,29 @@
 .userDashboardLinks {
   @apply flex;
 
+  .title {
+    @apply font-poppins font-semibold text-[24px] leading-[36px];
+    @apply mb-[12px];
+  }
+
+  .midContent {
+    @apply flex justify-between;
+
+    .leftSide {
+      @apply max-w-[666px];
+      @apply mr-[18px];
+    }
+
+    .rightSide {
+      @apply max-w-[600px];
+      @apply ml-[18px];
+
+      .rightSideContentWrapper {
+        @apply px-[24px] py-[60px];
+        @apply border-[2px] border-[#939393] rounded-[12px];
+
+      }
+    }
+  }
+
 }
