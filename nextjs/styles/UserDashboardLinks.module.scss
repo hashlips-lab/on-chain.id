@@ -6,8 +6,8 @@
   }
 
   .title {
-    @apply font-poppins font-semibold text-[24px] leading-[36px];
-    @apply mb-[12px];
+    @apply font-poppins font-semibold text-[1.5rem] leading-[2.25rem];
+    @apply mb-[0.75rem];
   }
 
   .midContent {
@@ -18,26 +18,26 @@
     }
 
     .leftSide {
-      @apply max-w-[666px];
-      @apply mb-[30px];
+      @apply max-w-[41.625rem];
+      @apply mb-[1.875rem];
 
       @screen xl {
-        @apply mr-[18px] mb-0;
+        @apply mr-[1.125rem] mb-0;
 
       }
 
     }
 
     .rightSide {
-      @apply max-w-[666px];
+      @apply max-w-[41.625rem];
 
       @screen xl {
-        @apply ml-[18px];
+        @apply ml-[1.125rem];
       }
 
       .rightSideContentWrapper {
-        @apply px-[24px] py-[60px];
-        @apply border-[2px] border-[#939393] rounded-[12px];
+        @apply px-[1.5rem] py-[3.75rem];
+        @apply border-[0.125rem] border-[#939393] rounded-[0.75rem];
 
       }
     }
