@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@oasisprotocol/sapphire-paratime": "^1.0.7",
     "@rainbow-me/rainbowkit": "^0.7.1",
     "ethers": "^5.7.1",
     "next": "12.2.3",

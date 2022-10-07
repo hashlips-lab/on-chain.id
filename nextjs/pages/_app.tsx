@@ -7,13 +7,13 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-
 import { UseContractProvider as ContractConfigProvider } from '../scripts/ContractConfigContext';
 import { OnChainIdProvider } from '../scripts/OnChainIdContext';
+import { sapphireChain, sapphireConnectorWrapper, sapphireWrapProvider } from '../scripts/lib/OnChainId/SapphireWagmi';
 
 const { chains, provider } = configureChains(
-  [ chain.hardhat ],
-  [ publicProvider() ],
+  [ chain.hardhat, sapphireChain ],
+  [ sapphireWrapProvider(publicProvider()) ],
 );
 
 const { connectors } = getDefaultWallets({
@@ -23,6 +23,8 @@ const { connectors } = getDefaultWallets({
 
 const wagmiClient = createClient({
   autoConnect: true,
+  // TODO: not working...
+  //connectors: () => connectors().map(connector => sapphireConnectorWrapper(connector)),
   connectors,
   provider,
 });

@@ -1,3 +1,5 @@
+import '@oasisprotocol/sapphire-hardhat';
+import * as sapphire from '@oasisprotocol/sapphire-paratime';
 import * as dotenv from 'dotenv';
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
@@ -20,6 +22,13 @@ const config: HardhatUserConfig = {
     truffle: {
       url: 'http://localhost:24012/rpc',
       timeout: 60000,
+    },
+    sapphire: {
+      chainId: sapphire.NETWORKS.testnet.chainId,
+      url: sapphire.NETWORKS.testnet.defaultGateway,
+      accounts: [
+        process.env.PRIVATE_KEY ?? Buffer.alloc(0, 32).toString('hex'),
+      ],
     },
   },
   gasReporter: {
