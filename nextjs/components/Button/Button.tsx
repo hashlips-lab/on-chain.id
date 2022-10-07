@@ -1,7 +1,10 @@
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
-  type: "borderRedBgWhiteTextRed" | "borderBlueBgBlueTextWhite";
+  type:
+    | "borderRedBgWhiteTextRed"
+    | "borderBlueBgBlueTextWhite"
+    | "borderBlueBgWhiteTextBlue";
   size: "sm" | "md" | "lg";
   children: any;
   onClick?: () => void;

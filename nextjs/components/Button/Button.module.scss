@@ -12,6 +12,12 @@
     @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem] text-[#fff];
   }
 
+  &.borderBlueBgWhiteTextBlue {
+    @apply bg-[#fff];
+    @apply border-[0.125rem] border-[#0075FF] rounded-[0.75rem];
+    @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem] text-[#0075FF];
+  }
+
   &.lg {
     @apply px-[1.5rem] py-[1.1875rem];
   }
