@@ -1,58 +1,23 @@
-import { ethers, BytesLike } from 'ethers';
+import { ethers, BytesLike, Bytes } from 'ethers';
 
-const _constructorGuard = { };
-
-export type PrivateDataKeyLike = string | BytesLike | PrivateDataKey;
-
-export class PrivateDataKey {
-  private key: BytesLike;
-  private name: string;
-
-  constructor(constructorGuard: any, key: BytesLike, name: string) {
-    if (constructorGuard !== _constructorGuard) {
-        throw new Error('Cannot call constructor directly; use PrivateDataKey.from');
-    }
-
-    this.key = key;
-    this.name = name;
-
-    Object.freeze(this);
+export const keyToString = (key: BytesLike): string => {
+  try {
+    return ethers.utils.parseBytes32String(key);
+  } catch (error) {
+    // Value doesn't contain a UTF-8 encoded string return the raw value
   }
 
-  public getKey(): BytesLike {
-    return this.key;
+  return ethers.utils.hexlify(key);
+}
+
+export const keyToBytes = (key: string): Bytes => {
+  if (!ethers.utils.isHexString(key)) {
+    key = ethers.utils.formatBytes32String(key);
   }
 
-  public getName(): string {
-    return this.name;
+  if (ethers.utils.isBytesLike(key)) {
+    return ethers.utils.arrayify(key);
   }
 
-  static from(value: PrivateDataKeyLike): PrivateDataKey {
-    if (value instanceof PrivateDataKey) {
-      return value;
-    }
-
-    let name: string | undefined;
-    let key: string | undefined;
-
-    if (ethers.utils.isBytesLike(value)) {
-      key = (typeof value === 'string') ? value : ethers.utils.hexlify(value);
-
-      try {
-        name = ethers.utils.parseBytes32String(value);
-      } catch (error) {
-        // Value doesn't contain a UTF-8 encoded string
-        name = (typeof value === 'string') ? value : key;
-      }
-    } else {
-      name = value;
-      key = ethers.utils.formatBytes32String(value);
-    }
-
-    if (name === undefined || key === undefined) {
-      throw new Error('Invalid PrivateDataKey value');
-    }
-
-    return new PrivateDataKey(_constructorGuard, key, name);
-  }
+  throw new Error(`Unsupported key format: "${key}".`);
 }

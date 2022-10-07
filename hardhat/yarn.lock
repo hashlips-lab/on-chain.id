@@ -557,9 +557,9 @@
     undici "^5.4.0"
 
 "@oasisprotocol/sapphire-hardhat@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@oasisprotocol/sapphire-hardhat/-/sapphire-hardhat-1.0.1.tgz#7ef86f8b86a715c48a07d0cbd5ac408c65b8a0be"
-  integrity sha512-f1HFHfE2xzA7vb5gyV7DIWS7cSyRnSBHVSD0iWdyTWpqG/Kz3KelQMtjx5V8pZdDf5hTMGxGnv3wPYk39FaW2Q==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@oasisprotocol/sapphire-hardhat/-/sapphire-hardhat-1.0.2.tgz#858810d31e02d2452dd0fe90dff504d07f9bbb1e"
+  integrity sha512-KPEPwsvw2PIsKJHiJw7VftEPHiIK8wQRm2Io/y1gzSxJJafMWeO/9/Vc/1DnULj462QnkCYgk4p/77pv/khgBA==
   dependencies:
     "@oasisprotocol/sapphire-paratime" "^1.0.7"
 
