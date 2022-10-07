@@ -55,6 +55,10 @@ interface OnChainIdInterface {
   refreshUserData: (userAddress: string, key: PrivateDataKeyLike) => void;
   getUserDataError?: { name: string, expiration?: BigNumber };
 
+  writePrivateData: (newPrivateData: PrivateData[]) => void;
+  writePrivateDataResult?: ethers.providers.TransactionReceipt;
+  isWritePrivateDataLoading?: boolean;
+
   deleteUserData: (key: PrivateDataKey) => void;
   deleteDataResult?: ethers.providers.TransactionReceipt;
   isDeleteUserDataLoading: boolean;
@@ -269,6 +273,71 @@ export function OnChainIdProvider({ children }: Props) {
     })();
   }, [ getPermissionsProgress ]);
 
+  // Write multiple data
+  const filterUpdatedData = (newPrivateData?: PrivateData[]): PrivateData[] => {
+    const onChainPrivateData = getPrivateDataProgress?.currentData;
+
+    if (!onChainPrivateData || !newPrivateData) {
+      return [];
+    }
+
+    const updatedPrivateData: PrivateData[] = [];
+    const onChainPrivateDataMap: Map<string, string> = new Map(onChainPrivateData.map(
+      entry => [entry.key.getName(), entry.data],
+    ));
+
+    let matchingEntriesCounter = 0;
+
+    newPrivateData.map(newEntry => {
+      if (onChainPrivateDataMap.has(newEntry.key.getName())) {
+        if (onChainPrivateDataMap.get(newEntry.key.getName()) !== newEntry.key.getName()) {
+          updatedPrivateData.push(newEntry);
+        }
+
+        matchingEntriesCounter++;
+      }
+    });
+
+    if (onChainPrivateData.length !== matchingEntriesCounter) {
+      throw new Error('Editable data MUST include at least all the on-chain entries.')
+    }
+
+    return updatedPrivateData;
+  }
+
+  const [ writePrivateDataArgs, setWritePrivateDataArgs ] = useState<PrivateData[]>();
+  const [ debouncedPrivateDataArgs ] = useDebounce(writePrivateDataArgs, 500);
+  const { config: writePrivateDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
+    functionName: 'writeMultipleData',
+    args: [ debouncedPrivateDataArgs ],
+    enabled: Boolean(debouncedPrivateDataArgs && debouncedPrivateDataArgs?.length != 0 ),
+  }));
+  const { write: writePrivateDataWrite, isLoading: isWritePrivateDataLoading, data: writePrivateDataTx } = useContractWrite(writePrivateDataConfig);
+  const { data: writePrivateDataResult } = useWaitForTransaction({ hash: writePrivateDataTx?.hash });
+
+  const writePrivateData = (newPrivateDataArgs: PrivateData[]) => {
+    if (!newPrivateDataArgs) {
+      setWritePrivateDataArgs(undefined);
+
+      return;
+    }
+
+    newPrivateDataArgs = filterUpdatedData(newPrivateDataArgs);
+
+    setWritePrivateDataArgs(newPrivateDataArgs);
+  }
+
+  useEffect(() => {
+    if (writePrivateDataArgs) {
+      writePrivateDataWrite?.();
+    }
+  }, [ writePrivateDataArgs ]);
+
+  useEffect(() => {
+    setWritePrivateDataArgs(undefined);
+    // TODO: refresh permissions
+  }, [ writePrivateDataResult ]);
+
   // Delete data
   const [ writeDeleteDataArgs, setWriteDeleteDataArgs ] = useState<{ key: BytesLike }>();
   const [ debouncedDeleteDataArgs ] = useDebounce(writeDeleteDataArgs, 500);
@@ -328,6 +397,7 @@ export function OnChainIdProvider({ children }: Props) {
 
     return updatedPermissions;
   }
+
   const [ writePermissionsArgs, setWritePermissionsArgs ] = useState<WritePermissionsArgs>();
   const [ debouncedWritePermissionsArgs ] = useDebounce(writePermissionsArgs, 500);
   const { config: writePermissionsConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
@@ -401,6 +471,9 @@ export function OnChainIdProvider({ children }: Props) {
       name: (getDataError as any).errorName,
       expiration: (getDataError as any)?.errorArgs[0] as BigNumber | undefined,
     },
+    writePrivateData,
+    writePrivateDataResult,
+    isWritePrivateDataLoading,
     deleteUserData: deleteData,
     deleteDataResult,
     isDeleteUserDataLoading: deleteDataIsLoading,
