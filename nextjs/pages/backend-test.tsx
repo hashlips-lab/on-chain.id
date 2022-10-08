@@ -1,3 +1,5 @@
+// TODO: This is a temporary page for testing and can be used as a reference. Delete this as soon as the real front end is ready.
+
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -37,19 +39,15 @@ const BackEndTest: NextPage = () => {
     getUserDataError,
 
     writePrivateData,
-    writePrivateDataResult,
     isWritePrivateDataLoading,
 
     deleteUserData,
-    deleteDataResult,
     isDeleteUserDataLoading,
 
     writePermissions,
-    writePermissionsResult,
     isWritePermissionsLoading,
 
     disableProvider,
-    disableProviderResult,
     isDisableProviderLoading,
   } = useOnChainIdContext();
   const [ walletIsConnected, setWalletIsConnected ] = useState(false);

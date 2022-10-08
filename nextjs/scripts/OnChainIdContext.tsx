@@ -1,5 +1,3 @@
-// TODO: This is a temporary page for this branch (remove before merge)
-
 import { ethers, BigNumber, BytesLike, Bytes } from 'ethers';
 import { useDebounce } from 'use-debounce';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
@@ -138,7 +136,10 @@ export function OnChainIdProvider({ children }: Props) {
   const [ debouncedGetDataArgs ] = useDebounce(getDataArgs, 500);
   const { data: getData, refetch: getDataRefetch, error: getDataError } = useContractRead(onChainIdContractConfigBuilder({
     functionName: 'getData',
-    args: [ debouncedGetDataArgs?.userAddress, debouncedGetDataArgs?.key ],
+    args: [
+      debouncedGetDataArgs?.userAddress,
+      debouncedGetDataArgs && ethers.utils.hexlify(debouncedGetDataArgs?.key)
+    ],
     watch: false,
     enabled: Boolean(debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress)),
   }));
@@ -360,7 +361,7 @@ export function OnChainIdProvider({ children }: Props) {
   const [ writeDeleteDataArgs, setWriteDeleteDataArgs ] = useState<{ key: Bytes }>();
   const { config: deleteDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
     functionName: 'deleteData',
-    args: [ writeDeleteDataArgs?.key ],
+    args: [ writeDeleteDataArgs && ethers.utils.hexlify(writeDeleteDataArgs?.key) ],
     enabled: Boolean(writeDeleteDataArgs?.key),
   }));
   const { write: deleteDataWrite, isLoading: deleteDataIsLoading, data: deleteDataTx } = useContractWrite(deleteDataConfig);
