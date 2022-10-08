@@ -13,10 +13,6 @@ import { Bytes, ethers } from 'ethers';
 
 const BackEndTest: NextPage = () => {
   const { isConnected } = useAccount();
-  const [ walletIsConnected, setWalletIsConnected ] = useState(false);
-  const [ providerAddress, setProviderAddress ] = useState('');
-  const [ userAddress, setUserAddress ] = useState('');
-  const [ userKey, setUserKey ] = useState('');
   const {
     noExpirationValue,
   
@@ -56,6 +52,10 @@ const BackEndTest: NextPage = () => {
     disableProviderResult,
     isDisableProviderLoading,
   } = useOnChainIdContext();
+  const [ walletIsConnected, setWalletIsConnected ] = useState(false);
+  const [ expirationProviderAddressInputValue, setExpirationProviderAddressInputValue ] = useState('');
+  const [ getUserDataAddressInputValue, setGetUserDataAddressInputValue ] = useState('');
+  const [ getUserDataKeyInputValue, setGetUserDataKeyInputValue ] = useState('');
 
   // Write private data (edit existing data)
   const [ editablePrivateData, setEditablePrivateData ] = useState<string[]>([]);
@@ -135,6 +135,15 @@ const BackEndTest: NextPage = () => {
 
     return hasValidNewData || hasValidPrivateDataChanges;
   };
+
+  // Get permissions
+  const [ permissionsProviderAddressInputValue, setPermissionsProviderAddressInputValue ] = useState('');
+
+  useEffect(() => {
+    if (ethers.utils.isAddress(permissionsProviderAddressInputValue)) {
+      refreshOnChainPermissions(permissionsProviderAddressInputValue);
+    }
+  }, [ permissionsProviderAddressInputValue ]);
 
   // Write permissions
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
@@ -229,7 +238,7 @@ const BackEndTest: NextPage = () => {
             {allowedProviders.map((provider, index) =>
               <li key={`allowed-providers-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
                 <code className="text-xs">{provider}</code>
-                <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={() => refreshOnChainPermissions(provider)} disabled={areOnChainPermissionsRefreshing}>Show permissions</button>
+                <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={() => setPermissionsProviderAddressInputValue(provider)} disabled={areOnChainPermissionsRefreshing}>Show permissions</button>
                 <button className="px-2 py-1 text-xs border border-black rounded disabled:bg-red-300" onClick={() => disableProvider(provider)} disabled={isDisableProviderLoading}>🗑 Delete</button>
               </li>
             )}
@@ -238,20 +247,23 @@ const BackEndTest: NextPage = () => {
           <hr className="w-96 border border-black" />
 
           <h2 className="mt-4 text-xl font-bold">Permissions:</h2>
-          {editablePermissions.length > 0 && <>
-            <small className="font-normal font-mono"><strong>Provider:</strong> {onChainPermissionsProvider}</small>
-            <ul className="my-4">
-              {onChainPermissions.map((permissionsEntry, index) =>
-                <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
-                  <div>
-                    <strong>Access {editablePermissions[index] ? <span className="text-green-700">granted</span> : <span className="text-red-700">denied</span>}</strong>
-                    <button className="mx-2 px-2 py-1 text-xs border border-black rounded disabled:bg-red-300" onClick={() => togglePermissions(index)}>🔁 Toggle</button>
-                  </div>
-                  <code className="text-xs">{keyToString(permissionsEntry.key)}</code>
-                </li>
-              )}
-            </ul>
-            <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={handleWritePermissionsClick} disabled={isWritePermissionsLoading || !permissionsChanged()}>Save</button>
+          <input className="px-1 w-96 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300" type="text" placeholder='Provider address' onChange={(e) => setPermissionsProviderAddressInputValue(e.target.value)} value={permissionsProviderAddressInputValue} />
+          {ethers.utils.isAddress(permissionsProviderAddressInputValue) && <>
+            <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={() => refreshOnChainPermissions(permissionsProviderAddressInputValue)} disabled={areOnChainPermissionsRefreshing}>Refresh</button>
+            {editablePermissions.length > 0 && <>
+              <ul className="my-4">
+                {onChainPermissions.map((permissionsEntry, index) =>
+                  <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
+                    <div>
+                      <strong>Access {editablePermissions[index] ? <span className="text-green-700">granted</span> : <span className="text-red-700">denied</span>}</strong>
+                      <button className="mx-2 px-2 py-1 text-xs border border-black rounded disabled:bg-red-300" onClick={() => togglePermissions(index)}>🔁 Toggle</button>
+                    </div>
+                    <code className="text-xs">{keyToString(permissionsEntry.key)}</code>
+                  </li>
+                )}
+              </ul>
+              <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={handleWritePermissionsClick} disabled={isWritePermissionsLoading || !permissionsChanged()}>Save</button>
+            </>}
           </>}
 
           <hr className="w-96 border border-black" />
@@ -265,16 +277,16 @@ const BackEndTest: NextPage = () => {
 
           <h2 className="mt-4 text-xl font-bold">Provider Expiration:</h2>
           <small className="font-normal italic">(current user context)</small>
-          <input className="border border-black mt-1 mb-4 w-96 text-sm" type="text" placeholder='Provider address' onChange={(e) => setProviderAddress(e.target.value)} />
-          <button className="px-2 py-1 border border-black rounded" onClick={() => refreshProviderExpiration(providerAddress)}>Get expiration for provider</button>
+          <input className="px-1 w-96 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300" type="text" placeholder='Provider address' onChange={(e) => setExpirationProviderAddressInputValue(e.target.value)} />
+          <button className="px-2 py-1 border border-black rounded" onClick={() => refreshProviderExpiration(expirationProviderAddressInputValue)}>Get expiration for provider</button>
           {providerExpiration && <strong>{providerExpiration.toNumber()}</strong>}
 
           <hr className="w-96 border border-black" />
 
-          <h2 className="mt-4 text-xl font-bold">Data:</h2>
-          <input className="border border-black mt-1 mb-4 w-96 text-sm" type="text" placeholder='User address' onChange={(e) => setUserAddress(e.target.value)} />
-          <input className="border border-black mt-1 mb-4 w-96 text-sm" type="text" placeholder='Key' onChange={(e) => setUserKey(e.target.value)} />
-          <button className="px-2 py-1 border border-black rounded" onClick={() => refreshUserData(userAddress, keyToBytes(userKey))}>Get data</button>
+          <h2 className="mt-4 text-xl font-bold">Retrieve user data:</h2>
+          <input className="px-1 w-96 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300" type="text" placeholder='User address' onChange={(e) => setGetUserDataAddressInputValue(e.target.value)} />
+          <input className="px-1 w-96 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300" type="text" placeholder='Key' onChange={(e) => setGetUserDataKeyInputValue(e.target.value)} />
+          <button className="px-2 py-1 border border-black rounded" onClick={() => refreshUserData(getUserDataAddressInputValue, keyToBytes(getUserDataKeyInputValue))}>Get data</button>
           {userData && <strong>{userData}</strong>}
           {getUserDataError && <span className="text-red-500">{ getUserDataError.name === AccessDenied ? `Access denied or expired: ${String(getUserDataError.expiration)}` : `Access denied to this information` }</span>}
         </> : <>Please connect wallet</>}
