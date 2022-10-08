@@ -341,11 +341,10 @@ export function OnChainIdProvider({ children }: Props) {
 
   // Delete data
   const [ writeDeleteDataArgs, setWriteDeleteDataArgs ] = useState<{ key: BytesLike }>();
-  const [ debouncedDeleteDataArgs ] = useDebounce(writeDeleteDataArgs, 500);
   const { config: deleteDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
     functionName: 'deleteData',
-    args: [ debouncedDeleteDataArgs?.key ],
-    enabled: Boolean(debouncedDeleteDataArgs?.key),
+    args: [ writeDeleteDataArgs?.key ],
+    enabled: Boolean(writeDeleteDataArgs?.key),
   }));
   const { write: deleteDataWrite, isLoading: deleteDataIsLoading, data: deleteDataTx } = useContractWrite(deleteDataConfig);
   const { data: deleteDataResult } = useWaitForTransaction({ hash: deleteDataTx?.hash });
@@ -355,10 +354,10 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   useEffect(() => {
-    if (debouncedDeleteDataArgs) {
+    if (writeDeleteDataArgs) {
       deleteDataWrite?.();
     }
-  }, [ debouncedDeleteDataArgs ]);
+  }, [ writeDeleteDataArgs ]);
 
   useEffect(() => {
     if (deleteDataResult) {
@@ -400,15 +399,14 @@ export function OnChainIdProvider({ children }: Props) {
   }
 
   const [ writePermissionsArgs, setWritePermissionsArgs ] = useState<WritePermissionsArgs>();
-  const [ debouncedWritePermissionsArgs ] = useDebounce(writePermissionsArgs, 500);
   const { config: writePermissionsConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
     functionName: 'writePermissions',
     args: [
-      debouncedWritePermissionsArgs?.providerAddress ?? ethers.constants.AddressZero,
-      debouncedWritePermissionsArgs?.updatedPermissions,
-      debouncedWritePermissionsArgs?.expiration ?? 0,
+      writePermissionsArgs?.providerAddress ?? ethers.constants.AddressZero,
+      writePermissionsArgs?.updatedPermissions,
+      writePermissionsArgs?.expiration ?? 0,
     ],
-    enabled: Boolean(debouncedWritePermissionsArgs && debouncedWritePermissionsArgs?.updatedPermissions.length != 0),
+    enabled: Boolean(writePermissionsArgs && writePermissionsArgs?.updatedPermissions.length != 0),
   }));
   const { write: writePermissionsWrite, isLoading: writePermissionsIsLoading, data: writePermissionsTx } = useContractWrite(writePermissionsConfig);
   const { data: writePermissionsResult } = useWaitForTransaction({ hash: writePermissionsTx?.hash });
@@ -437,14 +435,14 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   useEffect(() => {
-    if (debouncedWritePermissionsArgs) {
+    if (writePermissionsArgs) {
       writePermissionsWrite?.();
     }
-  }, [ debouncedWritePermissionsArgs ]);
+  }, [ writePermissionsArgs ]);
 
   useEffect(() => {
     if (writePermissionsResult) {
-      const updatedProviderAddress = debouncedWritePermissionsArgs?.providerAddress;
+      const updatedProviderAddress = writePermissionsArgs?.providerAddress;
       setWritePermissionsArgs(undefined);
 
       if (updatedProviderAddress) {

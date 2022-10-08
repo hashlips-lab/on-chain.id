@@ -60,13 +60,26 @@ const BackEndTest: NextPage = () => {
   };
 
   const handleWritePermissionsClick = () => {
+    if (!onChainPermissionsProvider) {
+      throw new Error('Cannot write permissions before a provider has been selected.');
+    }
+
     writePermissions({
-      providerAddress: onChainPermissionsProvider!,
+      providerAddress: onChainPermissionsProvider,
       updatedPermissions: onChainPermissions.map((entry, index) => {
         return { key: entry.key, canRead: editablePermissions[index] };
       }),
       expiration: noExpirationValue!,
     });
+  };
+
+  const permissionsChanged = () => {
+    return onChainPermissionsProvider &&
+      onChainPermissions.length > 0 &&
+      onChainPermissions.reduce(
+        (didChange, entry, index) => didChange || (entry.canRead !== editablePermissions[index]),
+        false,
+      );
   };
 
   useEffect(() => {
@@ -130,7 +143,7 @@ const BackEndTest: NextPage = () => {
                 </li>
               )}
             </ul>
-            <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={handleWritePermissionsClick} disabled={isWritePermissionsLoading}>Save</button>
+            <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={handleWritePermissionsClick} disabled={isWritePermissionsLoading || !permissionsChanged()}>Save</button>
           </>}
 
           <hr className="w-96 border border-black" />
