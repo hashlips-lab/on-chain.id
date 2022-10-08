@@ -4,7 +4,6 @@ import { ethers, BigNumber, BytesLike, Bytes } from 'ethers';
 import { useDebounce } from 'use-debounce';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
-import { SendTransactionResult } from '@wagmi/core';
 import { useContractContext } from './ContractConfigContext';
 import { keyToString } from './lib/OnChainId/types/PrivateDataKey';
 
@@ -19,7 +18,7 @@ interface WritePermissionsArgs {
   expiration: BigNumber;
 }
 
-interface PrivateData {
+interface PrivateDataEntry {
   key: Bytes;
   data: string;
 }
@@ -36,9 +35,9 @@ interface Props {
 interface OnChainIdInterface {
   noExpirationValue?: BigNumber;
 
-  privateData: PrivateData[];
-  refreshPrivateData: (entriesPerPage?: number) => void;
-  isPrivateDataRefreshing: boolean;
+  onChainPrivateData: PrivateDataEntry[];
+  refreshOnChainPrivateData: (entriesPerPage?: number) => void;
+  isOnChainPrivateDataRefreshing: boolean;
 
   allowedProviders: string[];
   refreshAllowedProviders: (providersPerPage?: number) => void;
@@ -56,7 +55,7 @@ interface OnChainIdInterface {
   refreshUserData: (userAddress: string, key: Bytes) => void;
   getUserDataError?: { name: string, expiration?: BigNumber };
 
-  writePrivateData: (newPrivateData: PrivateData[]) => void;
+  writePrivateData: (newPrivateData: PrivateDataEntry[]) => void;
   writePrivateDataResult?: ethers.providers.TransactionReceipt;
   isWritePrivateDataLoading?: boolean;
 
@@ -73,7 +72,7 @@ interface GetPrivateDataProgress {
   isLoading: boolean;
   nextStartKey?: BytesLike;
   entriesPerPage: number;
-  currentData: PrivateData[];
+  currentData: PrivateDataEntry[];
 }
 
 interface GetAllowedProvidersProgress {
@@ -236,7 +235,7 @@ export function OnChainIdProvider({ children }: Props) {
     enabled: false,
   }));
 
-  const refreshOnChainPermissions = (provider: string, entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
+  const refreshPermissions = (provider: string, entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
     setGetPermissionsProgress({
       isLoading: true,
       provider, 
@@ -275,27 +274,27 @@ export function OnChainIdProvider({ children }: Props) {
   }, [ getPermissionsProgress ]);
 
   // Write multiple data
-  const filterUpdatedData = (newPrivateData?: PrivateData[]): PrivateData[] => {
+  const filterUpdatedPrivateData = (newPrivateData?: PrivateDataEntry[]): PrivateDataEntry[] => {
     const onChainPrivateData = getPrivateDataProgress?.currentData;
 
     if (!onChainPrivateData || !newPrivateData) {
       return [];
     }
 
-    const updatedPrivateData: PrivateData[] = [];
+    const updatedPrivateData: PrivateDataEntry[] = [];
     const onChainPrivateDataMap: Map<string, string> = new Map(onChainPrivateData.map(
-      entry => [String(entry.key), entry.data],
+      entry => [keyToString(entry.key), entry.data],
     ));
 
     let matchingEntriesCounter = 0;
 
     newPrivateData.map(newEntry => {
-      if (onChainPrivateDataMap.has(String(newEntry.key))) {
-        if (onChainPrivateDataMap.get(String(newEntry.key)) !== String(newEntry.key)) {
-          updatedPrivateData.push(newEntry);
-        }
-
+      if (onChainPrivateDataMap.has(keyToString(newEntry.key))) {
         matchingEntriesCounter++;
+      }
+
+      if (onChainPrivateDataMap.get(keyToString(newEntry.key)) !== newEntry.data) {
+        updatedPrivateData.push(newEntry);
       }
     });
 
@@ -306,37 +305,39 @@ export function OnChainIdProvider({ children }: Props) {
     return updatedPrivateData;
   }
 
-  const [ writePrivateDataArgs, setWritePrivateDataArgs ] = useState<PrivateData[]>();
-  const [ debouncedPrivateDataArgs ] = useDebounce(writePrivateDataArgs, 500);
+  const [ writePrivateDataArgs, setWritePrivateDataArgs ] = useState<{ data: PrivateDataEntry[] }>();
   const { config: writePrivateDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
     functionName: 'writeMultipleData',
-    args: [ debouncedPrivateDataArgs ],
-    enabled: Boolean(debouncedPrivateDataArgs && debouncedPrivateDataArgs?.length != 0 ),
+    args: [ writePrivateDataArgs?.data ],
+    enabled: Boolean(writePrivateDataArgs && writePrivateDataArgs.data?.length !== 0 ),
   }));
-  const { write: writePrivateDataWrite, isLoading: isWritePrivateDataLoading, data: writePrivateDataTx } = useContractWrite(writePrivateDataConfig);
+  const { write: writePrivateDataWrite, isLoading: writePrivateDataIsLoading, data: writePrivateDataTx } = useContractWrite(writePrivateDataConfig);
   const { data: writePrivateDataResult } = useWaitForTransaction({ hash: writePrivateDataTx?.hash });
 
-  const writePrivateData = (newPrivateDataArgs: PrivateData[]) => {
-    if (!newPrivateDataArgs) {
+  const writePrivateData = (newData?: PrivateDataEntry[]) => {
+    if (!newData) {
       setWritePrivateDataArgs(undefined);
 
       return;
     }
 
-    newPrivateDataArgs = filterUpdatedData(newPrivateDataArgs);
+    newData = filterUpdatedPrivateData(newData);
 
-    setWritePrivateDataArgs(newPrivateDataArgs);
+    setWritePrivateDataArgs({ data: newData });
   }
 
   useEffect(() => {
-    if (writePrivateDataArgs) {
+    if (writePrivateDataArgs?.data.length !== 0) {
       writePrivateDataWrite?.();
     }
   }, [ writePrivateDataArgs ]);
 
   useEffect(() => {
-    setWritePrivateDataArgs(undefined);
-    // TODO: refresh permissions
+    if (writePrivateDataResult) {
+      setWritePrivateDataArgs(undefined);
+      
+      refreshPrivateData(getPrivateDataProgress?.entriesPerPage);
+    }
   }, [ writePrivateDataResult ]);
 
   // Delete data
@@ -376,17 +377,17 @@ export function OnChainIdProvider({ children }: Props) {
 
     const updatedPermissions: PermissionsEntry[] = [];
     const onChainPermissionsMap: Map<string, boolean> = new Map(onChainPermissions.map(
-      entry => [ String(entry.key), entry.canRead ],
+      entry => [ keyToString(entry.key), entry.canRead ],
     ));
 
     let matchingEntriesCounter = 0;
 
     newPermissions.map(newEntry => {
-      if (onChainPermissionsMap.has(String(newEntry.key))) {
+      if (onChainPermissionsMap.has(keyToString(newEntry.key))) {
         matchingEntriesCounter++;
       }
 
-      if (onChainPermissionsMap.get(String(newEntry.key)) !== newEntry.canRead) {
+      if (onChainPermissionsMap.get(keyToString(newEntry.key)) !== newEntry.canRead) {
         updatedPermissions.push(newEntry);
       }
     });
@@ -406,12 +407,12 @@ export function OnChainIdProvider({ children }: Props) {
       writePermissionsArgs?.updatedPermissions,
       writePermissionsArgs?.expiration ?? 0,
     ],
-    enabled: Boolean(writePermissionsArgs && writePermissionsArgs?.updatedPermissions.length != 0),
+    enabled: Boolean(writePermissionsArgs && writePermissionsArgs?.updatedPermissions.length !== 0),
   }));
   const { write: writePermissionsWrite, isLoading: writePermissionsIsLoading, data: writePermissionsTx } = useContractWrite(writePermissionsConfig);
   const { data: writePermissionsResult } = useWaitForTransaction({ hash: writePermissionsTx?.hash });
 
-  const writePermissions = (newWritePermissionsArgs: WritePermissionsArgs) => {
+  const writePermissions = (newWritePermissionsArgs?: WritePermissionsArgs) => {
     if (!newWritePermissionsArgs) {
       setWritePermissionsArgs(undefined);
 
@@ -446,7 +447,7 @@ export function OnChainIdProvider({ children }: Props) {
       setWritePermissionsArgs(undefined);
 
       if (updatedProviderAddress) {
-        refreshOnChainPermissions(updatedProviderAddress, getPermissionsProgress?.entriesPerPage);
+        refreshPermissions(updatedProviderAddress, getPermissionsProgress?.entriesPerPage);
       }
     }
   }, [ writePermissionsResult ]);
@@ -454,9 +455,9 @@ export function OnChainIdProvider({ children }: Props) {
   const value: OnChainIdInterface = {
     noExpirationValue: noExpirationValue as BigNumber | undefined,
 
-    privateData: getPrivateDataProgress?.currentData === undefined ? []: getPrivateDataProgress.currentData,
-    refreshPrivateData,
-    isPrivateDataRefreshing: getPrivateDataProgress?.isLoading === true,
+    onChainPrivateData: getPrivateDataProgress?.currentData === undefined ? []: getPrivateDataProgress.currentData,
+    refreshOnChainPrivateData: refreshPrivateData,
+    isOnChainPrivateDataRefreshing: getPrivateDataProgress?.isLoading === true,
 
     allowedProviders: getAllowedProvidersProgress?.currentData === undefined ? []: getAllowedProvidersProgress.currentData,
     refreshAllowedProviders,
@@ -464,7 +465,7 @@ export function OnChainIdProvider({ children }: Props) {
 
     onChainPermissions: getPermissionsProgress?.currentData === undefined ? []: getPermissionsProgress.currentData,
     onChainPermissionsProvider: getPermissionsProgress?.provider,
-    refreshOnChainPermissions,
+    refreshOnChainPermissions: refreshPermissions,
     areOnChainPermissionsRefreshing: getPermissionsProgress?.isLoading === true,
 
     providerExpiration: getExpiration as BigNumber | undefined,
@@ -479,7 +480,7 @@ export function OnChainIdProvider({ children }: Props) {
 
     writePrivateData,
     writePrivateDataResult,
-    isWritePrivateDataLoading,
+    isWritePrivateDataLoading: writePrivateDataIsLoading,
 
     deleteUserData: deleteData,
     deleteDataResult,

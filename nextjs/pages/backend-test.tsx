@@ -19,9 +19,9 @@ const BackEndTest: NextPage = () => {
   const {
     noExpirationValue,
   
-    privateData,
-    refreshPrivateData,
-    isPrivateDataRefreshing,
+    onChainPrivateData,
+    refreshOnChainPrivateData,
+    isOnChainPrivateDataRefreshing,
 
     allowedProviders,
     refreshAllowedProviders,
@@ -39,6 +39,10 @@ const BackEndTest: NextPage = () => {
     refreshUserData,
     getUserDataError,
 
+    writePrivateData,
+    writePrivateDataResult,
+    isWritePrivateDataLoading,
+
     deleteUserData,
     deleteDataResult,
     isDeleteUserDataLoading,
@@ -47,6 +51,32 @@ const BackEndTest: NextPage = () => {
     writePermissionsResult,
     isWritePermissionsLoading,
   } = useOnChainIdContext();
+
+  // Write private data
+  const [ editablePrivateData, setEditablePrivateData ] = useState<string[]>([]);
+
+  useEffect(() => {
+    setEditablePrivateData(onChainPrivateData.map(entry => entry.data));
+  }, [ onChainPrivateData ]);
+
+  const updateEditablePrivateData = (updateIndex: number, newData: string) => {
+    setEditablePrivateData(editablePrivateData.map((data, index) => (index === updateIndex) ? newData : data));
+  };
+
+  const handleWritePrivateDataClick = () => {
+    writePrivateData(onChainPrivateData.map((entry, index) => {
+      return { key: entry.key, data: editablePrivateData[index] };
+    }));
+  };
+
+  const privateDataChanged = () => {
+    return onChainPrivateData.length > 0 &&
+      onChainPrivateData.reduce(
+        (didChange, entry, index) =>
+          editablePrivateData[index]?.length !== 0 && (didChange || (entry.data !== editablePrivateData[index])),
+        false,
+      );
+  };
 
   // Write permissions
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
@@ -82,6 +112,7 @@ const BackEndTest: NextPage = () => {
       );
   };
 
+  // Connection
   useEffect(() => {
       setWalletIsConnected(isConnected);
   }, [ isConnected ]);
@@ -105,25 +136,28 @@ const BackEndTest: NextPage = () => {
           <hr className="mt-8 w-96 border border-black"/>
 
           <h2 className="mt-4 text-xl font-bold">Private data:</h2>
-          <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={() => refreshPrivateData()} disabled={isPrivateDataRefreshing}>Refresh</button>
-          <ul className="my-4">
-            {privateData.map((data, index) =>
-              <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
-                <strong>{data.data}</strong>
-                <code className="text-xs">{keyToString(data.key)}</code>
-                <button className="px-2 py-1 text-xs border border-black rounded disabled:bg-red-800" onClick={() => deleteUserData(data.key)} disabled={isDeleteUserDataLoading}>🗑 Delete</button>
-              </li>
-            )}
-          </ul>
+          <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={() => refreshOnChainPrivateData()} disabled={isOnChainPrivateDataRefreshing}>Refresh</button>
+          {onChainPrivateData.length > 0 && <>
+            <ul className="my-4">
+              {onChainPrivateData.map((data, index) =>
+                <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
+                  <input className="px-1 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300" type="text" onChange={(e) => {updateEditablePrivateData(index, e.target.value)}} value={editablePrivateData[index] ?? ''} required />
+                  <code className="text-xs">{keyToString(data.key)}</code>
+                  <button className="px-2 py-1 text-xs border border-black rounded disabled:bg-red-300" onClick={() => deleteUserData(data.key)} disabled={isDeleteUserDataLoading}>🗑 Delete</button>
+                </li>
+              )}
+            </ul>
+            <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={handleWritePrivateDataClick} disabled={isWritePrivateDataLoading || !privateDataChanged()}>Save</button>
+          </>}
 
           <hr className="w-96 border border-black"/>
 
           <h2 className="mt-4 text-xl font-bold">Allowed providers:</h2>
-          <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={() => refreshAllowedProviders()} disabled={areAllowedProvidersRefreshing}>Refresh</button>
+          <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={() => refreshAllowedProviders()} disabled={areAllowedProvidersRefreshing}>Refresh</button>
           <ul className="my-4">
             {allowedProviders.map((provider, index) =>
               <li key={`allowed-providers-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
-                <code className="text-xs">{provider}</code> <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={() => refreshOnChainPermissions(provider)} disabled={areOnChainPermissionsRefreshing}>Show permissions</button>
+                <code className="text-xs">{provider}</code> <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={() => refreshOnChainPermissions(provider)} disabled={areOnChainPermissionsRefreshing}>Show permissions</button>
               </li>
             )}
           </ul>
@@ -132,18 +166,19 @@ const BackEndTest: NextPage = () => {
 
           <h2 className="mt-4 text-xl font-bold">Permissions:</h2>
           {onChainPermissions.length > 0 && <>
+            <small className="font-normal font-mono"><strong>Provider:</strong> {onChainPermissionsProvider}</small>
             <ul className="my-4">
               {onChainPermissions.map((permissionsEntry, index) =>
                 <li key={`private-data-${index}`} className="flex flex-col mb-4 p-2 border border-black rounded">
                   <div>
                     <strong>Access {editablePermissions[index] ? <span className="text-green-700">granted</span> : <span className="text-red-700">denied</span>}</strong>
-                    <button className="mx-2 px-2 py-1 text-xs border border-black rounded disabled:bg-red-800" onClick={() => togglePermissions(index)}>🔁 Toggle</button>
+                    <button className="mx-2 px-2 py-1 text-xs border border-black rounded disabled:bg-red-300" onClick={() => togglePermissions(index)}>🔁 Toggle</button>
                   </div>
                   <code className="text-xs">{keyToString(permissionsEntry.key)}</code>
                 </li>
               )}
             </ul>
-            <button className="px-2 py-1 border border-black rounded disabled:bg-red-800" onClick={handleWritePermissionsClick} disabled={isWritePermissionsLoading || !permissionsChanged()}>Save</button>
+            <button className="px-2 py-1 border border-black rounded disabled:bg-red-300" onClick={handleWritePermissionsClick} disabled={isWritePermissionsLoading || !permissionsChanged()}>Save</button>
           </>}
 
           <hr className="w-96 border border-black" />
