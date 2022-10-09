@@ -1,25 +1,26 @@
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
 import styles from '../styles/Login.module.scss';
 
-const WALLET_LIST = [
-  { icon: './images/icon/metamask.svg', description: 'Log in with MetaMask' },
-  {
-    icon: './images/icon/coinbase.svg',
-    description: 'Log in with Coinbase Wallet',
-  },
-  {
-    icon: './images/icon/walletConnect.svg',
-    description: 'Log in with WalletConnect',
-  },
-  {
-    icon: './images/icon/phantom.svg',
-    description: 'Log in with Phantom (Solana)',
-  },
-  { icon: './images/icon/glow.svg', description: 'Log in with Glow (Solana)' },
-];
+const DEFAULT_REDIRECT_PATH = '/';
 
 const Login: NextPage = () => {
+  const router = useRouter();
+  const { isConnected } = useAccount();
+
+  useEffect(() => {
+    if (isConnected) {
+      const returnUrl = router.query.returnUrl || DEFAULT_REDIRECT_PATH;
+
+      // router.push doesn't work properly (causes infinite redirect loop)
+      window.location.href = Array.isArray(returnUrl) ? returnUrl[0] ?? '' : returnUrl;
+    }
+  }, [ isConnected ]);
+
   return (
     <div className={styles.container}>
       <div className={styles.left_content}>
@@ -35,7 +36,8 @@ const Login: NextPage = () => {
           </div>
           <div className={styles.questions}>Questions?</div>
           <div className={styles.faq}>
-            Check out our <a href="#">FAQs</a>
+            Check out our&nbsp;
+            <a href="#" onClick={() => alert('This has not been implemented yet!')/* TODO: implement this */}>FAQs</a>
           </div>
         </div>
       </div>
@@ -46,34 +48,16 @@ const Login: NextPage = () => {
           create one now.
         </p>
 
-        <ul>
-          {WALLET_LIST.map(({ icon, description }, i) => {
-            return (
-              <li key={i}>
-                <button className={styles.wallet}>
-                  <div className={styles.icon}>
-                    <Image
-                      src={icon}
-                      width={36}
-                      height={36}
-                      alt={description}
-                    />
-                  </div>
+        <div className={styles.buttonContainer}>
+          <ConnectButton label="Connect wallet or create one" />
+        </div>
 
-                  <div>{description}</div>
-                </button>
-              </li>
-            );
-          })}
-
-          <li>
-            <button className={styles.moreOption}>SHOW MORE OPTIONS</button>
-          </li>
-        </ul>
-
+        {/* TODO: We have no error to show here since RainbowKit handles
+                  everything inside its popup.
         <div className={styles.error}>
           Chain Error! Please change to MainNet.
         </div>
+        */}
       </div>
     </div>
   );

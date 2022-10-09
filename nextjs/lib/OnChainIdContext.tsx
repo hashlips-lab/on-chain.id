@@ -319,11 +319,11 @@ export function OnChainIdProvider({ children }: Props) {
     });
 
     if (onChainPrivateData.length !== matchingEntriesCounter) {
-      throw new Error('Editable data MUST include at least all the on-chain entries.')
+      throw new Error('Editable data MUST include at least all the on-chain entries.');
     }
 
     return updatedPrivateData;
-  }
+  };
 
   const [ writePrivateDataArgs, setWritePrivateDataArgs ] = useState<{ data: PrivateDataEntry[] }>();
   const { config: writePrivateDataConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({
@@ -348,7 +348,7 @@ export function OnChainIdProvider({ children }: Props) {
     newData = filterUpdatedPrivateData(newData);
 
     setWritePrivateDataArgs({ data: newData });
-  }
+  };
 
   useEffect(() => {
     if (!writePrivateDataIsLoading && writePrivateDataArgs && writePrivateDataWrite) {
@@ -421,7 +421,7 @@ export function OnChainIdProvider({ children }: Props) {
     }
 
     return updatedPermissions;
-  }
+  };
 
   const [ writePermissionsArgs, setWritePermissionsArgs ] = useState<WritePermissionsArgs>();
   const { config: writePermissionsConfig } = usePrepareContractWrite(onChainIdContractConfigBuilder({

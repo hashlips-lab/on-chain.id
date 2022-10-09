@@ -67,34 +67,8 @@
       @apply flex justify-center items-center self-center;
     }
 
-    ul {
-      @apply mb-[2.25rem];
-
-      button {
-        @apply rounded-[0.75rem];
-        @apply border-[#939393] border-[0.125rem];
-        @apply w-[100%] h-[3.75rem];
-        @apply flex items-center;
-        @apply px-[1.5rem] py-[0.75rem] mb-[0.75rem];
-        @apply leading-[1.3125rem];
-
-        &.wallet {
-
-          .icon {
-            @apply flex;
-            @apply mr-[1.5rem]
-          }
-
-          div {
-            @apply font-urbanist font-black text-[#000]
-          }
-        }
-
-        &.moreOption {
-          @apply font-urbanist font-black text-[#0075FF];
-          @apply flex justify-center;
-        }
-      }
+    .buttonContainer {
+      @apply flex justify-center;
     }
 
     .error {

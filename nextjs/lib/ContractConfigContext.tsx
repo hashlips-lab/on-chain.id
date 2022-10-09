@@ -33,11 +33,15 @@ export function UseContractProvider({ children }: Props) {
     return (contractConfiguration) => {
       return { ...partialContractConfiguration, ...contractConfiguration };
     };
+  };
+
+  if (!process.env.NEXT_PUBLIC_ON_CHAIN_ID_ADDRESS) {
+    throw new Error('Contract address ENV variable could not be found!');
   }
 
   const value = {
     onChainIdContractConfigBuilder: generateContractConfigBuilder({
-      addressOrName: process.env.NEXT_PUBLIC_ON_CHAIN_ID_ADDRESS!,
+      addressOrName: process.env.NEXT_PUBLIC_ON_CHAIN_ID_ADDRESS,
       contractInterface: onChainId.abi,
       // TODO: investigate this
       // Read calls randomly use the wrong address when moving between wallets

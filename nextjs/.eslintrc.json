@@ -11,9 +11,11 @@
     "quotes": [ "error", "single" ],
     "max-len": [ "error", { "code": 125, "comments": 80 } ],
     "no-trailing-spaces": "error",
+    "semi": [ "error", "always" ],
     "comma-dangle": [ "error", "always-multiline" ],
     "array-bracket-spacing": [ "error", "always" ],
     "object-curly-spacing": [ "error", "always" ],
+    "newline-before-return": "error",
     "jsx-quotes": [ "error", "prefer-double" ],
     "react/jsx-curly-brace-presence": [ "error", "never" ]
   }

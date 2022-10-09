@@ -70,12 +70,16 @@ const PermissionRequest = () => {
       </ul>
 
       <div className={styles.buttonWrapper}>
-        <Button type="borderRedBgWhiteTextRed" size="lg" onClick={() => {console.log('Click!')/* TODO: implement this */}}>
-          DENY
-        </Button>
-        <Button type="borderBlueBgBlueTextWhite" size="lg" onClick={() => {console.log('Click!')/* TODO: implement this */}}>
-          APPROVE
-        </Button>
+        <Button
+          type="borderRedBgWhiteTextRed"
+          size="lg"
+          onClick={() => console.log('Click!')/* TODO: implement this */}
+        >DENY</Button>
+        <Button
+          type="borderBlueBgBlueTextWhite"
+          size="lg"
+          onClick={() => console.log('Click!')/* TODO: implement this */}
+        >APPROVE</Button>
       </div>
 
       <p>
