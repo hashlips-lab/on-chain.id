@@ -7,9 +7,14 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    "indent": ["error", 2],
-    "quotes": ["error", "single"],
-    "jsx-quotes": ["error", "prefer-double"],
-    "react/jsx-curly-brace-presence": ["error", "never"]
+    "indent": [ "error", 2 ],
+    "quotes": [ "error", "single" ],
+    "max-len": [ "error", { "code": 125, "comments": 80 } ],
+    "no-trailing-spaces": "error",
+    "comma-dangle": [ "error", "always-multiline" ],
+    "array-bracket-spacing": [ "error", "always" ],
+    "object-curly-spacing": [ "error", "always" ],
+    "jsx-quotes": [ "error", "prefer-double" ],
+    "react/jsx-curly-brace-presence": [ "error", "never" ]
   }
 }
