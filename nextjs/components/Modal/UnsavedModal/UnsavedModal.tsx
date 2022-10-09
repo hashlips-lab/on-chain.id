@@ -11,10 +11,10 @@ const UnsavedModal = () => {
       </p>
 
       <div className={styles.buttonWrapper}>
-        <Button type="borderRedBgWhiteTextRed" size="lg" onClick={() => {console.log('Click!')/* TODO: implement this */}}>
+        <Button type="borderRedBgWhiteTextRed" size="lg" onClick={() => {console.log('Click!');/* TODO: implement this */}}>
           IT’S FINE
         </Button>
-        <Button type="borderBlueBgBlueTextWhite" size="lg" onClick={() => {console.log('Click!')/* TODO: implement this */}}>
+        <Button type="borderBlueBgBlueTextWhite" size="lg" onClick={() => {console.log('Click!');/* TODO: implement this */}}>
           TAKE ME BACK
         </Button>
       </div>

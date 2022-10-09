@@ -33,7 +33,7 @@ export function UseContractProvider({ children }: Props) {
     return (contractConfiguration) => {
       return { ...partialContractConfiguration, ...contractConfiguration };
     };
-  }
+  };
 
   if (!process.env.NEXT_PUBLIC_ON_CHAIN_ID_ADDRESS) {
     throw new Error('Contract address ENV variable could not be found!');

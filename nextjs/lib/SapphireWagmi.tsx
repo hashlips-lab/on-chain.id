@@ -17,7 +17,7 @@ export const sapphireChain: Chain = {
     default: { name: 'Sapphire Explorer (Testnet)', url: 'https://testnet.explorer.sapphire.oasis.dev' },
   },
   testnet: true,
-}
+};
 
 export const sapphireWrapProvider = (chainProviderFunction: ChainProviderFn) => (chain: Chain) => {
   const chainProvider = chainProviderFunction(chain);
@@ -46,7 +46,7 @@ export const sapphireConnectorWrapper = (connector: Connector) => {
         }
 
         return cachedProvider;
-      }
+      };
 
       if (property === 'getProvider') {
         return getProvider;

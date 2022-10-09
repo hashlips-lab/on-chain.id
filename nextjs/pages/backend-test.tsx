@@ -214,7 +214,7 @@ const BackEndTest: NextPage = () => {
                   <input
                     className="px-1 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300"
                     type="text"
-                    onChange={(e) => {updateEditablePrivateData(index, e.target.value)}}
+                    onChange={e => updateEditablePrivateData(index, e.target.value)}
                     value={editablePrivateData[index] ?? ''}
                     required
                   />
@@ -242,14 +242,14 @@ const BackEndTest: NextPage = () => {
                 <input
                   className="px-1 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300"
                   type="text"
-                  onChange={(e) => {updateNewPrivateData(index, e.target.value)}}
+                  onChange={e => updateNewPrivateData(index, e.target.value)}
                   value={newPrivateData[index].data ?? ''}
                   required
                 />
                 <input
                   className="px-1 text-xs font-mono rounded bg-slate-100 border border-slate-500 invalid:bg-red-300"
                   type="text"
-                  onChange={(e) => {updateNewPrivateDataKey(index, keyToBytes(e.target.value))}}
+                  onChange={e => updateNewPrivateDataKey(index, keyToBytes(e.target.value))}
                   value={keyToString(newPrivateData[index].key)}
                   required
                 />

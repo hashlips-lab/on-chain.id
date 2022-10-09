@@ -8,7 +8,7 @@ export const keyToString = (key: BytesLike): string => {
   }
 
   return ethers.utils.hexlify(key);
-}
+};
 
 export const keyToBytes = (key: string): Bytes => {
   if (!ethers.utils.isHexString(key)) {
@@ -20,4 +20,4 @@ export const keyToBytes = (key: string): Bytes => {
   }
 
   throw new Error(`Unsupported key format: "${key}".`);
-}
+};
