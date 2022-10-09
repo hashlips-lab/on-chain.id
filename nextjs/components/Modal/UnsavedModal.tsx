@@ -1,4 +1,4 @@
-import styles from "./UnsavedModal.module.scss";
+import styles from './UnsavedModal.module.scss';
 
 const UnsavedModal = () => {
   return (

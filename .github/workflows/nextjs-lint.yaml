@@ -1,0 +1,48 @@
+name: NextJS lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/nextjs-lint.yaml"
+      - "nextjs/**"
+  pull_request:
+    paths:
+      - ".github/workflows/nextjs-lint.yaml"
+      - "nextjs/**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js (Hardhat)
+        uses: actions/setup-node@v2
+        with:
+          cache: yarn
+          cache-dependency-path: hardhat/yarn.lock
+
+      - name: Yarn install (Hardhat)
+        run: cd ./hardhat && yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compile contract (Hardhat)
+        run: cd ./hardhat && yarn hardhat compile
+
+      - name: Setup Node.js (NextJS)
+        uses: actions/setup-node@v2
+        with:
+          cache: yarn
+          cache-dependency-path: nextjs/yarn.lock
+
+      - name: Yarn install (NextJS)
+        run: cd ./nextjs && yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run ESLint (NextJS)
+        run: cd ./nextjs && yarn lint

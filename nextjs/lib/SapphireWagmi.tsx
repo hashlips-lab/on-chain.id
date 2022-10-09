@@ -53,9 +53,8 @@ export const sapphireConnectorWrapper = (connector: Connector) => {
       }
 
       if (property in connector) {
-        // @ts-ignore
-        return connector[property];
+        return (connector as any)[property];
       }
-    }
+    },
   });
 };

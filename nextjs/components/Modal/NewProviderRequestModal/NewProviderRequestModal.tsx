@@ -1,6 +1,6 @@
-import styles from "./NewProviderRequestModal.module.scss";
-import Image from "next/image";
-import PermissionRequest from "../../PermissionRequest/PermissionRequest";
+import styles from './NewProviderRequestModal.module.scss';
+import Image from 'next/image';
+import PermissionRequest from '../../PermissionRequest/PermissionRequest';
 
 const NewProviderRequestModal = () => {
   return (

@@ -1,22 +1,22 @@
-import type { NextPage } from "next";
-import Image from "next/image";
-import styles from "../styles/Login.module.scss";
+import type { NextPage } from 'next';
+import Image from 'next/image';
+import styles from '../styles/Login.module.scss';
 
 const WALLET_LIST = [
-  { icon: "./images/icon/metamask.svg", description: "Log in with MetaMask" },
+  { icon: './images/icon/metamask.svg', description: 'Log in with MetaMask' },
   {
-    icon: "./images/icon/coinbase.svg",
-    description: "Log in with Coinbase Wallet",
+    icon: './images/icon/coinbase.svg',
+    description: 'Log in with Coinbase Wallet',
   },
   {
-    icon: "./images/icon/walletConnect.svg",
-    description: "Log in with WalletConnect",
+    icon: './images/icon/walletConnect.svg',
+    description: 'Log in with WalletConnect',
   },
   {
-    icon: "./images/icon/phantom.svg",
-    description: "Log in with Phantom (Solana)",
+    icon: './images/icon/phantom.svg',
+    description: 'Log in with Phantom (Solana)',
   },
-  { icon: "./images/icon/glow.svg", description: "Log in with Glow (Solana)" },
+  { icon: './images/icon/glow.svg', description: 'Log in with Glow (Solana)' },
 ];
 
 const Login: NextPage = () => {

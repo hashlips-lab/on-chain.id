@@ -1,7 +1,7 @@
 import { ContractInterface } from  'ethers';
 import React, { createContext, ReactNode, useContext } from  'react';
 import { useAccount } from 'wagmi';
-
+import onChainId from '../../hardhat/artifacts/contracts/OnChainId.sol/OnChainId.json';
 interface Props {
   children: ReactNode;
 }
@@ -17,20 +17,21 @@ interface PartialContractConfigurationInterface {
   contractInterface: ContractInterface;
   overrides: { from?: string },
 }
-const onChainId = require('../../hardhat/artifacts/contracts/OnChainId.sol/OnChainId.json');
 
 const UseContractContext = createContext({} as UseContractInterface);
 
 export function useContractContext() {
-    return useContext(UseContractContext);
+  return useContext(UseContractContext);
 }
 
 export function UseContractProvider({ children }: Props) {
   const { address } = useAccount();
 
-  const generateContractConfigBuilder = (partialContractConfiguration: PartialContractConfigurationInterface): ContractConfigBuilder => {
+  const generateContractConfigBuilder = (
+    partialContractConfiguration: PartialContractConfigurationInterface,
+  ): ContractConfigBuilder => {
     return (contractConfiguration) => {
-      return {...partialContractConfiguration, ...contractConfiguration};
+      return { ...partialContractConfiguration, ...contractConfiguration };
     };
   }
 
@@ -38,7 +39,8 @@ export function UseContractProvider({ children }: Props) {
     onChainIdContractConfigBuilder: generateContractConfigBuilder({
       addressOrName: process.env.NEXT_PUBLIC_ON_CHAIN_ID_ADDRESS!,
       contractInterface: onChainId.abi,
-      // TODO: why do read calls randomly use the wrong address when moving between wallets??
+      // TODO: investigate this
+      // Read calls randomly use the wrong address when moving between wallets
       overrides: { from: address },
     }),
   } as UseContractInterface;

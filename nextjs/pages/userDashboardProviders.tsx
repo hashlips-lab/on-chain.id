@@ -1,15 +1,15 @@
-import type { NextPage } from "next";
-import Button from "../components/Button/Button";
-import Nav from "../components/nav/Nav";
-import RightSideContentBox from "../components/RightSideContentBox/RightSideContentBox";
-import TopNavBar from "../components/TopNavBar/TopNavBar";
-import styles from "../styles/UserDashboardProviders.module.scss";
-import Image from "next/image";
+import type { NextPage } from 'next';
+import Button from '../components/Button/Button';
+import Nav from '../components/nav/Nav';
+import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../components/TopNavBar/TopNavBar';
+import styles from '../styles/UserDashboardProviders.module.scss';
+import Image from 'next/image';
 
 const KEY_LIST = [
-  "0xde3B22caAaD25e65C839c2A3d852d665669EdD5c",
-  "0xde3B22caAaD25e65C839c2A3d852d665669EdD5c",
-  "0xde3B22caAaD25e65C839c2A3d852d665669EdD5c",
+  '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
+  '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
+  '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
 ];
 
 const UserDashboardProviders: NextPage = () => {
@@ -19,12 +19,12 @@ const UserDashboardProviders: NextPage = () => {
       <RightSideContentBox>
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent={"TEST"}
-          firstBtnOnClick={() => {}}
+          firstBtnContent="TEST"
+          firstBtnOnClick={() => {console.log('Click!')/* TODO: implement this */}}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
-          secondBtnContent={"CREATE"}
-          secondBtnOnClick={() => {}}
+          secondBtnContent="CREATE"
+          secondBtnOnClick={() => {console.log('Click!')/* TODO: implement this */}}
           subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
         />
         <div className={styles.midContent}>
@@ -33,17 +33,17 @@ const UserDashboardProviders: NextPage = () => {
             <div className={styles.button}>
               <Button
                 type="borderRedBgRedTextWhite"
-                onClick={() => {}}
-                size={"md"}
+                onClick={() => {console.log('Click!')/* TODO: implement this */}}
+                size="md"
               >
                 <div className={styles.btnContent}>
                   <span>REMOVE ALL</span>
                   <div>
                     <Image
-                      src={"./images/icon/close.svg"}
+                      src="./images/icon/close.svg"
                       width={16}
                       height={16}
-                      alt={"Remove"}
+                      alt="Remove"
                     />
                   </div>
                 </div>
@@ -61,17 +61,17 @@ const UserDashboardProviders: NextPage = () => {
                       <div className={styles.firstBtn}>
                         <Button
                           type="borderRedBgWhiteTextRed"
-                          onClick={() => {}}
-                          size={"sm"}
+                          onClick={() => {console.log('Click!')/* TODO: implement this */}}
+                          size="sm"
                         >
                           <div className={styles.btnContent}>
                             <span>REMOVE</span>
                             <div>
                               <Image
-                                src={"./images/icon/closeRed.svg"}
+                                src="./images/icon/closeRed.svg"
                                 width={16}
                                 height={16}
-                                alt={"Remove"}
+                                alt="Remove"
                               />
                             </div>
                           </div>
@@ -80,8 +80,8 @@ const UserDashboardProviders: NextPage = () => {
                       <div className={styles.secondBtn}>
                         <Button
                           type="borderBlueBgWhiteTextBlue"
-                          onClick={() => {}}
-                          size={"sm"}
+                          onClick={() => {console.log('Click!')/* TODO: implement this */}}
+                          size="sm"
                         >
                           VIEW
                         </Button>

@@ -1,23 +1,23 @@
-import Button from "../Button/Button";
-import styles from "./PermissionRequest.module.scss";
-import Image from "next/image";
+import Button from '../Button/Button';
+import styles from './PermissionRequest.module.scss';
+import Image from 'next/image';
 
 const SOCIAL_MEDIA_LINKS = [
   {
-    icon: "./images/icon/facebook.svg",
-    name: "facebook",
+    icon: './images/icon/facebook.svg',
+    name: 'facebook',
     isActive: true,
   },
 
   {
-    icon: "./images/icon/hashlips.svg",
-    name: "Hashlips/Hash",
+    icon: './images/icon/hashlips.svg',
+    name: 'Hashlips/Hash',
     isActive: false,
   },
 
   {
-    icon: "./images/icon/gitlab.svg",
-    name: "gitlab",
+    icon: './images/icon/gitlab.svg',
+    name: 'gitlab',
     isActive: true,
   },
 ];
@@ -48,14 +48,14 @@ const PermissionRequest = () => {
                   <div className={styles.socialStatus}>
                     {isActive ? (
                       <Image
-                        src={"./images/icon/check.svg"}
+                        src="./images/icon/check.svg"
                         width={36}
                         height={36}
                         alt={name}
                       />
                     ) : (
                       <Image
-                        src={"./images/icon/unCheck.svg"}
+                        src="./images/icon/unCheck.svg"
                         width={36}
                         height={36}
                         alt={name}
@@ -70,10 +70,10 @@ const PermissionRequest = () => {
       </ul>
 
       <div className={styles.buttonWrapper}>
-        <Button type="borderRedBgWhiteTextRed" size="lg" onClick={() => {}}>
+        <Button type="borderRedBgWhiteTextRed" size="lg" onClick={() => {console.log('Click!')/* TODO: implement this */}}>
           DENY
         </Button>
-        <Button type="borderBlueBgBlueTextWhite" size="lg" onClick={() => {}}>
+        <Button type="borderBlueBgBlueTextWhite" size="lg" onClick={() => {console.log('Click!')/* TODO: implement this */}}>
           APPROVE
         </Button>
       </div>
