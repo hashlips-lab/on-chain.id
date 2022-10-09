@@ -1,6 +1,6 @@
 .button {
   @apply w-full;
-  @apply border-[0.125rem] rounded-[0.75rem];
+  @apply border-[0.125rem];
   @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem];
 
   &.borderRedBgWhiteTextRed {
@@ -26,7 +26,24 @@
     @apply text-[#939393];
   }
 
+  &.borderRedBgRedTextWhite {
+    @apply bg-[#FF0000];
+    @apply border-[#FF0000];
+    @apply text-[#fff];
+  }
+
   &.lg {
     @apply px-[1.5rem] py-[1.1875rem];
+    @apply rounded-[0.75rem];
+  }
+
+  &.md {
+    @apply px-[12px] py-[13px];
+    @apply rounded-[6px];
+  }
+
+  &.sm {
+    @apply px-[12px] py-[7px];
+    @apply rounded-[6px];
   }
 }

@@ -5,7 +5,8 @@ export interface ButtonProps {
     | "borderRedBgWhiteTextRed"
     | "borderBlueBgBlueTextWhite"
     | "borderBlueBgWhiteTextBlue"
-    | "borderGreyBgWhiteTextGrey";
+    | "borderGreyBgWhiteTextGrey"
+    | "borderRedBgRedTextWhite";
   size: "sm" | "md" | "lg";
   children: any;
   onClick?: () => void;
