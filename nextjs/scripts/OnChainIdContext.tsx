@@ -292,9 +292,9 @@ export function OnChainIdProvider({ children }: Props) {
 
   // Write multiple data
   const filterUpdatedPrivateData = (newPrivateData?: PrivateDataEntry[]): PrivateDataEntry[] => {
-    const onChainPrivateData = getPrivateDataProgress?.currentData;
+    const onChainPrivateData = getPrivateDataProgress?.currentData ?? [];
 
-    if (!onChainPrivateData || !newPrivateData) {
+    if (!newPrivateData) {
       return [];
     }
 
