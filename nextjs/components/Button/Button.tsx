@@ -1,6 +1,6 @@
 import styles from "./Button.module.scss";
 
-interface ButtonProps {
+export interface ButtonProps {
   type:
     | "borderRedBgWhiteTextRed"
     | "borderBlueBgBlueTextWhite"

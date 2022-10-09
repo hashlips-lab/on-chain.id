@@ -1,21 +1,41 @@
-import Button from "../Button/Button";
+import Button, { ButtonProps } from "../Button/Button";
 import styles from "./TopNavBar.module.scss";
 
-const TopNavBar = () => {
+interface TopNavBar {
+  mainTitle: string;
+  subTitle: string;
+  firstBtnClass: ButtonProps["type"];
+  firstBtnContent: any;
+  firstBtnOnClick: () => void;
+  secondBtnClass: ButtonProps["type"];
+  secondBtnContent: any;
+  secondBtnOnClick: () => void;
+}
+
+const TopNavBar = ({
+  mainTitle,
+  subTitle,
+  firstBtnClass,
+  firstBtnContent,
+  firstBtnOnClick,
+  secondBtnClass,
+  secondBtnContent,
+  secondBtnOnClick,
+}: TopNavBar) => {
   return (
     <div className={styles.topNavBar}>
       <div className={styles.topNavBarTitle}>
-        <h1 className={styles.h1}>Provider Dashboard</h1>
-        <span>0xde3B22caAaD25e65C839c2A3d852d665669EdD5c</span>
+        <h1 className={styles.h1}>{mainTitle}</h1>
+        <span>{subTitle}</span>
       </div>
 
       <div className={styles.buttonWrapper}>
-        <Button type="borderBlueBgWhiteTextBlue" size="lg" onClick={() => {}}>
-          TEST
+        <Button type={firstBtnClass} size="lg" onClick={firstBtnOnClick}>
+          {firstBtnContent}
         </Button>
 
-        <Button type="borderBlueBgBlueTextWhite" size="lg" onClick={() => {}}>
-          CREATE
+        <Button type={secondBtnClass} size="lg" onClick={secondBtnOnClick}>
+          {secondBtnContent}
         </Button>
       </div>
     </div>
