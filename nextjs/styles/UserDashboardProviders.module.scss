@@ -1,0 +1,81 @@
+.userDashboardLinks {
+  @apply flex flex-col-reverse;
+
+  @screen xl {
+    @apply flex-row;
+  }
+
+  .midContent {
+    @apply flex flex-col;
+
+    .btnContent {
+      @apply flex justify-between content-center;
+    }
+
+    .subBtnTitleWrapper {
+      @apply flex flex-col;
+      @apply w-full;
+      @apply mb-[2.25rem];
+
+      @screen sm {
+        @apply flex-row justify-between items-center;
+      }
+
+      .title {
+        @apply flex;
+        @apply font-poppins font-semibold text-[1.5rem] leading-[2.25rem];
+        @apply mb-[0.75rem];
+
+      }
+
+      .button {
+        @apply min-w-[10.5625rem];
+      }
+    }
+
+    ul {
+      li {
+        .listItem {
+          @apply flex justify-between content-center flex-col;
+          @apply mb-[1.5rem];
+
+          @screen sm {
+            @apply flex-row
+          }
+
+          .keyText {
+            @apply font-urbanist font-medium text-[1.5rem] leading-[1.8125rem];
+            @apply break-all;
+            @apply mb-[1.25rem];
+            @apply mr-[1.25rem];
+
+            @screen sm {
+              @apply mb-0;
+            }
+          }
+
+          .btnWrapper {
+            @apply flex flex-col;
+            @apply w-full;
+
+            @screen sm {
+              @apply flex-row justify-between;
+              @apply max-w-[14.375rem];
+            }
+
+            .firstBtn {
+              @apply min-w-[8.9375rem];
+              @apply mb-[1.25rem];
+
+              @screen sm {
+                @apply mb-0;
+              }
+            }
+
+          }
+        }
+      }
+    }
+  }
+
+}

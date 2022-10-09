@@ -15,7 +15,7 @@
 
     .inputWrapper {
       div {
-        @apply mb-[12px];
+        @apply mb-[0.75rem];
         @apply flex flex-col;
       }
     }
@@ -23,7 +23,7 @@
     .buttonWrapper {
       @apply flex justify-between;
       @apply w-full;
-      @apply mb-[36px];
+      @apply mb-[2.25rem];
 
       @screen lg {
         @apply max-w-[30%];
@@ -31,17 +31,17 @@
       }
 
       button {
-        @apply w-[calc(50%-6px)];
+        @apply w-[calc(50%-0.375rem)];
       }
     }
 
     .secondTitle {
-      @apply font-urbanist font-bold text-[24px] leading-[29px];
-      @apply mb-[12px];
+      @apply font-urbanist font-bold text-[1.5rem] leading-[1.8125rem];
+      @apply mb-[0.75rem];
     }
 
     .subList {
-      @apply font-urbanist font-normal text-[24px] leading-[28px];
+      @apply font-urbanist font-normal text-[1.5rem] leading-[1.75rem];
     }
 
   }
