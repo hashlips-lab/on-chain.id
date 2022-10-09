@@ -95,7 +95,7 @@ interface GetPermissionsProgress {
 const OnChainIdContext = createContext({} as OnChainIdInterface);
 
 export function useOnChainIdContext() {
-    return useContext(OnChainIdContext);
+  return useContext(OnChainIdContext);
 }
 
 export function OnChainIdProvider({ children }: Props) {
@@ -138,7 +138,7 @@ export function OnChainIdProvider({ children }: Props) {
     functionName: 'getData',
     args: [
       debouncedGetDataArgs?.userAddress,
-      debouncedGetDataArgs && ethers.utils.hexlify(debouncedGetDataArgs?.key)
+      debouncedGetDataArgs && ethers.utils.hexlify(debouncedGetDataArgs?.key),
     ],
     watch: false,
     enabled: Boolean(debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress)),
@@ -189,7 +189,10 @@ export function OnChainIdProvider({ children }: Props) {
           throw new Error('Something went wrong...');
         }
 
-        const normalizedPrivateData = privateData.map(entry => ({ key: ethers.utils.arrayify(entry.key), data: entry.data }));
+        const normalizedPrivateData = privateData.map(entry => ({
+          key: ethers.utils.arrayify(entry.key),
+          data: entry.data,
+        }));
 
         setGetPrivateDataProgress({
           isLoading: nextStartKey !== ethers.constants.HashZero,
@@ -255,7 +258,7 @@ export function OnChainIdProvider({ children }: Props) {
   const refreshPermissions = (provider: string, entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
     setGetPermissionsProgress({
       isLoading: true,
-      provider, 
+      provider,
       nextStartKey: undefined,
       entriesPerPage,
       currentData: [],
@@ -276,7 +279,7 @@ export function OnChainIdProvider({ children }: Props) {
 
         const normalizedPrivateData = permissions.map(entry => ({
           key: ethers.utils.arrayify(entry.key),
-          canRead: entry.canRead
+          canRead: entry.canRead,
         }));
 
         setGetPermissionsProgress({
@@ -300,7 +303,7 @@ export function OnChainIdProvider({ children }: Props) {
 
     const updatedPrivateData: PrivateDataEntry[] = [];
     const onChainPrivateDataMap: Map<string, string> = new Map(onChainPrivateData.map(
-      entry => [keyToString(entry.key), entry.data],
+      entry => [ keyToString(entry.key), entry.data ],
     ));
 
     let matchingEntriesCounter = 0;
@@ -328,7 +331,11 @@ export function OnChainIdProvider({ children }: Props) {
     args: [ writePrivateDataArgs?.data ],
     enabled: Boolean(writePrivateDataArgs && writePrivateDataArgs.data?.length !== 0 ),
   }));
-  const { write: writePrivateDataWrite, isLoading: writePrivateDataIsLoading, data: writePrivateDataTx } = useContractWrite(writePrivateDataConfig);
+  const {
+    write: writePrivateDataWrite,
+    isLoading: writePrivateDataIsLoading,
+    data: writePrivateDataTx,
+  } = useContractWrite(writePrivateDataConfig);
   const { data: writePrivateDataResult } = useWaitForTransaction({ hash: writePrivateDataTx?.hash });
 
   const writePrivateData = (newData?: PrivateDataEntry[]) => {
@@ -352,7 +359,7 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     if (writePrivateDataResult) {
       setWritePrivateDataArgs(undefined);
-      
+
       refreshPrivateData(getPrivateDataProgress?.entriesPerPage);
     }
   }, [ writePrivateDataResult ]);
@@ -426,7 +433,11 @@ export function OnChainIdProvider({ children }: Props) {
     ],
     enabled: Boolean(writePermissionsArgs && writePermissionsArgs?.updatedPermissions.length !== 0),
   }));
-  const { write: writePermissionsWrite, isLoading: writePermissionsIsLoading, data: writePermissionsTx } = useContractWrite(writePermissionsConfig);
+  const {
+    write: writePermissionsWrite,
+    isLoading: writePermissionsIsLoading,
+    data: writePermissionsTx,
+  } = useContractWrite(writePermissionsConfig);
   const { data: writePermissionsResult } = useWaitForTransaction({ hash: writePermissionsTx?.hash });
 
   const writePermissions = (newWritePermissionsArgs?: WritePermissionsArgs) => {
@@ -476,7 +487,11 @@ export function OnChainIdProvider({ children }: Props) {
     args: [ disableProviderArgs?.providerAddress ],
     enabled: Boolean(disableProviderArgs?.providerAddress),
   }));
-  const { write: disableProviderWrite, isLoading: disableProviderIsLoading, data: disableProviderTx } = useContractWrite(disableProviderConfig);
+  const {
+    write: disableProviderWrite,
+    isLoading: disableProviderIsLoading,
+    data: disableProviderTx,
+  } = useContractWrite(disableProviderConfig);
   const { data: disableProviderResult } = useWaitForTransaction({ hash: disableProviderTx?.hash });
 
   const disableProvider = (providerAddress: string) => {

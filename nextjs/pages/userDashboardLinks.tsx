@@ -1,10 +1,10 @@
-import type { NextPage } from "next";
-import Nav from "../components/nav/Nav";
-import PermissionRequest from "../components/PermissionRequest/PermissionRequest";
-import PermissionRequestLinkAndCode from "../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode";
-import RightSideContentBox from "../components/RightSideContentBox/RightSideContentBox";
-import TopNavBar from "../components/TopNavBar/TopNavBar";
-import styles from "../styles/UserDashboardLinks.module.scss";
+import type { NextPage } from 'next';
+import Nav from '../components/nav/Nav';
+import PermissionRequest from '../components/PermissionRequest/PermissionRequest';
+import PermissionRequestLinkAndCode from '../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode';
+import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../components/TopNavBar/TopNavBar';
+import styles from '../styles/UserDashboardLinks.module.scss';
 const UserDashboardLinks: NextPage = () => {
   return (
     <div className={styles.userDashboardLinks}>
@@ -12,12 +12,12 @@ const UserDashboardLinks: NextPage = () => {
       <RightSideContentBox>
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent={"TEST"}
-          firstBtnOnClick={() => {}}
+          firstBtnContent="TEST"
+          firstBtnOnClick={() => {console.log('Click!')/* TODO: implement this */}}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
-          secondBtnContent={"CREATE"}
-          secondBtnOnClick={() => {}}
+          secondBtnContent="CREATE"
+          secondBtnOnClick={() => {console.log('Click!')/* TODO: implement this */}}
           subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
         />
         <div className={styles.midContent}>

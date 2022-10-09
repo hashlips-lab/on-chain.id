@@ -24,6 +24,7 @@ const { connectors } = getDefaultWallets({
 const wagmiClient = createClient({
   autoConnect: true,
   // TODO: not working...
+  // eslint-disable-next-line
   //connectors: () => connectors().map(connector => sapphireConnectorWrapper(connector)),
   connectors,
   provider,

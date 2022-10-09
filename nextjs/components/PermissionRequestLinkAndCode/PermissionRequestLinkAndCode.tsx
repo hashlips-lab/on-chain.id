@@ -1,12 +1,12 @@
-import Button from "../Button/Button";
-import styles from "./PermissionRequestLinkAndCode.module.scss";
-import Image from "next/image";
+import Button from '../Button/Button';
+import styles from './PermissionRequestLinkAndCode.module.scss';
+import Image from 'next/image';
 const PermissionRequestLinkAndCode = () => {
   return (
     <div className={styles.permissionRequestLinkAndCode}>
       <div className={styles.editor}>Code</div>
       <div className={styles.buildBtn}>
-        <Button type="borderBlueBgBlueTextWhite" onClick={() => {}} size={"lg"}>
+        <Button type="borderBlueBgBlueTextWhite" onClick={() => {console.log('Click!')/* TODO: implement this */}} size="lg">
           Build Link
         </Button>
       </div>

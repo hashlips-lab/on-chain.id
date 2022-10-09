@@ -1,5 +1,5 @@
-import Image from "next/image";
-import styles from "./Nav.module.scss";
+import Image from 'next/image';
+import styles from './Nav.module.scss';
 const Nav = () => {
   return (
     <div className={styles.nav}>
