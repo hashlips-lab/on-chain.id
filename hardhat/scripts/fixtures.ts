@@ -13,6 +13,7 @@ async function main() {
 
   await onChainId.writePermissions('0x70997970C51812dc3A010C7d01b50e0d17dc79C8', [
     { key: formatBytes32String('Discord'), canRead: true },
+    { key: keccak256(toUtf8Bytes('Custom key (hash)')), canRead: true },
   ], onChainId.NO_EXPIRATION_VALUE());
 
   await onChainId.writePermissions('0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC', [
