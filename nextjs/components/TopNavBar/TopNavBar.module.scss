@@ -1,0 +1,40 @@
+.topNavBar {
+  @apply flex justify-between flex-col;
+  @apply mb-[2.25rem];
+
+  @screen xl {
+    @apply flex-row;
+  }
+
+  .topNavBarTitle {
+
+    @apply flex flex-col;
+    @apply mb-[1.25rem];
+
+    @screen xl {
+      @apply mb-0;
+    }
+
+    .h1 {
+      @apply font-poppins font-semibold text-[2.25rem] leading-[3.375rem];
+    }
+
+    span {
+      @apply font-urbanist font-normal text-[1.5rem] leading-[1.8125rem];
+      @apply break-all;
+
+    }
+  }
+
+  .buttonWrapper {
+    @apply flex justify-between items-center;
+
+    @screen xl {
+      @apply w-1/4;
+    }
+
+    button {
+      @apply w-[calc(50%-0.375rem)];
+    }
+  }
+}

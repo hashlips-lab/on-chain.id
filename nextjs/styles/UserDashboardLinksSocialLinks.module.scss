@@ -1,0 +1,49 @@
+.userDashboardLinks {
+  @apply flex flex-col-reverse;
+
+  @screen xl {
+    @apply flex-row;
+  }
+
+  .title {
+    @apply font-poppins font-semibold text-[1.5rem] leading-[2.25rem];
+    @apply mb-[0.75rem];
+  }
+
+  .midContent {
+    @apply flex flex-col;
+
+    .inputWrapper {
+      div {
+        @apply mb-[0.75rem];
+        @apply flex flex-col;
+      }
+    }
+
+    .buttonWrapper {
+      @apply flex justify-between;
+      @apply w-full;
+      @apply mb-[2.25rem];
+
+      @screen lg {
+        @apply max-w-[30%];
+
+      }
+
+      button {
+        @apply w-[calc(50%-0.375rem)];
+      }
+    }
+
+    .secondTitle {
+      @apply font-urbanist font-bold text-[1.5rem] leading-[1.8125rem];
+      @apply mb-[0.75rem];
+    }
+
+    .subList {
+      @apply font-urbanist font-normal text-[1.5rem] leading-[1.75rem];
+    }
+
+  }
+
+}

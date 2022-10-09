@@ -1,0 +1,25 @@
+.permissionRequestLinkAndCode {
+  @apply flex flex-col;
+
+  .editor {
+    @apply bg-[#3E3A44];
+    @apply p-[0.75rem];
+    @apply rounded-[0.5rem];
+    @apply text-[#fff];
+    @apply mb-[0.75rem];
+  }
+
+  .buildBtn {
+    @apply mb-[0.75rem];
+  }
+
+  .link {
+    @apply flex justify-between items-center;
+
+    span {
+      @apply font-urbanist font-medium text-[1.5rem] leading-[1.8125rem] text-[#0075FF];
+      @apply break-all;
+      @apply w-10/12;
+    }
+  }
+}

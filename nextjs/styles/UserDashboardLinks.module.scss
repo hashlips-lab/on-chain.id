@@ -1,0 +1,46 @@
+.userDashboardLinks {
+  @apply flex flex-col-reverse;
+
+  @screen xl {
+    @apply flex-row;
+  }
+
+  .title {
+    @apply font-poppins font-semibold text-[1.5rem] leading-[2.25rem];
+    @apply mb-[0.75rem];
+  }
+
+  .midContent {
+    @apply flex flex-col items-center;
+
+    @screen xl {
+      @apply flex-row items-start;
+    }
+
+    .leftSide {
+      @apply max-w-[41.625rem];
+      @apply mb-[1.875rem];
+
+      @screen xl {
+        @apply mr-[1.125rem] mb-0;
+
+      }
+
+    }
+
+    .rightSide {
+      @apply max-w-[41.625rem];
+
+      @screen xl {
+        @apply ml-[1.125rem];
+      }
+
+      .rightSideContentWrapper {
+        @apply px-[1.5rem] py-[3.75rem];
+        @apply border-[0.125rem] border-[#939393] rounded-[0.75rem];
+
+      }
+    }
+  }
+
+}
