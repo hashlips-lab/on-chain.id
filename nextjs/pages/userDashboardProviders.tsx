@@ -20,11 +20,11 @@ const UserDashboardProviders: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="TEST"
-          firstBtnOnClick={() => {console.log('Click!');/* TODO: implement this */}}
+          firstBtnOnClick={() => console.log('Click!')/* TODO: implement this */}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="CREATE"
-          secondBtnOnClick={() => {console.log('Click!');/* TODO: implement this */}}
+          secondBtnOnClick={() => console.log('Click!')/* TODO: implement this */}
           subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
         />
         <div className={styles.midContent}>
@@ -33,7 +33,7 @@ const UserDashboardProviders: NextPage = () => {
             <div className={styles.button}>
               <Button
                 type="borderRedBgRedTextWhite"
-                onClick={() => {console.log('Click!');/* TODO: implement this */}}
+                onClick={() => console.log('Click!')/* TODO: implement this */}
                 size="md"
               >
                 <div className={styles.btnContent}>
@@ -61,7 +61,7 @@ const UserDashboardProviders: NextPage = () => {
                       <div className={styles.firstBtn}>
                         <Button
                           type="borderRedBgWhiteTextRed"
-                          onClick={() => {console.log('Click!');/* TODO: implement this */}}
+                          onClick={() => console.log('Click!')/* TODO: implement this */}
                           size="sm"
                         >
                           <div className={styles.btnContent}>
@@ -80,7 +80,7 @@ const UserDashboardProviders: NextPage = () => {
                       <div className={styles.secondBtn}>
                         <Button
                           type="borderBlueBgWhiteTextBlue"
-                          onClick={() => {console.log('Click!');/* TODO: implement this */}}
+                          onClick={() => console.log('Click!')/* TODO: implement this */}
                           size="sm"
                         >
                           VIEW

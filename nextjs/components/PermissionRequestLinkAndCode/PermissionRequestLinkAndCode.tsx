@@ -6,9 +6,11 @@ const PermissionRequestLinkAndCode = () => {
     <div className={styles.permissionRequestLinkAndCode}>
       <div className={styles.editor}>Code</div>
       <div className={styles.buildBtn}>
-        <Button type="borderBlueBgBlueTextWhite" onClick={() => {console.log('Click!');/* TODO: implement this */}} size="lg">
-          Build Link
-        </Button>
+        <Button
+          type="borderBlueBgBlueTextWhite"
+          size="lg"
+          onClick={() => console.log('Click!')/* TODO: implement this */}
+        >Build Link</Button>
       </div>
       <div className={styles.link}>
         <span>
