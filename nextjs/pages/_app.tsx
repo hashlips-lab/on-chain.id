@@ -9,7 +9,8 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { UseContractProvider as ContractConfigProvider } from '../lib/ContractConfigContext';
 import { OnChainIdProvider } from '../lib/OnChainIdContext';
-import { sapphireChain, sapphireConnectorWrapper, sapphireWrapProvider } from '../lib/SapphireWagmi';
+import { sapphireChain,/* sapphireConnectorWrapper,*/ sapphireWrapProvider } from '../lib/SapphireWagmi';
+import RouteGuard from '../components/RouteGuard/RouteGuard';
 
 const { chains, provider } = configureChains(
   [ chain.hardhat, sapphireChain ],
@@ -33,11 +34,13 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return <WagmiConfig client={wagmiClient}>
     <RainbowKitProvider chains={chains}>
-      <ContractConfigProvider>
-        <OnChainIdProvider>
-          <Component {...pageProps} />
-        </OnChainIdProvider>
-      </ContractConfigProvider>
+      <RouteGuard>
+        <ContractConfigProvider>
+          <OnChainIdProvider>
+            <Component {...pageProps} />
+          </OnChainIdProvider>
+        </ContractConfigProvider>
+      </RouteGuard>
     </RainbowKitProvider>
   </WagmiConfig>;
 }
