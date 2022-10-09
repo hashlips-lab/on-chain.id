@@ -27,7 +27,7 @@ const config: HardhatUserConfig = {
       chainId: sapphire.NETWORKS.testnet.chainId,
       url: sapphire.NETWORKS.testnet.defaultGateway,
       accounts: [
-        process.env.PRIVATE_KEY ?? Buffer.alloc(0, 32).toString('hex'),
+        process.env.PRIVATE_KEY ?? Buffer.alloc(32, 0).toString('hex'),
       ],
     },
   },
