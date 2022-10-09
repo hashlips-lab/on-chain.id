@@ -1,21 +1,29 @@
 .button {
   @apply w-full;
+  @apply border-[0.125rem] rounded-[0.75rem];
+  @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem];
 
   &.borderRedBgWhiteTextRed {
-    @apply border-[0.125rem] border-[#FF0000] rounded-[0.75rem];
-    @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem] text-[#FF0000];
+    @apply border-[#FF0000];
+    @apply text-[#FF0000];
   }
 
   &.borderBlueBgBlueTextWhite {
     @apply bg-[#0075FF];
-    @apply border-[0.125rem] border-[#0075FF] rounded-[0.75rem];
-    @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem] text-[#fff];
+    @apply border-[#0075FF];
+    @apply text-[#fff];
   }
 
   &.borderBlueBgWhiteTextBlue {
     @apply bg-[#fff];
-    @apply border-[0.125rem] border-[#0075FF] rounded-[0.75rem];
-    @apply font-urbanist font-black text-[1.125rem] leading-[1.375rem] text-[#0075FF];
+    @apply border-[#0075FF];
+    @apply text-[#0075FF];
+  }
+
+  &.borderGreyBgWhiteTextGrey {
+    @apply bg-[#fff];
+    @apply border-[#939393];
+    @apply text-[#939393];
   }
 
   &.lg {
