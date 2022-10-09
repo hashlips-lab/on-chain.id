@@ -1,7 +1,7 @@
 .input {
   @apply flex;
-  @apply border-[2px] border-[#939393] rounded-[6px];
-  @apply px-[25px] py-[15px];
-  @apply font-urbanist font-medium text-[24px] leading-[24px] text-[#292D33];
+  @apply border-[0.125rem] border-[#939393] rounded-[0.375rem];
+  @apply px-[1.5625rem] py-[0.9375rem];
+  @apply font-urbanist font-medium text-[1.5rem] leading-[1.5rem] text-[#292D33];
 
 }
