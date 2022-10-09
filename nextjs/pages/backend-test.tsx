@@ -9,8 +9,8 @@ import {
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useAccount } from 'wagmi';
-import { useOnChainIdContext, AccessDenied, PrivateDataEntry } from '../scripts/OnChainIdContext';
-import { keyToBytes, keyToString } from '../scripts/lib/OnChainId/types/PrivateDataKey';
+import { useOnChainIdContext, AccessDenied, PrivateDataEntry } from '../lib/OnChainIdContext';
+import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
 import { Bytes, ethers } from 'ethers';
 
 const BackEndTest: NextPage = () => {
@@ -286,7 +286,7 @@ const BackEndTest: NextPage = () => {
           <input className="px-1 w-96 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300" type="text" placeholder='Key' onChange={(e) => setGetUserDataKeyInputValue(e.target.value)} />
           <button className="px-2 py-1 border border-black rounded" onClick={() => refreshUserData(getUserDataAddressInputValue, keyToBytes(getUserDataKeyInputValue))}>Get data</button>
           {userData && <strong>{userData}</strong>}
-          {getUserDataError && <span className="text-red-500">{ getUserDataError.name === AccessDenied ? `Access denied or expired: ${String(getUserDataError.expiration)}` : `Access denied to this information` }</span>}
+          {getUserDataError && <span className="text-red-500">{ getUserDataError.name === AccessDenied ? `Access denied or expired: ${String(getUserDataError.expiration)}` : 'Access denied to this information' }</span>}
         </> : <>Please connect wallet</>}
       </main>
     </div>

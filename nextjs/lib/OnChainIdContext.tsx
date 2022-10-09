@@ -3,7 +3,7 @@ import { useDebounce } from 'use-debounce';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { useContractContext } from './ContractConfigContext';
-import { keyToString } from './lib/OnChainId/types/PrivateDataKey';
+import { keyToString } from './types/PrivateDataKey';
 
 export const AccessDenied = 'AccessDenied';
 export const DataAccessDenied = 'DataAccessDenied';
