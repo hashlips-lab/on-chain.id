@@ -5,9 +5,10 @@ import PermissionRequest from '../components/PermissionRequest/PermissionRequest
 import PermissionRequestLinkAndCode from '../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode';
 import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
 import TopNavBar from '../components/TopNavBar/TopNavBar';
+import PermissionsRequestData from '../lib/types/PermissionsRequestData';
 import styles from '../styles/UserDashboardLinks.module.scss';
 const UserDashboardLinks: NextPage = () => {
-  const [ jsonValidationValue, setJsonValidationValue ] = useState();
+  const [ jsonValidationValue, setJsonValidationValue ] = useState<PermissionsRequestData>();
 
   return (
     <div className={styles.userDashboardLinks}>
@@ -26,13 +27,20 @@ const UserDashboardLinks: NextPage = () => {
         <div className={styles.midContent}>
           <div className={styles.leftSide}>
             <div className={styles.title}>New Permission Request Link</div>
-            <PermissionRequestLinkAndCode jsonValidationValue={jsonValidationValue} setJsonValidationValue={setJsonValidationValue} />
+            <PermissionRequestLinkAndCode
+              jsonValidationValue={jsonValidationValue}
+              setJsonValidationValue={setJsonValidationValue}
+            />
           </div>
           <div className={styles.rightSide}>
             <div className={styles.title}>Preview</div>
-            <div className={styles.rightSideContentWrapper}>
-              <PermissionRequest />
-            </div>
+            {jsonValidationValue ?
+              <div className={styles.rightSideContentWrapper}>
+                <PermissionRequest {...jsonValidationValue} />
+              </div>
+              :
+              <strong>Please correct the errors in the code before you can see the preview!</strong>
+            }
           </div>
         </div>
       </RightSideContentBox>
