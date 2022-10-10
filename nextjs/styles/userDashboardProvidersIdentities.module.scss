@@ -30,7 +30,10 @@
 
       .topBtnWrapper {
         @apply flex flex-col;
-        @apply ml-[20px];
+
+        @screen sm {
+          @apply ml-[20px];
+        }
 
         @screen lg {
           @apply flex-row;
