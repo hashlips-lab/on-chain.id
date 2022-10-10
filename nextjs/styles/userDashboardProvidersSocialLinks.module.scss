@@ -49,7 +49,7 @@
           }
 
           @screen sm {
-            @apply flex-row
+            @apply flex-row;
           }
 
           .social {
@@ -79,7 +79,7 @@
                 }
 
                 &.description {
-                  @apply font-urbanist font-normal italic text-[1.5rem] leading-[1.8125rem];
+                  @apply font-urbanist font-normal italic text-[1.2rem] leading-[1.8125rem];
                 }
               }
             }
@@ -102,11 +102,9 @@
                 @apply mb-0;
               }
             }
-
           }
         }
       }
     }
   }
-
 }
