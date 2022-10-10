@@ -5,10 +5,10 @@ import RightSideContentBox from '../components/RightSideContentBox/RightSideCont
 import TopNavBar from '../components/TopNavBar/TopNavBar';
 import styles from '../styles/UserDashboardProviders.module.scss';
 import Image from 'next/image';
-import { useEffect } from "react";
-import { useOnChainIdContext } from "../lib/OnChainIdContext";
-import router from "next/router";
-import { useAccount } from "wagmi";
+import { useEffect } from 'react';
+import { useOnChainIdContext } from '../lib/OnChainIdContext';
+import router from 'next/router';
+import { useAccount } from 'wagmi';
 
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 
@@ -34,11 +34,11 @@ const UserDashboardProviders: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="MY LINKS"
-          firstBtnOnClick={() => router.push(`/`)}
+          firstBtnOnClick={() => router.push('/')}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="PROVIDERS"
-          secondBtnOnClick={() => router.push(`/userDashboardProviders`)}
+          secondBtnOnClick={() => router.push('/userDashboardProviders')}
           subTitle={address}
         />
         <div className={styles.midContent}>
