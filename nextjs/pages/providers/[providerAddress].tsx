@@ -12,32 +12,6 @@ import { useRouter } from "next/router";
 import { keyToString } from "../../lib/types/PrivateDataKey";
 import { useOnChainIdContext } from "../../lib/OnChainIdContext";
 
-const KEY_LIST = [
-  {
-    title: "Facebook",
-    icon: "./images/icon/metamask.svg",
-    description: "Log in with MetaMask",
-    isOnclick: true,
-  },
-  {
-    title: "test",
-    icon: "./images/icon/coinbase.svg",
-    description: "Log in with Coinbase Wallet",
-    isOnclick: false,
-  },
-  {
-    title: "test2",
-    icon: "./images/icon/walletConnect.svg",
-    description: "Log in with WalletConnect",
-    isOnclick: false,
-  },
-  {
-    title: "test3",
-    icon: "./images/icon/phantom.svg",
-    description: "Log in with Phantom (Solana)",
-    isOnclick: false,
-  },
-];
 const userDashboardProvidersSocialLinks: NextPage = () => {
   const router = useRouter();
   const { providerAddress } = router.query;

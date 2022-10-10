@@ -6,6 +6,9 @@ import RightSideContentBox from "../components/RightSideContentBox/RightSideCont
 import TopNavBar from "../components/TopNavBar/TopNavBar";
 import styles from "../styles/userDashboardProvidersIdentities.module.scss";
 import { useRouter } from "next/router";
+import { useOnChainIdContext } from "../lib/OnChainIdContext";
+import { useAccount } from "wagmi";
+import { useEffect } from "react";
 
 const KEY_LIST = [
   {
@@ -42,6 +45,19 @@ const KEY_LIST = [
 const userDashboardProvidersIdentities: NextPage = () => {
   const router = useRouter();
 
+  const {
+    allowedProviders,
+    refreshAllowedProviders,
+    disableProvider,
+    isDisableProviderLoading,
+  } = useOnChainIdContext();
+
+  const { address } = useAccount();
+
+  useEffect(() => {
+    refreshAllowedProviders();
+  }, []);
+
   return (
     <div className={styles.userDashboardLinks}>
       <Nav />
@@ -54,7 +70,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
           secondBtnClass="borderBlueBgWhiteTextBlue"
           secondBtnContent="PROVIDERS"
           secondBtnOnClick={() => router.push("/providers")}
-          subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
+          subTitle={String(address)}
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
