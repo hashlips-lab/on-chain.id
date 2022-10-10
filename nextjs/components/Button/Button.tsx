@@ -3,13 +3,13 @@ import styles from './Button.module.scss';
 
 export interface ButtonProps {
   type:
-    | "borderRedBgWhiteTextRed"
-    | "borderBlueBgBlueTextWhite"
-    | "borderBlueBgWhiteTextBlue"
-    | "borderGreyBgWhiteTextGrey"
-    | "borderRedBgRedTextWhite"
-    | "borderWhiteBgWhiteTextBlue";
-  size: "sm" | "md" | "lg";
+    | 'borderRedBgWhiteTextRed'
+    | 'borderBlueBgBlueTextWhite'
+    | 'borderBlueBgWhiteTextBlue'
+    | 'borderGreyBgWhiteTextGrey'
+    | 'borderRedBgRedTextWhite'
+    | 'borderWhiteBgWhiteTextBlue';
+  size: 'sm' | 'md' | 'lg';
   children: any;
   onClick?: () => void;
   disabled?: boolean;

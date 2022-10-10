@@ -1,40 +1,40 @@
-import type { NextPage } from "next";
-import Image from "next/image";
-import Button from "../components/Button/Button";
-import Nav from "../components/nav/Nav";
-import RightSideContentBox from "../components/RightSideContentBox/RightSideContentBox";
-import TopNavBar from "../components/TopNavBar/TopNavBar";
-import styles from "../styles/userDashboardProvidersIdentities.module.scss";
+import type { NextPage } from 'next';
+import Image from 'next/image';
+import Button from '../components/Button/Button';
+import Nav from '../components/nav/Nav';
+import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../components/TopNavBar/TopNavBar';
+import styles from '../styles/userDashboardProvidersIdentities.module.scss';
 
 const KEY_LIST = [
   {
-    title: "Facebook",
-    icon: "./images/icon/metamask.svg",
-    description: "Log in with MetaMask",
+    title: 'Facebook',
+    icon: './images/icon/metamask.svg',
+    description: 'Log in with MetaMask',
     isOnclick: false,
   },
   {
-    title: "Facebook",
-    icon: "./images/icon/metamask.svg",
-    description: "Log in with MetaMask",
+    title: 'Facebook',
+    icon: './images/icon/metamask.svg',
+    description: 'Log in with MetaMask',
     isOnclick: true,
   },
   {
-    title: "test",
-    icon: "./images/icon/coinbase.svg",
-    description: "Log in with Coinbase Wallet",
+    title: 'test',
+    icon: './images/icon/coinbase.svg',
+    description: 'Log in with Coinbase Wallet',
     isOnclick: false,
   },
   {
-    title: "test2",
-    icon: "./images/icon/walletConnect.svg",
-    description: "Log in with WalletConnect",
+    title: 'test2',
+    icon: './images/icon/walletConnect.svg',
+    description: 'Log in with WalletConnect',
     isOnclick: false,
   },
   {
-    title: "test3",
-    icon: "./images/icon/phantom.svg",
-    description: "Log in with Phantom (Solana)",
+    title: 'test3',
+    icon: './images/icon/phantom.svg',
+    description: 'Log in with Phantom (Solana)',
     isOnclick: false,
   },
 ];
@@ -47,13 +47,13 @@ const userDashboardProvidersIdentities: NextPage = () => {
           firstBtnClass="borderBlueBgBlueTextWhite"
           firstBtnContent="MY LINKS"
           firstBtnOnClick={
-            () => console.log("Click!") /* TODO: implement this */
+            () => console.log('Click!') /* TODO: implement this */
           }
           mainTitle="My Social Identities"
           secondBtnClass="borderBlueBgWhiteTextBlue"
-          secondBtnContent={"PROVIDERS"}
+          secondBtnContent="PROVIDERS"
           secondBtnOnClick={
-            () => console.log("Click!") /* TODO: implement this */
+            () => console.log('Click!') /* TODO: implement this */
           }
           subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
         />
@@ -66,7 +66,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
                 <Button
                   type="borderBlueBgWhiteTextBlue"
                   onClick={
-                    () => console.log("Click!") /* TODO: implement this */
+                    () => console.log('Click!') /* TODO: implement this */
                   }
                   size="sm"
                 >
@@ -88,7 +88,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
                 <Button
                   type="borderWhiteBgWhiteTextBlue"
                   onClick={
-                    () => console.log("Click!") /* TODO: implement this */
+                    () => console.log('Click!') /* TODO: implement this */
                   }
                   size="sm"
                 >
@@ -110,7 +110,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
                 <Button
                   type="borderBlueBgBlueTextWhite"
                   onClick={
-                    () => console.log("Click!") /* TODO: implement this */
+                    () => console.log('Click!') /* TODO: implement this */
                   }
                   size="sm"
                 >
@@ -138,16 +138,16 @@ const userDashboardProvidersIdentities: NextPage = () => {
                 <div className={styles.social}>
                   <div className={styles.icon}>
                     <Image
-                      src={"./images/icon/metamask.svg"}
+                      src="./images/icon/metamask.svg"
                       width={72}
                       height={72}
-                      alt={"newLink"}
+                      alt="newLink"
                     />
                   </div>
                   <div className={styles.info}>
-                    <span className={styles.title}>{"New Link"}</span>
+                    <span className={styles.title}>New Link</span>
                     <span className={styles.description}>
-                      {"NEW KEY (EDITABLE of known keys)"}
+                      NEW KEY (EDITABLE of known keys)
                     </span>
                   </div>
                 </div>
@@ -157,7 +157,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
                     <Button
                       type="borderGreyBgWhiteTextGrey"
                       onClick={
-                        () => console.log("Click!") /* TODO: implement this */
+                        () => console.log('Click!') /* TODO: implement this */
                       }
                       size="sm"
                     >
@@ -199,7 +199,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
                             type="borderRedBgWhiteTextRed"
                             onClick={
                               () =>
-                                console.log("Click!") /* TODO: implement this */
+                                console.log('Click!') /* TODO: implement this */
                             }
                             size="sm"
                           >
@@ -221,7 +221,7 @@ const userDashboardProvidersIdentities: NextPage = () => {
                             type="borderGreyBgWhiteTextGrey"
                             onClick={
                               () =>
-                                console.log("Click!") /* TODO: implement this */
+                                console.log('Click!') /* TODO: implement this */
                             }
                             size="sm"
                           >
