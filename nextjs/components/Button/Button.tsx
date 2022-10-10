@@ -12,7 +12,7 @@ export interface ButtonProps {
   children: any;
   onClick?: () => void;
   disabled?: boolean;
-  loading: boolean;
+  loading?: boolean;
 }
 
 const Button = ({
@@ -25,8 +25,6 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      disabled={disabled}
-      loading={loading}
       onClick={() => onClick?.()}
       className={`${styles.button} ${styles[type]}  ${styles[size]}`}
       disabled={disabled}

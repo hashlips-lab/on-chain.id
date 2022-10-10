@@ -39,7 +39,7 @@ const UserDashboardProviders: NextPage = () => {
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="PROVIDERS"
           secondBtnOnClick={() => router.push('/userDashboardProviders')}
-          subTitle={address}
+          subTitle={address ?? ''}
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
