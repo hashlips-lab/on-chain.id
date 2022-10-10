@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "On-Chain.id Provider Link",
+  "description": "This object describes the properties needed in order to create a provider's link",
+  "type": "object",
+  "properties": {
+    "providerAddress": {
+      "description": "The ETH address of the provider",
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+    "requiredPermissions": {
+      "description": "A list of propery names required by the provider",
+      "type": "array",
+      "items": {
+          "type": "string",
+          "pattern": ".+"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": ["providerAddress", "requiredPermissions"]
+}

@@ -1,0 +1,17 @@
+.jsonEditorContainer {
+  & .codeEditor {
+    font-family: monospace;
+    @apply bg-[#3E3A44];
+    @apply p-[0.75rem];
+    @apply rounded-[0.5rem];
+    @apply text-[#fff];
+    @apply mb-[0.75rem];
+  }
+
+  & ul {
+    & li {
+      @apply m-6;
+      @apply list-disc;
+    }
+  }
+}
