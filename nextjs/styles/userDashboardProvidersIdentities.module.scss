@@ -1,0 +1,173 @@
+.userDashboardLinks {
+  @apply flex flex-col-reverse;
+
+  @screen xl {
+    @apply flex-row;
+  }
+
+  .btnContent {
+    @apply flex justify-between content-center;
+  }
+
+  .midContent {
+    @apply flex flex-col;
+
+    .subBtnTitleWrapper {
+      @apply flex flex-col;
+      @apply w-full;
+      @apply mb-[2.25rem];
+
+      @screen sm {
+        @apply flex-row justify-between items-center;
+      }
+
+      .title {
+        @apply flex;
+        @apply font-poppins font-semibold text-[24px] leading-[36px];
+        @apply mb-[0.75rem];
+        @apply break-all;
+      }
+
+      .topBtnWrapper {
+        @apply flex flex-col;
+
+        @screen sm {
+          @apply ml-[20px];
+        }
+
+        @screen lg {
+          @apply flex-row;
+        }
+
+        .buttonNew,
+        .buttonUpdate,
+        .buttonUpdateAll {
+          @apply w-full;
+          @apply min-w-full;
+        }
+
+        .buttonNew,
+        .buttonUpdate {
+          @apply mb-[20px];
+
+          @screen sm {
+            @apply mb-0;
+          }
+        }
+
+        .buttonNew {
+          @screen sm {
+            @apply min-w-[300px];
+          }
+        }
+
+        .buttonUpdate {
+          @screen sm {
+            @apply min-w-[141px];
+          }
+        }
+
+        .buttonUpdateAll {
+          @screen sm {
+            @apply min-w-[167px];
+          }
+        }
+      }
+    }
+
+    ul {
+      li {
+        .listItem {
+          @apply flex justify-between items-center flex-col;
+          @apply mb-[1.5rem];
+          @apply px-[0.625rem] py-[0.625rem];
+
+          @screen sm {
+            @apply pr-[1.5rem] pl-[0.3125rem] pt-[0.3125rem] pb-[0.3125rem];
+          }
+
+          &.listItemSingle {
+            .btnWrapper {
+              @apply flex flex-col items-end;
+              @apply w-full;
+
+              .button {
+                @apply w-full;
+
+                @screen sm {
+                  @apply max-w-[96px];
+                }
+              }
+            }
+          }
+
+          &.selected {
+            @apply border-[0.125rem] border-[#939393] rounded-[0.375rem];
+          }
+
+          &.selectedBlue {
+            @apply border-[0.125rem] border-[#0075FF] rounded-[0.375rem];
+          }
+
+          @screen sm {
+            @apply flex-row
+          }
+
+          .social {
+            @apply flex items-center;
+            @apply font-urbanist font-medium text-[1.5rem] leading-[1.8125rem];
+            @apply break-all;
+            @apply mb-[1.25rem];
+            @apply mr-[1.25rem];
+
+            @screen sm {
+              @apply mb-0;
+            }
+
+            .icon {
+              @apply mr-[1.5rem];
+            }
+
+            .info {
+              @apply flex flex-col;
+
+              span {
+                @apply flex;
+
+                &.title {
+                  @apply font-urbanist font-bold text-[1rem] leading-[1.25rem];
+                  @apply mb-[0.25rem];
+                }
+
+                &.description {
+                  @apply font-urbanist font-normal italic text-[1.5rem] leading-[1.8125rem];
+                }
+              }
+            }
+          }
+
+          .btnWrapper {
+            @apply flex flex-col;
+            @apply w-full;
+
+            @screen sm {
+              @apply flex-row justify-between;
+              @apply max-w-[18.75rem];
+            }
+
+            .firstBtn {
+              @apply min-w-[11.75rem];
+              @apply mb-[1.25rem];
+
+              @screen sm {
+                @apply mb-0;
+              }
+            }
+
+          }
+        }
+      }
+    }
+  }
+
+}
