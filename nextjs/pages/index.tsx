@@ -65,7 +65,9 @@ const Dashboard: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgBlueTextWhite"
           firstBtnContent="MY LINKS"
-          firstBtnOnClick={() => {}}
+          firstBtnOnClick={() => {
+            console.log('Empty');
+          }}
           mainTitle="My Social Identities"
           secondBtnClass="borderBlueBgWhiteTextBlue"
           secondBtnContent="PROVIDERS"
