@@ -42,7 +42,7 @@ const KEY_LIST = [
     isOnclick: false,
   },
 ];
-const userDashboardProvidersIdentities: NextPage = () => {
+const Dashboard: NextPage = () => {
   const router = useRouter();
 
   const {
@@ -265,4 +265,4 @@ const userDashboardProvidersIdentities: NextPage = () => {
   );
 };
 
-export default userDashboardProvidersIdentities;
+export default Dashboard;
