@@ -1,20 +1,20 @@
 // TODO: This is a temporary page for testing and can be used as a reference.
 // Delete this as soon as the real front end is ready.
 
-import type { NextPage } from "next";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import styles from "../styles/Home.module.scss";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import "@rainbow-me/rainbowkit/styles.css";
-import { useAccount } from "wagmi";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import styles from '../styles/Home.module.scss';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { useAccount } from 'wagmi';
 import {
   useOnChainIdContext,
   AccessDenied,
   PrivateDataEntry,
-} from "../lib/OnChainIdContext";
-import { keyToBytes, keyToString } from "../lib/types/PrivateDataKey";
-import { Bytes, ethers } from "ethers";
+} from '../lib/OnChainIdContext';
+import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
+import { Bytes, ethers } from 'ethers';
 
 const BackEndTest: NextPage = () => {
   const { isConnected } = useAccount();
@@ -53,17 +53,17 @@ const BackEndTest: NextPage = () => {
     disableProvider,
     isDisableProviderLoading,
   } = useOnChainIdContext();
-  const [walletIsConnected, setWalletIsConnected] = useState(false);
+  const [ walletIsConnected, setWalletIsConnected ] = useState(false);
   const [
     expirationProviderAddressInputValue,
     setExpirationProviderAddressInputValue,
-  ] = useState("");
-  const [getUserDataAddressInputValue, setGetUserDataAddressInputValue] =
-    useState("");
-  const [getUserDataKeyInputValue, setGetUserDataKeyInputValue] = useState("");
+  ] = useState('');
+  const [ getUserDataAddressInputValue, setGetUserDataAddressInputValue ] =
+    useState('');
+  const [ getUserDataKeyInputValue, setGetUserDataKeyInputValue ] = useState('');
 
   // Write private data (edit existing data)
-  const [editablePrivateData, setEditablePrivateData] = useState<string[]>([]);
+  const [ editablePrivateData, setEditablePrivateData ] = useState<string[]>([]);
 
   const updateEditablePrivateData = (updateIndex: number, newData: string) => {
     setEditablePrivateData(
@@ -74,13 +74,13 @@ const BackEndTest: NextPage = () => {
   };
 
   // Write private data (new data)
-  const [newPrivateData, setNewPrivateData] = useState<PrivateDataEntry[]>([]);
+  const [ newPrivateData, setNewPrivateData ] = useState<PrivateDataEntry[]>([]);
 
   const addNewPrivateData = () => {
     setNewPrivateData(
       newPrivateData.concat({
-        key: keyToBytes("Example key"),
-        data: "Example data",
+        key: keyToBytes('Example key'),
+        data: 'Example data',
       })
     );
   };
@@ -110,10 +110,10 @@ const BackEndTest: NextPage = () => {
   };
 
   // Write private data (general)
-  const [onChainPrivateDataKeysSet, setOnChainPrivateDataKeysSet] = useState<
+  const [ onChainPrivateDataKeysSet, setOnChainPrivateDataKeysSet ] = useState<
     Set<string>
   >(new Set<string>());
-  const [newPrivateDataKeysSet, setNePrivateDataKeysSet] = useState<
+  const [ newPrivateDataKeysSet, setNePrivateDataKeysSet ] = useState<
     Set<string>
   >(new Set<string>());
 
@@ -121,13 +121,13 @@ const BackEndTest: NextPage = () => {
     setOnChainPrivateDataKeysSet(
       new Set<string>(onChainPrivateData.map((entry) => keyToString(entry.key)))
     );
-  }, [onChainPrivateData]);
+  }, [ onChainPrivateData ]);
 
   useEffect(() => {
     setNePrivateDataKeysSet(
       new Set<string>(newPrivateData.map((entry) => keyToString(entry.key)))
     );
-  }, [newPrivateData]);
+  }, [ newPrivateData ]);
 
   useEffect(() => {
     setEditablePrivateData(onChainPrivateData.map((entry) => entry.data));
@@ -137,7 +137,7 @@ const BackEndTest: NextPage = () => {
         (entry) => !onChainPrivateDataKeysSet.has(keyToString(entry.key))
       )
     );
-  }, [onChainPrivateDataKeysSet]);
+  }, [ onChainPrivateDataKeysSet ]);
 
   const handleWritePrivateDataClick = () => {
     writePrivateData(
@@ -175,20 +175,20 @@ const BackEndTest: NextPage = () => {
   const [
     permissionsProviderAddressInputValue,
     setPermissionsProviderAddressInputValue,
-  ] = useState("");
+  ] = useState('');
 
   useEffect(() => {
     if (ethers.utils.isAddress(permissionsProviderAddressInputValue)) {
       refreshOnChainPermissions(permissionsProviderAddressInputValue);
     }
-  }, [permissionsProviderAddressInputValue]);
+  }, [ permissionsProviderAddressInputValue ]);
 
   // Write permissions
-  const [editablePermissions, setEditablePermissions] = useState<boolean[]>([]);
+  const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
 
   useEffect(() => {
     setEditablePermissions(onChainPermissions.map((entry) => entry.canRead));
-  }, [onChainPermissions]);
+  }, [ onChainPermissions ]);
 
   const togglePermissions = (toggleIndex: number) => {
     setEditablePermissions(
@@ -201,7 +201,7 @@ const BackEndTest: NextPage = () => {
   const handleWritePermissionsClick = () => {
     if (!onChainPermissionsProvider) {
       throw new Error(
-        "Cannot write permissions before a provider has been selected."
+        'Cannot write permissions before a provider has been selected.'
       );
     }
 
@@ -229,7 +229,7 @@ const BackEndTest: NextPage = () => {
   // Connection
   useEffect(() => {
     setWalletIsConnected(isConnected);
-  }, [isConnected]);
+  }, [ isConnected ]);
 
   return (
     <div className={styles.container}>
@@ -270,7 +270,7 @@ const BackEndTest: NextPage = () => {
                         onChange={(e) =>
                           updateEditablePrivateData(index, e.target.value)
                         }
-                        value={editablePrivateData[index] ?? ""}
+                        value={editablePrivateData[index] ?? ''}
                         required
                       />
                       <code className="text-xs">{keyToString(data.key)}</code>
@@ -312,7 +312,7 @@ const BackEndTest: NextPage = () => {
                     onChange={(e) =>
                       updateNewPrivateData(index, e.target.value)
                     }
-                    value={newPrivateData[index].data ?? ""}
+                    value={newPrivateData[index].data ?? ''}
                     required
                   />
                   <input
@@ -516,9 +516,9 @@ const BackEndTest: NextPage = () => {
               <span className="text-red-500">
                 {getUserDataError.name === AccessDenied
                   ? `Access denied or expired: ${String(
-                      getUserDataError.expiration
-                    )}`
-                  : "Access denied to this information"}
+                    getUserDataError.expiration
+                  )}`
+                  : 'Access denied to this information'}
               </span>
             )}
           </>
