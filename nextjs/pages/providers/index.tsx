@@ -1,16 +1,16 @@
-import type { NextPage } from "next";
-import Button from "../../components/Button/Button";
-import Nav from "../../components/nav/Nav";
-import RightSideContentBox from "../../components/RightSideContentBox/RightSideContentBox";
-import TopNavBar from "../../components/TopNavBar/TopNavBar";
-import styles from "../../styles/UserDashboardProviders.module.scss";
-import Image from "next/image";
-import { useEffect } from "react";
-import { useOnChainIdContext } from "../../lib/OnChainIdContext";
-import router from "next/router";
-import { useAccount } from "wagmi";
+import type { NextPage } from 'next';
+import Button from '../../components/Button/Button';
+import Nav from '../../components/nav/Nav';
+import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../../components/TopNavBar/TopNavBar';
+import styles from '../../styles/UserDashboardProviders.module.scss';
+import Image from 'next/image';
+import { useEffect } from 'react';
+import { useOnChainIdContext } from '../../lib/OnChainIdContext';
+import router from 'next/router';
+import { useAccount } from 'wagmi';
 
-import CloseRedIcon from "../../assets/images/icon/closeRed.svg";
+import CloseRedIcon from '../../assets/images/icon/closeRed.svg';
 
 const Providers: NextPage = () => {
   const {
@@ -33,12 +33,12 @@ const Providers: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="MY LINKS"
-          firstBtnOnClick={() => router.push("/")}
+          firstBtnOnClick={() => router.push('/')}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="PROVIDERS"
-          secondBtnOnClick={() => router.push("/providers")}
-          subTitle={address ?? ""}
+          secondBtnOnClick={() => router.push('/providers')}
+          subTitle={address ?? ''}
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
