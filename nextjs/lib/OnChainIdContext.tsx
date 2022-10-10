@@ -393,9 +393,9 @@ export function OnChainIdProvider({ children }: Props) {
 
   // Write permissions
   const filterUpdatedPermissions = (newPermissions?: PermissionsEntry[]): PermissionsEntry[] => {
-    const onChainPermissions = getPermissionsProgress?.currentData;
+    const onChainPermissions = getPermissionsProgress?.currentData ?? [];
 
-    if (!onChainPermissions || !newPermissions) {
+    if (!newPermissions) {
       return [];
     }
 
