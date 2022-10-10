@@ -29,7 +29,7 @@ const Login: NextPage = () => {
           <div className={styles.welcome}>Welcome to</div>
           <div className={styles.logo}>
             <Image
-              src={Logo.svg}
+              src={Logo.src}
               width={261}
               height={222}
               alt="On chain ID"

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import styles from './Nav.module.scss';
+
 import MainIcon from '../../assets/images/icon/nav/main.svg';
 import PersonIcon from '../../assets/images/icon/nav/person.svg';
 import PersonInfoIcon from '../../assets/images/icon/nav/personInfo.svg';

@@ -2,21 +2,27 @@ import Button from '../Button/Button';
 import styles from './PermissionRequest.module.scss';
 import Image from 'next/image';
 
+import FacebookIcon from '../../assets/images/icon/facebook.svg';
+import HashLipsIcon from '../../assets/images/icon/hashlips.svg';
+import GitLabIcon from '../../assets/images/icon/gitlab.svg';
+import CheckBoxChecked from '../../assets/images/icon/check.svg';
+import CheckBoxUnchecked from '../../assets/images/icon/unCheck.svg';
+
 const SOCIAL_MEDIA_LINKS = [
   {
-    icon: './images/icon/facebook.svg',
+    icon: FacebookIcon.src,
     name: 'facebook',
     isActive: true,
   },
 
   {
-    icon: './images/icon/hashlips.svg',
+    icon: HashLipsIcon.src,
     name: 'Hashlips/Hash',
     isActive: false,
   },
 
   {
-    icon: './images/icon/gitlab.svg',
+    icon: GitLabIcon.src,
     name: 'gitlab',
     isActive: true,
   },
@@ -48,14 +54,14 @@ const PermissionRequest = () => {
                   <div className={styles.socialStatus}>
                     {isActive ? (
                       <Image
-                        src="./images/icon/check.svg"
+                        src={CheckBoxChecked.src}
                         width={36}
                         height={36}
                         alt={name}
                       />
                     ) : (
                       <Image
-                        src="./images/icon/unCheck.svg"
+                        src={CheckBoxUnchecked.src}
                         width={36}
                         height={36}
                         alt={name}
