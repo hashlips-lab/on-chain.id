@@ -14,6 +14,12 @@
     @apply text-[#fff];
   }
 
+  &.borderWhiteBgWhiteTextBlue {
+    @apply bg-[#fff];
+    @apply border-[#fff];
+    @apply text-[#0075FF];
+  }
+
   &.borderBlueBgWhiteTextBlue {
     @apply bg-[#fff];
     @apply border-[#0075FF];
