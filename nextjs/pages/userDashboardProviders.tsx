@@ -6,6 +6,9 @@ import TopNavBar from '../components/TopNavBar/TopNavBar';
 import styles from '../styles/UserDashboardProviders.module.scss';
 import Image from 'next/image';
 
+import CloseRedIcon from '../assets/images/icon/closeRed.svg';
+import CloseIcon from '../assets/images/icon/close.svg';
+
 const KEY_LIST = [
   '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
   '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
@@ -40,7 +43,7 @@ const UserDashboardProviders: NextPage = () => {
                   <span>REMOVE ALL</span>
                   <div>
                     <Image
-                      src="./images/icon/close.svg"
+                      src={CloseIcon.src}
                       width={16}
                       height={16}
                       alt="Remove"
@@ -68,7 +71,7 @@ const UserDashboardProviders: NextPage = () => {
                             <span>REMOVE</span>
                             <div>
                               <Image
-                                src="./images/icon/closeRed.svg"
+                                src={CloseRedIcon.src}
                                 width={16}
                                 height={16}
                                 alt="Remove"

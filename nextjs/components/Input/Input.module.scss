@@ -4,4 +4,5 @@
   @apply px-[1.5625rem] py-[0.9375rem];
   @apply font-urbanist font-medium text-[1.5rem] leading-[1.5rem] text-[#292D33];
 
+  @apply invalid:bg-red-100;
 }

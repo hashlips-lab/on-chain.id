@@ -1,6 +1,9 @@
 import Button from '../Button/Button';
 import styles from './PermissionRequestLinkAndCode.module.scss';
 import Image from 'next/image';
+
+import CopyIcon from '../../assets/images/icon/copy.svg';
+
 const PermissionRequestLinkAndCode = () => {
   return (
     <div className={styles.permissionRequestLinkAndCode}>
@@ -18,7 +21,7 @@ const PermissionRequestLinkAndCode = () => {
         </span>
 
         <Image
-          src="./images/icon/copy.svg"
+          src={CopyIcon.src}
           width={36}
           height={36}
           alt="On chain ID"

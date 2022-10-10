@@ -46,4 +46,8 @@
 
   }
 
+  .error {
+    @apply font-urbanist font-normal text-[1.5rem] leading-[1.75rem];
+    @apply text-red-500;
+  }
 }

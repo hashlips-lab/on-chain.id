@@ -1,12 +1,18 @@
 import Image from 'next/image';
 import styles from './Nav.module.scss';
+
+import MainIcon from '../../assets/images/icon/nav/main.svg';
+import PersonIcon from '../../assets/images/icon/nav/person.svg';
+import PersonInfoIcon from '../../assets/images/icon/nav/personInfo.svg';
+import RightArrowIcon from '../../assets/images/icon/nav/rightArrow.svg';
+
 const Nav = () => {
   return (
     <div className={styles.nav}>
       <ul>
         <li>
           <Image
-            src="./images/icon/nav/main.svg"
+            src={MainIcon.src}
             width={36}
             height={36}
             alt="On chain ID"
@@ -14,7 +20,7 @@ const Nav = () => {
         </li>
         <li>
           <Image
-            src="./images/icon/nav/person.svg"
+            src={PersonIcon.src}
             width={36}
             height={36}
             alt="On chain ID"
@@ -22,7 +28,7 @@ const Nav = () => {
         </li>
         <li>
           <Image
-            src="./images/icon/nav/personInfo.svg"
+            src={PersonInfoIcon.src}
             width={36}
             height={36}
             alt="On chain ID"
@@ -30,7 +36,7 @@ const Nav = () => {
         </li>
         <li>
           <Image
-            src="./images/icon/nav/rightArrow.svg"
+            src={RightArrowIcon.src}
             width={36}
             height={36}
             alt="On chain ID"
