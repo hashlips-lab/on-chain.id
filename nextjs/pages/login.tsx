@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import styles from '../styles/Login.module.scss';
+import Logo from '../assets/images/logo.svg';
 
 const DEFAULT_REDIRECT_PATH = '/';
 
@@ -28,7 +29,7 @@ const Login: NextPage = () => {
           <div className={styles.welcome}>Welcome to</div>
           <div className={styles.logo}>
             <Image
-              src="./images/logo.svg"
+              src={Logo.svg}
               width={261}
               height={222}
               alt="On chain ID"

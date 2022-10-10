@@ -390,7 +390,9 @@ const BackEndTest: NextPage = () => {
                 `Access denied or expired: ${String(getUserDataError.expiration)}`
                 :
                 'Access denied to this information'
-              }</span>}
+              }
+            </span>
+          }
         </> : <>Please connect wallet</>}
       </main>
     </div>
