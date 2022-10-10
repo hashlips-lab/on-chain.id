@@ -5,38 +5,49 @@ import RightSideContentBox from '../components/RightSideContentBox/RightSideCont
 import TopNavBar from '../components/TopNavBar/TopNavBar';
 import styles from '../styles/UserDashboardProviders.module.scss';
 import Image from 'next/image';
+import { useEffect } from "react";
+import { useOnChainIdContext } from "../lib/OnChainIdContext";
+import router from "next/router";
+import { useAccount } from "wagmi";
 
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
-import CloseIcon from '../assets/images/icon/close.svg';
-
-const KEY_LIST = [
-  '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
-  '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
-  '0xde3B22caAaD25e65C839c2A3d852d665669EdD5c',
-];
 
 const UserDashboardProviders: NextPage = () => {
+  const {
+    allowedProviders,
+    refreshAllowedProviders,
+    areAllowedProvidersRefreshing,
+    disableProvider,
+    isDisableProviderLoading,
+  } = useOnChainIdContext();
+
+  const { address } = useAccount();
+
+  useEffect(() => {
+    refreshAllowedProviders();
+  }, []);
+
   return (
     <div className={styles.userDashboardLinks}>
       <Nav />
       <RightSideContentBox>
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent="TEST"
-          firstBtnOnClick={() => console.log('Click!')/* TODO: implement this */}
+          firstBtnContent="MY LINKS"
+          firstBtnOnClick={() => router.push(`/`)}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
-          secondBtnContent="CREATE"
-          secondBtnOnClick={() => console.log('Click!')/* TODO: implement this */}
-          subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
+          secondBtnContent="PROVIDERS"
+          secondBtnOnClick={() => router.push(`/userDashboardProviders`)}
+          subTitle={address}
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
             <div className={styles.title}>New Permission Request Link</div>
-            <div className={styles.button}>
+            {/* <div className={styles.button}>
               <Button
                 type="borderRedBgRedTextWhite"
-                onClick={() => console.log('Click!')/* TODO: implement this */}
+                onClick={() => console.log("Click!") }
                 size="md"
               >
                 <div className={styles.btnContent}>
@@ -51,20 +62,22 @@ const UserDashboardProviders: NextPage = () => {
                   </div>
                 </div>
               </Button>
-            </div>
+            </div> */}
           </div>
 
           <ul>
-            {KEY_LIST.map((key, index) => {
+            {allowedProviders.map((provider, index) => {
               return (
                 <li key={index}>
                   <div className={styles.listItem}>
-                    <span className={styles.keyText}>{key}</span>
+                    <span className={styles.keyText}>{provider}</span>
                     <div className={styles.btnWrapper}>
                       <div className={styles.firstBtn}>
                         <Button
+                          loading={isDisableProviderLoading}
+                          disabled={isDisableProviderLoading}
                           type="borderRedBgWhiteTextRed"
-                          onClick={() => console.log('Click!')/* TODO: implement this */}
+                          onClick={() => disableProvider(provider)}
                           size="sm"
                         >
                           <div className={styles.btnContent}>
@@ -82,8 +95,12 @@ const UserDashboardProviders: NextPage = () => {
                       </div>
                       <div className={styles.secondBtn}>
                         <Button
+                          loading={false}
+                          disabled={false}
                           type="borderBlueBgWhiteTextBlue"
-                          onClick={() => console.log('Click!')/* TODO: implement this */}
+                          onClick={() =>
+                            router.push(`/userDashboardProviders/${provider}`)
+                          }
                           size="sm"
                         >
                           VIEW
