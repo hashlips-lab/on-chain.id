@@ -1,13 +1,14 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import Nav from '../components/nav/Nav';
-import PermissionRequest from '../components/PermissionRequest/PermissionRequest';
-import PermissionRequestLinkAndCode from '../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode';
-import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
-import TopNavBar from '../components/TopNavBar/TopNavBar';
-import PermissionsRequestData from '../lib/types/PermissionsRequestData';
-import styles from '../styles/UserDashboardLinks.module.scss';
-const UserDashboardLinks: NextPage = () => {
+import Nav from '../../components/nav/Nav';
+import PermissionRequest from '../../components/PermissionRequest/PermissionRequest';
+import PermissionRequestLinkAndCode from '../../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode';
+import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../../components/TopNavBar/TopNavBar';
+import PermissionsRequestData from '../../lib/types/PermissionsRequestData';
+import styles from '../../styles/UserDashboardLinks.module.scss';
+
+const CreateApprovalLink: NextPage = () => {
   const [ jsonValidationValue, setJsonValidationValue ] = useState<PermissionsRequestData>();
 
   return (
@@ -48,4 +49,4 @@ const UserDashboardLinks: NextPage = () => {
   );
 };
 
-export default UserDashboardLinks;
+export default CreateApprovalLink;
