@@ -1,18 +1,18 @@
-import type { NextPage } from 'next';
-import Image from 'next/image';
-import Button from '../../components/Button/Button';
-import Nav from '../../components/nav/Nav';
-import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
-import TopNavBar from '../../components/TopNavBar/TopNavBar';
-import styles from '../../styles/userDashboardProvidersSocialLinks.module.scss';
-import { useAccount } from 'wagmi';
-import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-import { useRouter } from 'next/router';
-import { keyToString } from '../../lib/types/PrivateDataKey';
-import { useOnChainIdContext } from '../../lib/OnChainIdContext';
+import type { NextPage } from "next";
+import Image from "next/image";
+import Button from "../../components/Button/Button";
+import Nav from "../../components/nav/Nav";
+import RightSideContentBox from "../../components/RightSideContentBox/RightSideContentBox";
+import TopNavBar from "../../components/TopNavBar/TopNavBar";
+import styles from "../../styles/userDashboardProvidersSocialLinks.module.scss";
+import { useAccount } from "wagmi";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { useRouter } from "next/router";
+import { keyToString } from "../../lib/types/PrivateDataKey";
+import { useOnChainIdContext } from "../../lib/OnChainIdContext";
 
-const userDashboardProvidersSocialLinks: NextPage = () => {
+const ProvidersSocialLinks: NextPage = () => {
   const router = useRouter();
   const { providerAddress } = router.query;
 
@@ -27,22 +27,22 @@ const userDashboardProvidersSocialLinks: NextPage = () => {
     isDisableProviderLoading,
   } = useOnChainIdContext();
 
-  const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
+  const [editablePermissions, setEditablePermissions] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (ethers.utils.isAddress(String(providerAddress))) {
       refreshOnChainPermissions(String(providerAddress));
     }
-  }, [ providerAddress ]);
+  }, [providerAddress]);
 
   useEffect(() => {
     setEditablePermissions(onChainPermissions.map((entry) => entry.canRead));
-  }, [ onChainPermissions ]);
+  }, [onChainPermissions]);
 
   const handleWritePermissionsClick = () => {
     if (!onChainPermissionsProvider) {
       throw new Error(
-        'Cannot write permissions before a provider has been selected.'
+        "Cannot write permissions before a provider has been selected."
       );
     }
 
@@ -82,7 +82,7 @@ const userDashboardProvidersSocialLinks: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="MY LINKS"
-          firstBtnOnClick={() => router.push('/')}
+          firstBtnOnClick={() => router.push("/")}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent={
@@ -179,4 +179,4 @@ const userDashboardProvidersSocialLinks: NextPage = () => {
   );
 };
 
-export default userDashboardProvidersSocialLinks;
+export default ProvidersSocialLinks;
