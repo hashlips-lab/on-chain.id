@@ -10,11 +10,10 @@ import { useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';
 import {
   useOnChainIdContext,
-  AccessDenied,
   PrivateDataEntry,
 } from '../lib/OnChainIdContext';
 import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
-import { Bytes, ethers } from 'ethers';
+import { Bytes } from 'ethers';
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 import UpArrow from '../assets/images/icon/upArrow.svg';
 
@@ -23,39 +22,15 @@ const Dashboard: NextPage = () => {
   const { address } = useAccount();
 
   const {
-    noExpirationValue,
-
     onChainPrivateData,
     refreshOnChainPrivateData,
     isOnChainPrivateDataRefreshing,
-
-    allowedProviders,
-    refreshAllowedProviders,
-    areAllowedProvidersRefreshing,
-
-    onChainPermissions,
-    onChainPermissionsProvider,
-    refreshOnChainPermissions,
-    areOnChainPermissionsRefreshing,
-
-    providerExpiration,
-    refreshProviderExpiration,
-
-    userData,
-    refreshUserData,
-    getUserDataError,
 
     writePrivateData,
     isWritePrivateDataLoading,
 
     deleteUserData,
     isDeleteUserDataLoading,
-
-    writePermissions,
-    isWritePermissionsLoading,
-
-    disableProvider,
-    isDisableProviderLoading,
   } = useOnChainIdContext();
 
   // Write private data (edit existing data)
@@ -166,9 +141,6 @@ const Dashboard: NextPage = () => {
 
     return hasValidNewData || hasValidPrivateDataChanges;
   };
-
-  useEffect(() => {
-  }, []);
 
   return (
     <div className={styles.userDashboardLinks}>
@@ -284,8 +256,6 @@ const Dashboard: NextPage = () => {
                 </div>
                 <div className="flex flex-shrink">
                   <Button
-                    loading={isDisableProviderLoading}
-                    disabled={isDisableProviderLoading}
                     type="borderRedBgWhiteTextRed"
                     onClick={() => removeNewPrivateData(index)}
                     size="sm"
@@ -324,8 +294,8 @@ const Dashboard: NextPage = () => {
                 </div>
                 <div className="flex flex-shrink">
                   <Button
-                    loading={isDisableProviderLoading}
-                    disabled={isDisableProviderLoading}
+                    loading={isDeleteUserDataLoading}
+                    disabled={isDeleteUserDataLoading}
                     type="borderRedBgWhiteTextRed"
                     onClick={() => deleteUserData(data.key)}
                     size="sm"

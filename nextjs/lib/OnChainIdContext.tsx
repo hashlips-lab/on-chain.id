@@ -120,7 +120,7 @@ export function OnChainIdProvider({ children }: Props) {
   const [ getExpiration, setGetExpiration ] = useState<BigNumber>();
 
   const getExpirationRefetch = async () => {
-    if (Boolean(debouncedGetExpirationArgs && ethers.utils.isAddress(debouncedGetExpirationArgs.providerAddress))) {
+    if (debouncedGetExpirationArgs && ethers.utils.isAddress(debouncedGetExpirationArgs.providerAddress)) {
       setGetExpiration(await onChainIdContract.getExpiration(debouncedGetExpirationArgs!.providerAddress));
     }
   };
@@ -148,7 +148,7 @@ export function OnChainIdProvider({ children }: Props) {
   const [ getDataError, setGetDataError ] = useState<any>(null);
 
   const getDataRefetch = async () => {
-    if (Boolean(debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress))) {
+    if (debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress)) {
       setGetDataError(null);
 
       try {

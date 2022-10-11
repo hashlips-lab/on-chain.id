@@ -115,12 +115,12 @@ const ProviderSettings: NextPage = () => {
                   >
                     <div className={styles.btnContent}>
                       <span>REMOVE PROVIDER</span>
-                        <Image
-                          src={CloseRed.src}
-                          width={16}
-                          height={16}
-                          alt="Remove"
-                        />
+                      <Image
+                        src={CloseRed.src}
+                        width={16}
+                        height={16}
+                        alt="Remove"
+                      />
                     </div>
                   </Button>
                   <br />
