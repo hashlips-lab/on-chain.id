@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import Nav from "../../components/nav/Nav";
@@ -10,6 +11,7 @@ import PermissionsRequestData from "../../lib/types/PermissionsRequestData";
 import styles from "../../styles/manager/CreateApprovalLink.module.scss";
 
 const CreateApprovalLink: NextPage = () => {
+  const router = useRouter();
   const { address } = useAccount();
   const [jsonValidationValue, setJsonValidationValue] =
     useState<PermissionsRequestData>();
@@ -21,9 +23,7 @@ const CreateApprovalLink: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="DEBUGGER"
-          firstBtnOnClick={
-            () => console.log("Click!") /* TODO: implement this */
-          }
+          firstBtnOnClick={() => router.push("/manager/debugger")}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="CREATE"

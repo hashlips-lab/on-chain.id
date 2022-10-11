@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import Button from "../../components/Button/Button";
@@ -11,6 +12,7 @@ import { keyToBytes } from "../../lib/types/PrivateDataKey";
 import styles from "../../styles/manager/Debugger.module.scss";
 
 const Debugger: NextPage = () => {
+  const router = useRouter();
   const { address } = useAccount();
   const { userData, refreshUserData, getUserDataError } = useOnChainIdContext();
   const [getUserDataAddressInputValue, setGetUserDataAddressInputValue] =
@@ -31,7 +33,7 @@ const Debugger: NextPage = () => {
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="CREATE"
           secondBtnOnClick={
-            () => console.log("Click!") /* TODO: implement this */
+            () => router.push("/manager/create-link") /* TODO: implement this */
           }
           subTitle={address ?? ""}
           firstBtnDisabled
