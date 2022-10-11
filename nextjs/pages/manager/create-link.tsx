@@ -31,6 +31,7 @@ const CreateApprovalLink: NextPage = () => {
             () => console.log("Click!") /* TODO: implement this */
           }
           subTitle={address ?? ""}
+          secondBtnDisabled
         />
         <div className={styles.midContent}>
           <div className={styles.leftSide}>
