@@ -6,56 +6,168 @@ import RightSideContentBox from '../components/RightSideContentBox/RightSideCont
 import TopNavBar from '../components/TopNavBar/TopNavBar';
 import styles from '../styles/userDashboardProvidersIdentities.module.scss';
 import { useRouter } from 'next/router';
-import { useOnChainIdContext } from '../lib/OnChainIdContext';
 import { useAccount } from 'wagmi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  useOnChainIdContext,
+  AccessDenied,
+  PrivateDataEntry,
+} from '../lib/OnChainIdContext';
+import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
+import { Bytes, ethers } from 'ethers';
+import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 
-const KEY_LIST = [
-  {
-    title: 'Facebook',
-    icon: './images/icon/metamask.svg',
-    description: 'Log in with MetaMask',
-    isOnclick: false,
-  },
-  {
-    title: 'Facebook',
-    icon: './images/icon/metamask.svg',
-    description: 'Log in with MetaMask',
-    isOnclick: true,
-  },
-  {
-    title: 'test',
-    icon: './images/icon/coinbase.svg',
-    description: 'Log in with Coinbase Wallet',
-    isOnclick: false,
-  },
-  {
-    title: 'test2',
-    icon: './images/icon/walletConnect.svg',
-    description: 'Log in with WalletConnect',
-    isOnclick: false,
-  },
-  {
-    title: 'test3',
-    icon: './images/icon/phantom.svg',
-    description: 'Log in with Phantom (Solana)',
-    isOnclick: false,
-  },
-];
 const Dashboard: NextPage = () => {
   const router = useRouter();
+  const { address } = useAccount();
 
   const {
+    noExpirationValue,
+
+    onChainPrivateData,
+    refreshOnChainPrivateData,
+    isOnChainPrivateDataRefreshing,
+
     allowedProviders,
     refreshAllowedProviders,
+    areAllowedProvidersRefreshing,
+
+    onChainPermissions,
+    onChainPermissionsProvider,
+    refreshOnChainPermissions,
+    areOnChainPermissionsRefreshing,
+
+    providerExpiration,
+    refreshProviderExpiration,
+
+    userData,
+    refreshUserData,
+    getUserDataError,
+
+    writePrivateData,
+    isWritePrivateDataLoading,
+
+    deleteUserData,
+    isDeleteUserDataLoading,
+
+    writePermissions,
+    isWritePermissionsLoading,
+
     disableProvider,
     isDisableProviderLoading,
   } = useOnChainIdContext();
 
-  const { address } = useAccount();
+  // Write private data (edit existing data)
+  const [ editablePrivateData, setEditablePrivateData ] = useState<string[]>([]);
+
+  const updateEditablePrivateData = (updateIndex: number, newData: string) => {
+    setEditablePrivateData(
+      editablePrivateData.map((data, index) =>
+        index === updateIndex ? newData : data
+      )
+    );
+  };
+
+  // Write private data (new data)
+  const [ newPrivateData, setNewPrivateData ] = useState<PrivateDataEntry[]>([]);
+
+  const addNewPrivateData = () => {
+    setNewPrivateData(
+      newPrivateData.concat({
+        key: keyToBytes('Example key'),
+        data: 'Example data',
+      })
+    );
+  };
+
+  const updateNewPrivateDataKey = (updateIndex: number, newKey: Bytes) => {
+    setNewPrivateData(
+      newPrivateData.map((entry, index) =>
+        index === updateIndex ? { key: newKey, data: entry.data } : entry
+      )
+    );
+  };
+
+  const updateNewPrivateData = (updateIndex: number, newData: string) => {
+    setNewPrivateData(
+      newPrivateData.map((entry, index) =>
+        index === updateIndex ? { key: entry.key, data: newData } : entry
+      )
+    );
+  };
+
+  const removeNewPrivateData = (index: number) => {
+    const newPrivateDataClone = Array.from(newPrivateData);
+
+    newPrivateDataClone.splice(index, 1);
+
+    setNewPrivateData(newPrivateDataClone);
+  };
+
+  // Write private data (general)
+  const [ onChainPrivateDataKeysSet, setOnChainPrivateDataKeysSet ] = useState<
+    Set<string>
+  >(new Set<string>());
+  const [ newPrivateDataKeysSet, setNePrivateDataKeysSet ] = useState<
+    Set<string>
+  >(new Set<string>());
 
   useEffect(() => {
-    refreshAllowedProviders();
+    setOnChainPrivateDataKeysSet(
+      new Set<string>(onChainPrivateData.map((entry) => keyToString(entry.key)))
+    );
+  }, [ onChainPrivateData ]);
+
+  useEffect(() => {
+    setNePrivateDataKeysSet(
+      new Set<string>(newPrivateData.map((entry) => keyToString(entry.key)))
+    );
+  }, [ newPrivateData ]);
+
+  useEffect(() => {
+    setEditablePrivateData(onChainPrivateData.map((entry) => entry.data));
+
+    setNewPrivateData(
+      newPrivateData.filter(
+        (entry) => !onChainPrivateDataKeysSet.has(keyToString(entry.key))
+      )
+    );
+  }, [ onChainPrivateDataKeysSet ]);
+
+  const handleWritePrivateDataClick = () => {
+    writePrivateData(
+      onChainPrivateData
+        .map((entry, index) => {
+          return { key: entry.key, data: editablePrivateData[index] };
+        })
+        .concat(newPrivateData)
+    );
+  };
+
+  const privateDataChanged = () => {
+    const hasValidNewData =
+      newPrivateData.length !== 0 &&
+      newPrivateData.length === newPrivateDataKeysSet.size &&
+      newPrivateData.reduce(
+        (isValid, entry) =>
+          isValid && !onChainPrivateDataKeysSet.has(keyToString(entry.key)),
+        true
+      );
+
+    const hasValidPrivateDataChanges =
+      onChainPrivateData.length !== 0 &&
+      onChainPrivateData.reduce(
+        (didChange, entry, index) =>
+          editablePrivateData[index]?.length !== 0 &&
+          (didChange || entry.data !== editablePrivateData[index]),
+        false
+      );
+
+    return hasValidNewData || hasValidPrivateDataChanges;
+  };
+
+  useEffect(() => {
+    refreshOnChainPrivateData();
   }, []);
 
   return (
@@ -79,60 +191,27 @@ const Dashboard: NextPage = () => {
             <div className={styles.title}>Configure your Social Links</div>
 
             <div className={styles.topBtnWrapper}>
-              <div className={styles.buttonNew}>
-                <Button
-                  type="borderBlueBgWhiteTextBlue"
-                  onClick={
-                    () => console.log('Click!') /* TODO: implement this */
-                  }
-                  size="sm"
-                >
-                  <div className={styles.btnContent}>
-                    <span>NEW</span>
-                    <div>
-                      <Image
-                        src="./images/icon/plus.svg"
-                        width={16}
-                        height={16}
-                        alt="plus"
-                      />
-                    </div>
-                  </div>
-                </Button>
-              </div>
-
               <div className={styles.buttonUpdate}>
                 <Button
                   type="borderWhiteBgWhiteTextBlue"
-                  onClick={
-                    () => console.log('Click!') /* TODO: implement this */
-                  }
+                  onClick={() => addNewPrivateData()}
                   size="sm"
                 >
                   <div className={styles.btnContent}>
-                    <span>UPDATE</span>
-                    <div>
-                      <Image
-                        src="./images/icon/ok.svg"
-                        width={18}
-                        height={14}
-                        alt="ok"
-                      />
-                    </div>
+                    <span> ➕ ADD NEW</span>
                   </div>
                 </Button>
               </div>
 
               <div className={styles.buttonUpdateAll}>
                 <Button
+                  disabled={isWritePrivateDataLoading || !privateDataChanged()}
                   type="borderBlueBgBlueTextWhite"
-                  onClick={
-                    () => console.log('Click!') /* TODO: implement this */
-                  }
+                  onClick={handleWritePrivateDataClick}
                   size="sm"
                 >
                   <div className={styles.btnContent}>
-                    <span>UPDATE ALL</span>
+                    <span>SAVE</span>
                     <div>
                       <Image
                         src="./images/icon/upArrow.svg"
@@ -147,119 +226,108 @@ const Dashboard: NextPage = () => {
             </div>
           </div>
 
-          <ul>
-            <li>
-              <div
-                className={`${styles.listItem} ${styles.listItemSingle} ${styles.selectedBlue}`}
-              >
-                <div className={styles.social}>
-                  <div className={styles.icon}>
-                    <Image
-                      src="./images/icon/metamask.svg"
-                      width={72}
-                      height={72}
-                      alt="newLink"
-                    />
-                  </div>
-                  <div className={styles.info}>
-                    <span className={styles.title}>New Link</span>
-                    <span className={styles.description}>
-                      NEW KEY (EDITABLE of known keys)
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.btnWrapper}>
-                  <div className={styles.button}>
-                    <Button
-                      type="borderGreyBgWhiteTextGrey"
-                      onClick={
-                        () => console.log('Click!') /* TODO: implement this */
-                      }
-                      size="sm"
-                    >
-                      CANCEL
-                    </Button>
-                  </div>
-                </div>
+          <ul className="my-4">
+            {newPrivateData.length !== newPrivateDataKeysSet.size && (
+              <div className="text-red-500 mb-5">
+                New data contains duplicates!
               </div>
-            </li>
-            {KEY_LIST.map(({ icon, description, title, isOnclick }, index) => {
-              return (
-                <li key={index}>
-                  <div
-                    className={`${styles.listItem} ${
-                      isOnclick && styles.selected
-                    }`}
-                  >
-                    <div className={styles.social}>
-                      <div className={styles.icon}>
-                        <Image
-                          src={icon}
-                          width={isOnclick ? 72 : 60}
-                          height={isOnclick ? 72 : 60}
-                          alt={description}
-                        />
-                      </div>
-                      <div className={styles.info}>
-                        <span className={styles.title}>{title}</span>
-                        <span className={styles.description}>
-                          {description}
-                        </span>
-                      </div>
+            )}
+            {newPrivateData.map((data, index) => (
+              <li
+                key={`private-data-${index}`}
+                className="flex flex-row mb-4 p-2 border border-black rounded gap-4"
+              >
+                <div className="flex flex-col flex-1 gap-2">
+                  <div className="flex flex-row flex-1 gap-2 items-center">
+                    <div className="flex flex-col gap-1 flex-1">
+                      <code className="text-sm">Key</code>
+                      <input
+                        className="px-2 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300 h-10 font-semibold"
+                        type="text"
+                        onChange={(e) =>
+                          updateNewPrivateDataKey(
+                            index,
+                            keyToBytes(e.target.value)
+                          )
+                        }
+                        value={keyToString(newPrivateData[index].key)}
+                        required
+                      />
                     </div>
-
-                    {isOnclick ? (
-                      <div className={styles.btnWrapper}>
-                        <div className={styles.firstBtn}>
-                          <Button
-                            type="borderRedBgWhiteTextRed"
-                            onClick={
-                              () =>
-                                console.log('Click!') /* TODO: implement this */
-                            }
-                            size="sm"
-                          >
-                            <div className={styles.btnContent}>
-                              <span>REMOVE LINK</span>
-                              <div>
-                                <Image
-                                  src="./images/icon/closeRed.svg"
-                                  width={16}
-                                  height={16}
-                                  alt="Remove"
-                                />
-                              </div>
-                            </div>
-                          </Button>
-                        </div>
-                        <div className={styles.secondBtn}>
-                          <Button
-                            type="borderGreyBgWhiteTextGrey"
-                            onClick={
-                              () =>
-                                console.log('Click!') /* TODO: implement this */
-                            }
-                            size="sm"
-                          >
-                            CANCEL
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
+                    <div className="flex flex-col gap-1 flex-1">
+                      <code className="text-sm">Value</code>
+                      <input
+                        className="px-2 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300 h-10 font-semibold"
+                        type="text"
+                        onChange={(e) =>
+                          updateNewPrivateData(index, e.target.value)
+                        }
+                        value={newPrivateData[index].data ?? ''}
+                        required
+                      />
+                    </div>
+                  </div>
+                  {onChainPrivateDataKeysSet.has(
+                    keyToString(newPrivateData[index].key)
+                  ) && (
+                    <small className="text-red-500">Key already exists!</small>
+                  )}
+                </div>
+                <div className="flex flex-shrink">
+                  <Button
+                    loading={isDisableProviderLoading}
+                    disabled={isDisableProviderLoading}
+                    type="borderRedBgWhiteTextRed"
+                    onClick={() => removeNewPrivateData(index)}
+                    size="sm"
+                  >
+                    <div className={styles.btnContent}>
                       <div>
                         <Image
-                          src="./images/icon/editPen.svg"
-                          width={24}
-                          height={24}
+                          src={CloseRedIcon.src}
+                          width={16}
+                          height={16}
                           alt="Remove"
                         />
                       </div>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
+                    </div>
+                  </Button>
+                </div>
+              </li>
+            ))}
+            {onChainPrivateData.map((data, index) => (
+              <li
+                key={`private-data-${index}`}
+                className="flex flex-row mb-4 p-2 border border-black rounded gap-4"
+              >
+                <div className="flex flex-col flex-1 gap-2">
+                  <code className="px-2 text-md">{keyToString(data.key)}</code>
+
+                  <input
+                    className="px-2 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300 h-10 font-semibold"
+                    type="text"
+                    onChange={(e) =>
+                      updateEditablePrivateData(index, e.target.value)
+                    }
+                    value={editablePrivateData[index] ?? ''}
+                    required
+                  />
+                </div>
+                <div className="flex flex-shrink">
+                  <Button
+                    loading={isDisableProviderLoading}
+                    disabled={isDisableProviderLoading}
+                    type="borderRedBgWhiteTextRed"
+                    onClick={() => deleteUserData(data.key)}
+                    size="sm"
+                  >
+                    <div className={styles.btnContent}>
+                      <span>REMOVE</span>
+                    </div>
+                  </Button>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       </RightSideContentBox>
