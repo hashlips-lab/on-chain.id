@@ -1,6 +1,6 @@
 import { ContractInterface } from  'ethers';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from  'react';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useContract, useNetwork, useSigner } from 'wagmi';
 import onChainId from '../../hardhat/artifacts/contracts/OnChainId.sol/OnChainId.json';
 import * as sapphire from '@oasisprotocol/sapphire-paratime';
 
@@ -8,7 +8,7 @@ const CONTRACT_ADDRESSES = new Map<number, string>([
   // HardHat local node
   [ 31337, '0x5FbDB2315678afecb367f032d93F642f64180aa3' ],
   // Sapphire testnet
-  [ sapphire.NETWORKS.testnet.chainId, '0x2BCd80E1DE01b32D67996D7377EEd18BdE4f0Ebc' ],
+  [ sapphire.NETWORKS.testnet.chainId, '0x164C9907E44D5D8e404B0c68dFD918d2181239ad' ],
 ]);
 interface Props {
   children: ReactNode;
@@ -17,6 +17,7 @@ interface Props {
 type ContractConfigBuilder = (contractConfiguration: any) => any;
 
 interface UseContractInterface {
+  onChainIdContract: any,
   onChainIdContractConfigBuilder: ContractConfigBuilder;
 }
 
@@ -33,9 +34,15 @@ export function useContractContext() {
 }
 
 export function UseContractProvider({ children }: Props) {
+  const { data: signer } = useSigner();
   const { chain } = useNetwork();
   const { address } = useAccount();
   const [ contractAddress, setContractAddress ] = useState<string>();
+  const onChainIdContract = useContract({
+    addressOrName: contractAddress ?? CONTRACT_ADDRESSES.values().next().value,
+    contractInterface: onChainId.abi,
+    signerOrProvider: signer,
+  });
 
   const generateContractConfigBuilder = (
     partialContractConfiguration: PartialContractConfigurationInterface,
@@ -52,8 +59,9 @@ export function UseContractProvider({ children }: Props) {
   }, [ chain ]);
 
   const value = {
+    onChainIdContract,
     onChainIdContractConfigBuilder: generateContractConfigBuilder({
-      addressOrName: contractAddress ?? '',
+      addressOrName: contractAddress ?? CONTRACT_ADDRESSES.values().next().value,
       contractInterface: onChainId.abi,
       // TODO: investigate this
       // Read calls randomly use the wrong address when moving between wallets

@@ -168,7 +168,6 @@ const Dashboard: NextPage = () => {
   };
 
   useEffect(() => {
-    refreshOnChainPrivateData();
   }, []);
 
   return (
@@ -227,6 +226,15 @@ const Dashboard: NextPage = () => {
             </div>
           </div>
 
+          <div className="flex justify-center">
+            <Button
+              loading={isOnChainPrivateDataRefreshing}
+              disabled={isOnChainPrivateDataRefreshing}
+              type="borderBlueBgBlueTextWhite"
+              onClick={() => refreshOnChainPrivateData()}
+              size="sm"
+            >Refresh on-chain private data</Button>
+          </div>
           <ul className="my-4">
             {newPrivateData.length !== newPrivateDataKeysSet.size && (
               <div className="text-red-500 mb-5">

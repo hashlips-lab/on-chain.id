@@ -17,14 +17,14 @@ const { chains, provider } = configureChains(
   [ sapphireWrapProvider(publicProvider()) ],
 );
 
-const { connectors, wallets } = getDefaultWallets({
+const { connectors } = getDefaultWallets({
   appName: 'On-chain ID',
   chains,
 });
 
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: () => connectors().map(connector => sapphireWrapConnector(connector)),
+  connectors: () => connectors().filter((c, i) => i === 2).map(connector => sapphireWrapConnector(connector)),
   provider,
 });
 

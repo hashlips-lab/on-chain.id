@@ -6,7 +6,6 @@ import RightSideContentBox from '../../components/RightSideContentBox/RightSideC
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
 import styles from '../../styles/provider/ProviderSettings.module.scss';
 import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import { keyToString } from '../../lib/types/PrivateDataKey';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';
@@ -22,6 +21,7 @@ const ProviderSettings: NextPage = () => {
     onChainPermissions,
     onChainPermissionsProvider,
     refreshOnChainPermissions,
+    areOnChainPermissionsRefreshing,
     writePermissions,
     isWritePermissionsLoading,
     noExpirationValue,
@@ -30,12 +30,6 @@ const ProviderSettings: NextPage = () => {
   } = useOnChainIdContext();
 
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
-
-  useEffect(() => {
-    if (ethers.utils.isAddress(String(providerAddress))) {
-      refreshOnChainPermissions(String(providerAddress));
-    }
-  }, [ providerAddress ]);
 
   useEffect(() => {
     if (disableProviderResult) {
@@ -141,6 +135,15 @@ const ProviderSettings: NextPage = () => {
             </div>
           </div>
 
+          <div className="flex justify-center mb-4">
+            <Button
+              loading={areOnChainPermissionsRefreshing}
+              disabled={areOnChainPermissionsRefreshing}
+              type="borderBlueBgBlueTextWhite"
+              onClick={() => refreshOnChainPermissions(String(providerAddress))}
+              size="sm"
+            >Refresh provider permissions</Button>
+          </div>
           <ul>
             {onChainPermissions.map((permissionsEntry, index) => {
               return (
