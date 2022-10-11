@@ -9,6 +9,13 @@ import 'prismjs/themes/prism-dark.css';
 import styles from './JsonEditor.module.scss';
 import jsonSchema from './../../assets/schema.json';
 
+type JsonValidationErrors = {
+  error: string;
+  instanceLocation: string;
+  keyword: string;
+  keywordLocation: string;
+}[];
+
 const JsonEditor = (props: { jsonPermissionSetCallback: Dispatch<SetStateAction<any>> }) => {
   const { address } = useAccount();
   const defaultValue = {
@@ -19,7 +26,7 @@ const JsonEditor = (props: { jsonPermissionSetCallback: Dispatch<SetStateAction<
   };
   const [ jsonValue, setJsonValue ] = useState<string>(JSON.stringify(defaultValue, null, '\t'));
   const [ debouncedJsonValue ] = useDebounce(jsonValue, 500);
-  const [ jsonValidationErrors, setJsonValidationErrors ] = useState<any>();
+  const [ jsonValidationErrors, setJsonValidationErrors ] = useState<JsonValidationErrors>();
   const validator = new Validator(jsonSchema as any);
 
   useEffect(() => {
@@ -55,12 +62,20 @@ const JsonEditor = (props: { jsonPermissionSetCallback: Dispatch<SetStateAction<
       />
 
       {(jsonValidationErrors && jsonValidationErrors.length !== 0) &&
-      <>
-        <h3>Warning: </h3>
-        <ul>
-          { jsonValidationErrors.map((error: any, i: number) => <li key={i}>{error.error}</li>) }
-        </ul>
-      </>}
+        <div className={styles.errors}>
+          <h3>Warning: </h3>
+          <ul>
+            {jsonValidationErrors.map((error, i: number) =>
+              <li key={i}>
+                <div>
+                  {error.error}
+                  <small>{error.instanceLocation}</small>
+                </div>
+              </li>
+            )}
+          </ul>
+        </div>
+      }
     </div>
   );
 };
