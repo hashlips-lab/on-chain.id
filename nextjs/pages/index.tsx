@@ -16,6 +16,7 @@ import {
 import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
 import { Bytes, ethers } from 'ethers';
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
+import UpArrow from '../assets/images/icon/upArrow.svg';
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
@@ -214,7 +215,7 @@ const Dashboard: NextPage = () => {
                     <span>SAVE</span>
                     <div>
                       <Image
-                        src="./images/icon/upArrow.svg"
+                        src={UpArrow.src}
                         width={15}
                         height={18}
                         alt="Up"
