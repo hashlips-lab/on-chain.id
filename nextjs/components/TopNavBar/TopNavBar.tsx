@@ -1,15 +1,17 @@
-import Button, { ButtonProps } from '../Button/Button';
-import styles from './TopNavBar.module.scss';
+import Button, { ButtonProps } from "../Button/Button";
+import styles from "./TopNavBar.module.scss";
 
 interface TopNavBar {
   mainTitle: string;
   subTitle: string;
-  firstBtnClass: ButtonProps['type'];
+  firstBtnClass: ButtonProps["type"];
   firstBtnContent: any;
+  firstBtnDisabled?: boolean;
   firstBtnOnClick: () => void;
-  secondBtnClass: ButtonProps['type'];
+  secondBtnClass: ButtonProps["type"];
   secondBtnContent: any;
   secondBtnOnClick: () => void;
+  secondBtnDisabled?: boolean;
 }
 
 const TopNavBar = ({
@@ -21,6 +23,8 @@ const TopNavBar = ({
   secondBtnClass,
   secondBtnContent,
   secondBtnOnClick,
+  firstBtnDisabled,
+  secondBtnDisabled,
 }: TopNavBar) => {
   return (
     <div className={styles.topNavBar}>
@@ -30,11 +34,21 @@ const TopNavBar = ({
       </div>
 
       <div className={styles.buttonWrapper}>
-        <Button type={firstBtnClass} size="lg" onClick={firstBtnOnClick}>
+        <Button
+          type={firstBtnClass}
+          size="lg"
+          onClick={firstBtnOnClick}
+          disabled={firstBtnDisabled}
+        >
           {firstBtnContent}
         </Button>
 
-        <Button type={secondBtnClass} size="lg" onClick={secondBtnOnClick}>
+        <Button
+          type={secondBtnClass}
+          size="lg"
+          onClick={secondBtnOnClick}
+          disabled={secondBtnDisabled}
+        >
           {secondBtnContent}
         </Button>
       </div>

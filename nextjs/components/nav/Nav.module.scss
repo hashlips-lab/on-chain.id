@@ -14,5 +14,27 @@
     @screen xl {
       @apply flex-col;
     }
+
+    li {
+      @apply cursor-pointer;
+
+      .active {
+        @apply hidden #{!important};
+      }
+
+      .inactive {
+        @apply block #{!important};
+      }
+
+      &:hover {
+        .active {
+          @apply block #{!important};
+        }
+
+        .inactive {
+          @apply hidden #{!important};
+        }
+      }
+    }
   }
 }
