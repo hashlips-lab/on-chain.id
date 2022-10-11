@@ -16,7 +16,6 @@ const PermissionRequestLinkAndCode = ({
   jsonValidationValue,
   setJsonValidationValue,
 }: PermissionRequestLinkAndCodeProps) => {
-  const { address } = useAccount();
   const [ permissionsRequestLink, setPermissionsRequestLink ] = useState<string>();
   const linkElement = useRef<HTMLAnchorElement>(null);
 
@@ -39,7 +38,7 @@ const PermissionRequestLinkAndCode = ({
       {jsonValidationValue &&
         <div className={styles.link}>
           <Link href={{
-            pathname: `/approve/${address}`,
+            pathname: `/approve/${jsonValidationValue.providerAddress}`,
             query: { p: jsonValidationValue.requiredPermissions },
           }}>
             <a ref={linkElement} target="_blank" rel="noreferrer">{permissionsRequestLink}</a>

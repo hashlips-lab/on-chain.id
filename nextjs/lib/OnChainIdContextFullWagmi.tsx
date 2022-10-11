@@ -1,8 +1,3 @@
-// TODO: This implementation uses direct contract calls for every READ call
-//       since WAGMI is not compatible with Sapphire out-of-the-box. We should
-//       be able to fix this in the future.
-//       (see OnChainIdContextFullWagmi.ts)
-
 import { ethers, BigNumber, BytesLike, Bytes } from 'ethers';
 import { useDebounce } from 'use-debounce';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
@@ -13,7 +8,7 @@ import { keyToString } from './types/PrivateDataKey';
 export const AccessDenied = 'AccessDenied';
 export const DataAccessDenied = 'DataAccessDenied';
 
-const DEFAULT_PAGINATION_VALUE = 50;
+const DEFAULT_PAGINATION_VALUE = 10;
 
 interface WritePermissionsArgs {
   providerAddress: string;
@@ -104,7 +99,7 @@ export function useOnChainIdContext() {
 }
 
 export function OnChainIdProvider({ children }: Props) {
-  const { onChainIdContract, onChainIdContractConfigBuilder } = useContractContext();
+  const { onChainIdContractConfigBuilder } = useContractContext();
 
   // NO_EXPIRATION_VALUE
   const { data: noExpirationValue } = useContractRead(onChainIdContractConfigBuilder({
@@ -117,13 +112,12 @@ export function OnChainIdProvider({ children }: Props) {
   // getExpiration
   const [ getExpirationArgs, setGetExpirationArgs ] = useState<{ providerAddress: string }>();
   const [ debouncedGetExpirationArgs ] = useDebounce(getExpirationArgs, 500);
-  const [ getExpiration, setGetExpiration ] = useState<BigNumber>();
-
-  const getExpirationRefetch = async () => {
-    if (debouncedGetExpirationArgs && ethers.utils.isAddress(debouncedGetExpirationArgs.providerAddress)) {
-      setGetExpiration(await onChainIdContract.getExpiration(debouncedGetExpirationArgs!.providerAddress));
-    }
-  };
+  const { data: getExpiration, refetch: getExpirationRefetch } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'getExpiration',
+    args: [ debouncedGetExpirationArgs?.providerAddress ],
+    watch: false,
+    enabled: Boolean(debouncedGetExpirationArgs && ethers.utils.isAddress(debouncedGetExpirationArgs.providerAddress)),
+  }));
 
   const refreshProviderExpiration = (providerAddress: string) => {
     if (providerAddress === getExpirationArgs?.providerAddress) {
@@ -137,33 +131,18 @@ export function OnChainIdProvider({ children }: Props) {
     });
   };
 
-  useEffect(() => {
-    getExpirationRefetch();
-  }, [ debouncedGetExpirationArgs ]);
-
   // getData
   const [ getDataArgs, setGetDataArgs ] = useState<{ userAddress: string, key: Bytes }>();
   const [ debouncedGetDataArgs ] = useDebounce(getDataArgs, 500);
-  const [ getData, setGetData ] = useState<PrivateDataEntry[]>();
-  const [ getDataError, setGetDataError ] = useState<any>(null);
-
-  const getDataRefetch = async () => {
-    if (debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress)) {
-      setGetDataError(null);
-
-      try {
-        setGetData(await onChainIdContract.getData(
-          debouncedGetDataArgs?.userAddress,
-          debouncedGetDataArgs && ethers.utils.hexlify(debouncedGetDataArgs?.key),
-        ));
-      } catch (error) {
-        setGetDataError({
-          errorName: DataAccessDenied,
-          errorArgs: [],
-        });
-      }
-    }
-  };
+  const { data: getData, refetch: getDataRefetch, error: getDataError } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'getData',
+    args: [
+      debouncedGetDataArgs?.userAddress,
+      debouncedGetDataArgs && ethers.utils.hexlify(debouncedGetDataArgs?.key),
+    ],
+    watch: false,
+    enabled: Boolean(debouncedGetDataArgs && ethers.utils.isAddress(debouncedGetDataArgs.userAddress)),
+  }));
 
   const refreshUserData = (userAddress: string, key: Bytes) => {
     if (userAddress === getDataArgs?.userAddress && keyToString(key) === keyToString(getDataArgs.key)) {
@@ -178,18 +157,16 @@ export function OnChainIdProvider({ children }: Props) {
     });
   };
 
-  useEffect(() => {
-    getDataRefetch();
-  }, [ debouncedGetDataArgs ]);
-
   // Private data
   const [ getPrivateDataProgress, setGetPrivateDataProgress ] = useState<GetPrivateDataProgress>();
-  const getDataEntries = async () => {
-    return await onChainIdContract.getDataEntries(
+  const { refetch: getDataEntries } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'getDataEntries',
+    args: [
       getPrivateDataProgress?.nextStartKey ?? ethers.constants.HashZero,
       getPrivateDataProgress == undefined ? 0 : getPrivateDataProgress.entriesPerPage,
-    );
-  };
+    ],
+    enabled: false,
+  }));
 
   const refreshPrivateData = (entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
     setGetPrivateDataProgress({
@@ -203,7 +180,7 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getPrivateDataProgress?.isLoading === true) {
-        const [ privateData, nextStartKey ] = (await getDataEntries()) as [
+        const [ privateData, nextStartKey ] = (await getDataEntries()).data as [
           { key: BytesLike, data: string }[],
           string,
         ];
@@ -229,12 +206,14 @@ export function OnChainIdProvider({ children }: Props) {
 
   // Allowed providers
   const [ getAllowedProvidersProgress, setGetAllowedProvidersProgress ] = useState<GetAllowedProvidersProgress>();
-  const getAllowedProviders = async () => {
-    return await onChainIdContract.getAllowedProviders(
+  const { refetch: getAllowedProviders } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'getAllowedProviders',
+    args: [
       getAllowedProvidersProgress?.nextStartProvider ?? ethers.constants.AddressZero,
       getAllowedProvidersProgress == undefined ? 0 : getAllowedProvidersProgress.providersPerPage,
-    );
-  };
+    ],
+    enabled: false,
+  }));
 
   const refreshAllowedProviders = (providersPerPage: number = DEFAULT_PAGINATION_VALUE) => {
     setGetAllowedProvidersProgress({
@@ -248,7 +227,7 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getAllowedProvidersProgress?.isLoading === true) {
-        const [ allowedProviders, nextStartProvider ] = (await getAllowedProviders()) as [ string[], string ];
+        const [ allowedProviders, nextStartProvider ] = (await getAllowedProviders()).data as [ string[], string ];
 
         if (allowedProviders === undefined) {
           throw new Error('Something went wrong...');
@@ -266,13 +245,15 @@ export function OnChainIdProvider({ children }: Props) {
 
   // Get permissions
   const [ getPermissionsProgress, setGetPermissionsProgress ] = useState<GetPermissionsProgress>();
-  const getPermissions = async () => {
-    return await onChainIdContract.getPermissions(
+  const { refetch: getPermissions } = useContractRead(onChainIdContractConfigBuilder({
+    functionName: 'getPermissions',
+    args: [
       getPermissionsProgress?.provider ?? ethers.constants.AddressZero,
       getPermissionsProgress?.nextStartKey ?? ethers.constants.HashZero,
       getPermissionsProgress == undefined ? 0 : getPermissionsProgress.entriesPerPage,
-    );
-  };
+    ],
+    enabled: false,
+  }));
 
   const refreshPermissions = (provider: string, entriesPerPage: number = DEFAULT_PAGINATION_VALUE) => {
     setGetPermissionsProgress({
@@ -287,7 +268,7 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     (async () => {
       if (getPermissionsProgress?.isLoading === true) {
-        const [ permissions, nextStartKey ] = (await getPermissions()) as [
+        const [ permissions, nextStartKey ] = (await getPermissions()).data as [
           { key: BytesLike, canRead: boolean }[],
           string,
         ];

@@ -10,11 +10,10 @@ import { useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';
 import {
   useOnChainIdContext,
-  AccessDenied,
   PrivateDataEntry,
 } from '../lib/OnChainIdContext';
 import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
-import { Bytes, ethers } from 'ethers';
+import { Bytes } from 'ethers';
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 import UpArrow from '../assets/images/icon/upArrow.svg';
 
@@ -23,39 +22,15 @@ const Dashboard: NextPage = () => {
   const { address } = useAccount();
 
   const {
-    noExpirationValue,
-
     onChainPrivateData,
     refreshOnChainPrivateData,
     isOnChainPrivateDataRefreshing,
-
-    allowedProviders,
-    refreshAllowedProviders,
-    areAllowedProvidersRefreshing,
-
-    onChainPermissions,
-    onChainPermissionsProvider,
-    refreshOnChainPermissions,
-    areOnChainPermissionsRefreshing,
-
-    providerExpiration,
-    refreshProviderExpiration,
-
-    userData,
-    refreshUserData,
-    getUserDataError,
 
     writePrivateData,
     isWritePrivateDataLoading,
 
     deleteUserData,
     isDeleteUserDataLoading,
-
-    writePermissions,
-    isWritePermissionsLoading,
-
-    disableProvider,
-    isDisableProviderLoading,
   } = useOnChainIdContext();
 
   // Write private data (edit existing data)
@@ -167,10 +142,6 @@ const Dashboard: NextPage = () => {
     return hasValidNewData || hasValidPrivateDataChanges;
   };
 
-  useEffect(() => {
-    refreshOnChainPrivateData();
-  }, []);
-
   return (
     <div className={styles.userDashboardLinks}>
       <Nav />
@@ -181,7 +152,7 @@ const Dashboard: NextPage = () => {
           firstBtnOnClick={() => {
             console.log('Empty');
           }}
-          mainTitle="My Social Identities"
+          mainTitle="My On-Chain ID"
           secondBtnClass="borderBlueBgWhiteTextBlue"
           secondBtnContent="PROVIDERS"
           secondBtnOnClick={() => router.push('/providers')}
@@ -189,7 +160,7 @@ const Dashboard: NextPage = () => {
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
-            <div className={styles.title}>Configure your Social Links</div>
+            <div className={styles.title}>Configure your private data</div>
 
             <div className={styles.topBtnWrapper}>
               <div className={styles.buttonUpdate}>
@@ -227,6 +198,15 @@ const Dashboard: NextPage = () => {
             </div>
           </div>
 
+          <div className="flex justify-center">
+            <Button
+              loading={isOnChainPrivateDataRefreshing}
+              disabled={isOnChainPrivateDataRefreshing}
+              type="borderBlueBgBlueTextWhite"
+              onClick={() => refreshOnChainPrivateData()}
+              size="sm"
+            >Refresh on-chain private data</Button>
+          </div>
           <ul className="my-4">
             {newPrivateData.length !== newPrivateDataKeysSet.size && (
               <div className="text-red-500 mb-5">
@@ -276,8 +256,6 @@ const Dashboard: NextPage = () => {
                 </div>
                 <div className="flex flex-shrink">
                   <Button
-                    loading={isDisableProviderLoading}
-                    disabled={isDisableProviderLoading}
                     type="borderRedBgWhiteTextRed"
                     onClick={() => removeNewPrivateData(index)}
                     size="sm"
@@ -316,8 +294,8 @@ const Dashboard: NextPage = () => {
                 </div>
                 <div className="flex flex-shrink">
                   <Button
-                    loading={isDisableProviderLoading}
-                    disabled={isDisableProviderLoading}
+                    loading={isDeleteUserDataLoading}
+                    disabled={isDeleteUserDataLoading}
                     type="borderRedBgWhiteTextRed"
                     onClick={() => deleteUserData(data.key)}
                     size="sm"

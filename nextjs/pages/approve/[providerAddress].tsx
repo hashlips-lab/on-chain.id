@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ModalWrapper from '../../components/Modal/ModalWrapper/ModalWrapper';
@@ -32,7 +33,10 @@ const Home: NextPage = () => {
     <main className={styles.main}>
       <ModalWrapper>
         {data === undefined ?
-          <span>This link is invalid!</span>
+          <div className="text-center">
+            This link is <strong>invalid</strong>!<br />
+            Please visit <Link href="/"><a className="font-bold text-[#0075FF] hover:underline">your dashboard</a></Link>.
+          </div>
           :
           <NewProviderRequestModal {...data} />
         }

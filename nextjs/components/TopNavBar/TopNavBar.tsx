@@ -7,10 +7,10 @@ interface TopNavBar {
   firstBtnClass: ButtonProps['type'];
   firstBtnContent: any;
   firstBtnDisabled?: boolean;
-  firstBtnOnClick: () => void;
+  firstBtnOnClick?: () => void;
   secondBtnClass: ButtonProps['type'];
   secondBtnContent: any;
-  secondBtnOnClick: () => void;
+  secondBtnOnClick?: () => void;
   secondBtnDisabled?: boolean;
 }
 

@@ -6,22 +6,23 @@ import RightSideContentBox from '../../components/RightSideContentBox/RightSideC
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
 import styles from '../../styles/provider/ProviderSettings.module.scss';
 import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import { keyToString } from '../../lib/types/PrivateDataKey';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';
 import KnownServicesIcons from '../../lib/KnownServicesIcons';
 import BackArrow from '../../assets/images/icon/backArrow.svg';
 import CloseRed from '../../assets/images/icon/closeRed.svg';
+import { ethers } from 'ethers';
 
 const ProviderSettings: NextPage = () => {
   const router = useRouter();
-  const { providerAddress } = router.query;
+  const { providerAddress } = router.query as { providerAddress?: string };
 
   const {
     onChainPermissions,
     onChainPermissionsProvider,
     refreshOnChainPermissions,
+    areOnChainPermissionsRefreshing,
     writePermissions,
     isWritePermissionsLoading,
     noExpirationValue,
@@ -30,12 +31,6 @@ const ProviderSettings: NextPage = () => {
   } = useOnChainIdContext();
 
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
-
-  useEffect(() => {
-    if (ethers.utils.isAddress(String(providerAddress))) {
-      refreshOnChainPermissions(String(providerAddress));
-    }
-  }, [ providerAddress ]);
 
   useEffect(() => {
     if (disableProviderResult) {
@@ -87,101 +82,117 @@ const ProviderSettings: NextPage = () => {
     <div className={styles.userDashboardLinks}>
       <Nav />
       <RightSideContentBox>
-        <TopNavBar
-          firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent="MY LINKS"
-          firstBtnOnClick={() => router.push('/')}
-          mainTitle="Provider Dashboard"
-          secondBtnClass="borderBlueBgBlueTextWhite"
-          secondBtnContent={
-            <div className={styles.btnContent}>
-              <Image
-                src={BackArrow.src}
-                width={27}
-                height={24}
-                alt="Back"
-              />
-              <span>BACK</span>
-            </div>
-          }
-          secondBtnOnClick={() => router.back()}
-          subTitle=""
-        />
-        <div className={styles.midContent}>
-          <div className={styles.subBtnTitleWrapper}>
-            <div className={styles.title}>{providerAddress}</div>
-            <div className={styles.btnWrapper}>
-              <Button
-                type="borderRedBgWhiteTextRed"
-                onClick={() => disableProvider(String(providerAddress))}
-                size="sm"
-              >
+        {ethers.utils.isAddress(providerAddress ?? '') ?
+          <>
+            <TopNavBar
+              firstBtnClass="borderBlueBgWhiteTextBlue"
+              firstBtnContent="MY LINKS"
+              firstBtnOnClick={() => router.push('/')}
+              mainTitle="Provider Dashboard"
+              secondBtnClass="borderBlueBgBlueTextWhite"
+              secondBtnContent={
                 <div className={styles.btnContent}>
-                  <span>REMOVE PROVIDER</span>
-                  <div>
-                    <Image
-                      src={CloseRed.src}
-                      width={16}
-                      height={16}
-                      alt="Remove"
-                    />
-                  </div>
+                  <Image
+                    src={BackArrow.src}
+                    width={27}
+                    height={24}
+                    alt="Back"
+                  />
+                  <span>BACK</span>
                 </div>
-              </Button>
-              <br />
-              <br />
-              <Button
-                disabled={isWritePermissionsLoading || !permissionsChanged()}
-                type="borderBlueBgBlueTextWhite"
-                onClick={handleWritePermissionsClick}
-                size="sm"
-              >
-                <div className={styles.btnContent}>SAVE</div>
-              </Button>
-            </div>
-          </div>
-
-          <ul>
-            {onChainPermissions.map((permissionsEntry, index) => {
-              return (
-                <li key={index}>
-                  <div className={`${styles.listItem}`}>
-                    <div className={styles.social}>
-                      <div className={styles.icon}>
-                        <Image src={KnownServicesIcons[keyToString(permissionsEntry.key)].src} width={60} height={60} />
-                      </div>
-                      <div className={styles.info}>
-                        <span className={styles.title}>
-                          {keyToString(permissionsEntry.key)}
-                        </span>
-                        <span className={styles.description}>
-                          Access&nbsp;
-                          {editablePermissions[index] ? (
-                            <span className="text-green-700">granted</span>
-                          ) : (
-                            <span className="text-red-700">denied</span>
-                          )}
-                        </span>
-                      </div>
+              }
+              secondBtnOnClick={() => router.back()}
+              subTitle=""
+            />
+            <div className={styles.midContent}>
+              <div className={styles.subBtnTitleWrapper}>
+                <div className={styles.title}>{providerAddress}</div>
+                <div className={styles.btnWrapper}>
+                  <Button
+                    type="borderRedBgWhiteTextRed"
+                    onClick={() => disableProvider(String(providerAddress))}
+                    size="sm"
+                  >
+                    <div className={styles.btnContent}>
+                      <span>REMOVE PROVIDER</span>
+                      <Image
+                        src={CloseRed.src}
+                        width={16}
+                        height={16}
+                        alt="Remove"
+                      />
                     </div>
+                  </Button>
+                  <br />
+                  <br />
+                  <Button
+                    disabled={isWritePermissionsLoading || !permissionsChanged()}
+                    type="borderBlueBgBlueTextWhite"
+                    onClick={handleWritePermissionsClick}
+                    size="sm"
+                  >
+                    <div className={styles.btnContent}>SAVE</div>
+                  </Button>
+                </div>
+              </div>
 
-                    <div className={styles.btnWrapper}>
-                      <Button
-                        type="borderWhiteBgWhiteTextBlue"
-                        onClick={() => togglePermissions(index)}
-                        size="sm"
-                      >
-                        <div className={styles.btnContent}>
-                          <span>TOGGLE</span>
+              <div className="flex justify-center mb-4">
+                <Button
+                  loading={areOnChainPermissionsRefreshing}
+                  disabled={areOnChainPermissionsRefreshing}
+                  type="borderBlueBgBlueTextWhite"
+                  onClick={() => refreshOnChainPermissions(String(providerAddress))}
+                  size="sm"
+                >Refresh provider permissions</Button>
+              </div>
+              <ul>
+                {onChainPermissions.map((permissionsEntry, index) => {
+                  return (
+                    <li key={index}>
+                      <div className={`${styles.listItem}`}>
+                        <div className={styles.social}>
+                          <div className={styles.icon}>
+                            <Image src={KnownServicesIcons[keyToString(permissionsEntry.key)].src} width={60} height={60} />
+                          </div>
+                          <div className={styles.info}>
+                            <span className={styles.title}>
+                              {keyToString(permissionsEntry.key)}
+                            </span>
+                            <span className={styles.description}>
+                              Access&nbsp;
+                              {editablePermissions[index] ? (
+                                <span className="text-green-700">granted</span>
+                              ) : (
+                                <span className="text-red-700">denied</span>
+                              )}
+                            </span>
+                          </div>
                         </div>
-                      </Button>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+
+                        <div className={styles.btnWrapper}>
+                          <Button
+                            type="borderWhiteBgWhiteTextBlue"
+                            onClick={() => togglePermissions(index)}
+                            size="sm"
+                          >
+                            <div className={styles.btnContent}>
+                              <span>TOGGLE</span>
+                            </div>
+                          </Button>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </>
+          :
+          <div className="flex flex-col justify-center items-center w-full h-full">
+            <strong>Invalid ETH address:</strong>
+            {providerAddress}
+          </div>
+        }
       </RightSideContentBox>
     </div>
   );

@@ -23,7 +23,7 @@
   }
 
   .listTitle {
-    @apply flex;
+    @apply flex justify-center;
     @apply font-urbanist font-semibold text-[1.5rem] leading-[1.75rem] text-center;
     @apply mb-[0.75rem];
 

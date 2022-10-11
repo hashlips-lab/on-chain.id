@@ -1,7 +1,7 @@
 import { Chain, ChainProviderFn, Connector } from 'wagmi';
 import * as sapphire from '@oasisprotocol/sapphire-paratime';
 
-export const sapphireChain: Chain = {
+export const sapphireChainTestnet: Chain = {
   id: sapphire.NETWORKS.testnet.chainId,
   name: 'Sapphire',
   network: 'sapphire',
@@ -19,42 +19,38 @@ export const sapphireChain: Chain = {
   testnet: true,
 };
 
-export const sapphireWrapProvider = (chainProviderFunction: ChainProviderFn) => (chain: Chain) => {
-  const chainProvider = chainProviderFunction(chain);
+export const sapphireWrapProvider = (wagmiChainProviderFunction: ChainProviderFn) => (chain: Chain) => {
+  const wagmiChainProvider = wagmiChainProviderFunction(chain);
 
-  if (chainProvider === null) {
+  if (wagmiChainProvider === null) {
     return null;
   }
 
-  (chainProvider as any)._provider = chainProvider.provider;
+  (wagmiChainProvider as any)._provider = wagmiChainProvider.provider;
 
-  if (chain.id === sapphireChain.id) {
-    chainProvider.provider = () => sapphire.wrap((chainProvider as any)._provider());
+  if (chain.id === sapphireChainTestnet.id) {
+    console.log('Wrapping provider...');
+
+    wagmiChainProvider.provider = () => sapphire.wrap((wagmiChainProvider as any)._provider());
   }
 
-  return chainProvider;
+  return wagmiChainProvider;
 };
 
-export const sapphireConnectorWrapper = (connector: Connector) => {
-  let cachedProvider: typeof Connector.prototype.getProvider;
+export const sapphireWrapConnector = (connector: Connector) => {
+  const originalGetProviderFunction = connector.getProvider;
 
-  return new Proxy(connector, {
-    get(connector, property) {
-      const getProvider: typeof connector.getProvider = async (...args) => {
-        if (!cachedProvider) {
-          cachedProvider = sapphire.wrap(await connector.getProvider(...args));
-        }
+  connector.getProvider = async (...args) => {
+    let provider = await originalGetProviderFunction.bind(connector)(...args);
 
-        return cachedProvider;
-      };
+    if (Number(provider.chainId)  === sapphireChainTestnet.id) {
+      console.log('Wrapping connector...');
 
-      if (property === 'getProvider') {
-        return getProvider;
-      }
+      provider = sapphire.wrap(provider);
+    }
 
-      if (property in connector) {
-        return (connector as any)[property];
-      }
-    },
-  });
+    return provider;
+  };
+
+  return connector;
 };

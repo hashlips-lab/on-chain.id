@@ -21,17 +21,14 @@ const CreateApprovalLink: NextPage = () => {
       <Nav />
       <RightSideContentBox>
         <TopNavBar
-          firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent="DEBUGGER"
-          firstBtnOnClick={() => router.push('/manager/debugger')}
           mainTitle="Provider Dashboard"
-          secondBtnClass="borderBlueBgBlueTextWhite"
-          secondBtnContent="CREATE"
-          secondBtnOnClick={
-            () => console.log('Click!') /* TODO: implement this */
-          }
           subTitle={address ?? ''}
-          secondBtnDisabled
+          firstBtnClass="borderBlueBgBlueTextWhite"
+          firstBtnContent="CREATE LINK"
+          firstBtnDisabled
+          secondBtnClass="borderBlueBgWhiteTextBlue"
+          secondBtnContent="DEBUGGER"
+          secondBtnOnClick={() => router.push('/manager/debugger')}
         />
         <div className={styles.midContent}>
           <div className={styles.leftSide}>

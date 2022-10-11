@@ -16,15 +16,12 @@ const Providers: NextPage = () => {
   const {
     allowedProviders,
     refreshAllowedProviders,
+    areAllowedProvidersRefreshing,
     disableProvider,
     isDisableProviderLoading,
   } = useOnChainIdContext();
 
   const { address } = useAccount();
-
-  useEffect(() => {
-    refreshAllowedProviders();
-  }, []);
 
   return (
     <div className={styles.userDashboardLinks}>
@@ -45,6 +42,15 @@ const Providers: NextPage = () => {
             <div className={styles.title}>New Permission Request Link</div>
           </div>
 
+          <div className="flex justify-center mb-4">
+            <Button
+              loading={areAllowedProvidersRefreshing}
+              disabled={areAllowedProvidersRefreshing}
+              type="borderBlueBgBlueTextWhite"
+              onClick={() => refreshAllowedProviders()}
+              size="sm"
+            >Refresh providers</Button>
+          </div>
           <ul>
             {allowedProviders.map((provider, index) => {
               return (
