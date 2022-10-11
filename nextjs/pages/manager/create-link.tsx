@@ -39,7 +39,7 @@ const CreateApprovalLink: NextPage = () => {
             <div className={styles.title}>Preview</div>
             {jsonValidationValue ?
               <div className={styles.rightSideContentWrapper}>
-                <PermissionRequest {...jsonValidationValue} />
+                <PermissionRequest {...jsonValidationValue} isPreview={true} />
               </div>
               :
               <strong>Please correct the errors in the code before you can see the preview!</strong>
