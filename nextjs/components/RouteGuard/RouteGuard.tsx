@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState, PropsWithChildren } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 const LOGIN_PATH = '/login';
 
 const RouteGuard = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const { isConnected } = useAccount();
+  const { chain } = useNetwork();
   const [ authorized, setAuthorized ] = useState(false);
 
   const authCheck = (url: string) => {
@@ -14,7 +15,7 @@ const RouteGuard = ({ children }: PropsWithChildren) => {
     const publicPaths = [ LOGIN_PATH ];
     const path = url.split('?')[0];
 
-    if (isConnected || publicPaths.includes(path)) {
+    if ((isConnected && (chain?.unsupported !== true)) || publicPaths.includes(path)) {
       setAuthorized(true);
 
       return;
@@ -48,7 +49,7 @@ const RouteGuard = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     authCheck(router.asPath);
-  }, [ isConnected ]);
+  }, [ isConnected, chain ]);
 
   return (authorized && children) ? <>{children}</> : null;
 };

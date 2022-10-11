@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import styles from '../styles/Login.module.scss';
 import Logo from '../assets/images/logo.svg';
 
@@ -12,15 +12,16 @@ const DEFAULT_REDIRECT_PATH = '/';
 const Login: NextPage = () => {
   const router = useRouter();
   const { isConnected } = useAccount();
+  const { chain } = useNetwork();
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && chain?.unsupported !== true) {
       const returnUrl = router.query.returnUrl || DEFAULT_REDIRECT_PATH;
 
       // router.push doesn't work properly (causes infinite redirect loop)
       window.location.href = Array.isArray(returnUrl) ? returnUrl[0] ?? '' : returnUrl;
     }
-  }, [ isConnected ]);
+  }, [ isConnected, chain ]);
 
   return (
     <div className={styles.container}>
