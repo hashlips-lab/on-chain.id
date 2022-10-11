@@ -10,6 +10,9 @@ import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import { keyToString } from '../../lib/types/PrivateDataKey';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';
+import KnownServicesIcons from '../../lib/KnownServicesIcons';
+import BackArrow from '../../assets/images/icon/backArrow.svg';
+import CloseRed from '../../assets/images/icon/closeRed.svg';
 
 const ProviderSettings: NextPage = () => {
   const router = useRouter();
@@ -23,6 +26,7 @@ const ProviderSettings: NextPage = () => {
     isWritePermissionsLoading,
     noExpirationValue,
     disableProvider,
+    disableProviderResult,
   } = useOnChainIdContext();
 
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
@@ -32,6 +36,12 @@ const ProviderSettings: NextPage = () => {
       refreshOnChainPermissions(String(providerAddress));
     }
   }, [ providerAddress ]);
+
+  useEffect(() => {
+    if (disableProviderResult) {
+      router.back();
+    }
+  }, [ disableProviderResult ]);
 
   useEffect(() => {
     setEditablePermissions(onChainPermissions.map((entry) => entry.canRead));
@@ -86,7 +96,7 @@ const ProviderSettings: NextPage = () => {
           secondBtnContent={
             <div className={styles.btnContent}>
               <Image
-                src=".././images/icon/backArrow.svg"
+                src={BackArrow.src}
                 width={27}
                 height={24}
                 alt="Back"
@@ -110,7 +120,7 @@ const ProviderSettings: NextPage = () => {
                   <span>REMOVE PROVIDER</span>
                   <div>
                     <Image
-                      src=".././images/icon/closeRed.svg"
+                      src={CloseRed.src}
                       width={16}
                       height={16}
                       alt="Remove"
@@ -138,7 +148,7 @@ const ProviderSettings: NextPage = () => {
                   <div className={`${styles.listItem}`}>
                     <div className={styles.social}>
                       <div className={styles.icon}>
-                        <Image src="../" width={60} height={60} />
+                        <Image src={KnownServicesIcons[keyToString(permissionsEntry.key)].src} width={60} height={60} />
                       </div>
                       <div className={styles.info}>
                         <span className={styles.title}>
