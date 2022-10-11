@@ -10,19 +10,21 @@ import MainIconGreen from "../../assets/images/icon/nav/green/main.svg";
 import PersonIconGreen from "../../assets/images/icon/nav/green/person.svg";
 import PersonInfoIconGreen from "../../assets/images/icon/nav/green/personInfo.svg";
 import RightArrowIconGreen from "../../assets/images/icon/nav/green/rightArrow.svg";
+import { useRouter } from "next/router";
 
 interface NavProps {
   activeNav?: "person" | "info";
 }
 
 const Nav = ({ activeNav = "person" }: NavProps) => {
+  const router = useRouter();
   return (
     <div className={styles.nav}>
       <ul>
         <li>
           <Image src={MainIcon.src} width={36} height={36} alt="On chain ID" />
         </li>
-        <li>
+        <li onClick={() => router.push("/")}>
           {activeNav === "person" ? (
             <Image
               src={PersonIconGreen.src}
@@ -53,7 +55,7 @@ const Nav = ({ activeNav = "person" }: NavProps) => {
             </>
           )}
         </li>
-        <li>
+        <li onClick={() => router.push("/manager/create-link")}>
           {activeNav === "info" ? (
             <Image
               src={PersonInfoIconGreen.src}
