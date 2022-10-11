@@ -24,6 +24,9 @@
     @apply bg-[#fff];
     @apply border-[#0075FF];
     @apply text-[#0075FF];
+
+    @apply hover:bg-[#0075FF];
+    @apply hover:text-[#fff];
   }
 
   &.borderGreyBgWhiteTextGrey {
@@ -60,4 +63,6 @@
   &.borderRedBgRedTextWhite {
     @apply disabled:opacity-50;
   }
+
+  @apply transition-all hover:scale-[103%];
 }

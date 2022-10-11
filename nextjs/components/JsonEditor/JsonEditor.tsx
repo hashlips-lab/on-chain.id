@@ -22,6 +22,8 @@ const JsonEditor = (props: { jsonPermissionSetCallback: Dispatch<SetStateAction<
     'providerAddress': address,
     'requiredPermissions': [
       'Facebook',
+      'Discord',
+      'GitLab',
     ],
   };
   const [ jsonValue, setJsonValue ] = useState<string>(JSON.stringify(defaultValue, null, '\t'));

@@ -24,19 +24,14 @@ const Debugger: NextPage = () => {
       <Nav />
       <RightSideContentBox>
         <TopNavBar
-          firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent="DEBUGGER"
-          firstBtnOnClick={
-            () => console.log('Click!') /* TODO: implement this */
-          }
           mainTitle="Provider Dashboard"
-          secondBtnClass="borderBlueBgBlueTextWhite"
-          secondBtnContent="CREATE"
-          secondBtnOnClick={
-            () => router.push('/manager/create-link') /* TODO: implement this */
-          }
           subTitle={address ?? ''}
-          firstBtnDisabled
+          firstBtnClass="borderBlueBgWhiteTextBlue"
+          firstBtnContent="CREATE LINK"
+          firstBtnOnClick={() => router.push('/manager/create-link')}
+          secondBtnClass="borderBlueBgBlueTextWhite"
+          secondBtnContent="DEBUGGER"
+          secondBtnDisabled
         />
         <div className={styles.midContent}>
           <div className={styles.title}>Test Permissions</div>

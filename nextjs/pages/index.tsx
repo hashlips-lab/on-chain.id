@@ -180,7 +180,7 @@ const Dashboard: NextPage = () => {
           firstBtnOnClick={() => {
             console.log('Empty');
           }}
-          mainTitle="My Social Identities"
+          mainTitle="My On-Chain ID"
           secondBtnClass="borderBlueBgWhiteTextBlue"
           secondBtnContent="PROVIDERS"
           secondBtnOnClick={() => router.push('/providers')}
@@ -188,7 +188,7 @@ const Dashboard: NextPage = () => {
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
-            <div className={styles.title}>Configure your Social Links</div>
+            <div className={styles.title}>Configure your private data</div>
 
             <div className={styles.topBtnWrapper}>
               <div className={styles.buttonUpdate}>
