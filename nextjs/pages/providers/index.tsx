@@ -43,25 +43,6 @@ const Providers: NextPage = () => {
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
             <div className={styles.title}>New Permission Request Link</div>
-            {/* <div className={styles.button}>
-              <Button
-                type="borderRedBgRedTextWhite"
-                onClick={() => console.log("Click!") }
-                size="md"
-              >
-                <div className={styles.btnContent}>
-                  <span>REMOVE ALL</span>
-                  <div>
-                    <Image
-                      src={CloseIcon.src}
-                      width={16}
-                      height={16}
-                      alt="Remove"
-                    />
-                  </div>
-                </div>
-              </Button>
-            </div> */}
           </div>
 
           <ul>
