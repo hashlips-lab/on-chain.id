@@ -11,6 +11,7 @@ import { UseContractProvider as ContractConfigProvider } from '../lib/ContractCo
 import { OnChainIdProvider } from '../lib/OnChainIdContext';
 import { sapphireChainTestnet, sapphireWrapConnector, sapphireWrapProvider } from '../lib/SapphireWagmi';
 import RouteGuard from '../components/RouteGuard/RouteGuard';
+import Head from 'next/head';
 
 const { chains, provider } = configureChains(
   [ chain.hardhat, sapphireChainTestnet ],
@@ -29,17 +30,23 @@ const wagmiClient = createClient({
 });
 
 function OnChainId({ Component, pageProps }: AppProps) {
-  return <WagmiConfig client={wagmiClient}>
-    <RainbowKitProvider chains={chains}>
-      <RouteGuard>
-        <ContractConfigProvider>
-          <OnChainIdProvider>
-            <Component {...pageProps} />
-          </OnChainIdProvider>
-        </ContractConfigProvider>
-      </RouteGuard>
-    </RainbowKitProvider>
-  </WagmiConfig>;
+  return <>
+    <Head>
+      <title>On-Chain.ID - Your own identity, on-chain!</title>
+    </Head>
+
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains}>
+        <RouteGuard>
+          <ContractConfigProvider>
+            <OnChainIdProvider>
+              <Component {...pageProps} />
+            </OnChainIdProvider>
+          </ContractConfigProvider>
+        </RouteGuard>
+      </RainbowKitProvider>
+    </WagmiConfig>
+  </>;
 }
 
 export default OnChainId;

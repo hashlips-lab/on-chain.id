@@ -28,18 +28,18 @@ const Providers: NextPage = () => {
       <Nav />
       <RightSideContentBox>
         <TopNavBar
+          mainTitle="My Providers"
+          subTitle={address ?? ''}
           firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent="MY LINKS"
+          firstBtnContent="MY DATA"
           firstBtnOnClick={() => router.push('/')}
-          mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="PROVIDERS"
-          secondBtnOnClick={() => router.push('/providers')}
-          subTitle={address ?? ''}
+          secondBtnDisabled
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
-            <div className={styles.title}>New Permission Request Link</div>
+            <div className={styles.title}>Manage access permissions</div>
           </div>
 
           <div className="flex justify-center mb-4">

@@ -85,10 +85,11 @@ const ProviderSettings: NextPage = () => {
         {ethers.utils.isAddress(providerAddress ?? '') ?
           <>
             <TopNavBar
+              mainTitle="Provider permissions"
+              subTitle=""
               firstBtnClass="borderBlueBgWhiteTextBlue"
-              firstBtnContent="MY LINKS"
+              firstBtnContent="MY DATA"
               firstBtnOnClick={() => router.push('/')}
-              mainTitle="Provider Dashboard"
               secondBtnClass="borderBlueBgBlueTextWhite"
               secondBtnContent={
                 <div className={styles.btnContent}>
@@ -98,11 +99,10 @@ const ProviderSettings: NextPage = () => {
                     height={24}
                     alt="Back"
                   />
-                  <span>BACK</span>
+                  <span>PROVIDERS</span>
                 </div>
               }
-              secondBtnOnClick={() => router.back()}
-              subTitle=""
+              secondBtnOnClick={() => router.push('/providers')}
             />
             <div className={styles.midContent}>
               <div className={styles.subBtnTitleWrapper}>

@@ -24,8 +24,8 @@ const Debugger: NextPage = () => {
       <Nav />
       <RightSideContentBox>
         <TopNavBar
-          mainTitle="Provider Dashboard"
-          subTitle={address ?? ''}
+          mainTitle="Verify data access"
+          subTitle="Input an ETH address and a data key to verify you have access to it."
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="CREATE LINK"
           firstBtnOnClick={() => router.push('/manager/create-link')}
@@ -39,7 +39,7 @@ const Debugger: NextPage = () => {
           <div className={styles.inputWrapper}>
             <div>
               <Input
-                placeholder="User Address"
+                placeholder="Fetch user data:"
                 onChange={(e) =>
                   setGetUserDataAddressInputValue(e.target.value)
                 }

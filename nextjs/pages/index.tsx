@@ -147,20 +147,18 @@ const Dashboard: NextPage = () => {
       <Nav />
       <RightSideContentBox>
         <TopNavBar
-          firstBtnClass="borderBlueBgBlueTextWhite"
-          firstBtnContent="MY LINKS"
-          firstBtnOnClick={() => {
-            console.log('Empty');
-          }}
           mainTitle="My On-Chain ID"
+          subTitle={String(address)}
+          firstBtnClass="borderBlueBgBlueTextWhite"
+          firstBtnContent="MY DATA"
+          firstBtnDisabled
           secondBtnClass="borderBlueBgWhiteTextBlue"
           secondBtnContent="PROVIDERS"
           secondBtnOnClick={() => router.push('/providers')}
-          subTitle={String(address)}
         />
         <div className={styles.midContent}>
           <div className={styles.subBtnTitleWrapper}>
-            <div className={styles.title}>Configure your private data</div>
+            <div className={styles.title}>Manage your private data</div>
 
             <div className={styles.topBtnWrapper}>
               <div className={styles.buttonUpdate}>
