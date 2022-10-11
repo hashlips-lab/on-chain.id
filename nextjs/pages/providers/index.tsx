@@ -3,7 +3,7 @@ import Button from '../../components/Button/Button';
 import Nav from '../../components/nav/Nav';
 import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
-import styles from '../../styles/UserDashboardProviders.module.scss';
+import styles from '../../styles/providers/Providers.module.scss';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';

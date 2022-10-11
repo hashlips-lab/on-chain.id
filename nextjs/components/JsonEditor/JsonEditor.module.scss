@@ -1,4 +1,6 @@
 .jsonEditorContainer {
+  @apply text-lg;
+
   & .codeEditor {
     font-family: monospace;
     @apply bg-[#3E3A44];

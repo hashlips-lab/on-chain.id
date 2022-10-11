@@ -1,3 +1,5 @@
+// TODO: This is a temporary implementation, please remove when/if not needed
+
 import type { NextPage } from 'next';
 import ModalWrapper from '../components/Modal/ModalWrapper/ModalWrapper';
 import UnsavedModal from '../components/Modal/UnsavedModal/UnsavedModal';

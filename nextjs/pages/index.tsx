@@ -4,7 +4,7 @@ import Button from '../components/Button/Button';
 import Nav from '../components/nav/Nav';
 import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
 import TopNavBar from '../components/TopNavBar/TopNavBar';
-import styles from '../styles/userDashboardProvidersIdentities.module.scss';
+import styles from '../styles/Dashboard.module.scss';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';

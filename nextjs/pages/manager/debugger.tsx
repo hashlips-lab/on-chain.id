@@ -8,7 +8,7 @@ import RightSideContentBox from '../../components/RightSideContentBox/RightSideC
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
 import { AccessDenied, useOnChainIdContext } from '../../lib/OnChainIdContext';
 import { keyToBytes } from '../../lib/types/PrivateDataKey';
-import styles from '../../styles/manager/debugger.module.scss';
+import styles from '../../styles/manager/Debugger.module.scss';
 
 const Debugger: NextPage = () => {
   const { address } = useAccount();
