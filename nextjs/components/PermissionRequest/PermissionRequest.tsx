@@ -62,6 +62,7 @@ const PermissionRequest = ({ providerAddress, requiredPermissions, isPreview }: 
           type="borderRedBgWhiteTextRed"
           size="lg"
           onClick={() => router.push('/')}
+          disabled={isPreview || isWritePermissionsLoading}
         >DENY</Button>
         <Button
           type="borderBlueBgBlueTextWhite"

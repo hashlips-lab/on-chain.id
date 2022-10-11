@@ -1,5 +1,7 @@
 .jsonEditorContainer {
-  & .codeEditor {
+  @apply text-lg;
+
+  .codeEditor {
     font-family: monospace;
     @apply bg-[#3E3A44];
     @apply p-[0.75rem];
@@ -8,10 +10,29 @@
     @apply mb-[0.75rem];
   }
 
-  & ul {
-    & li {
-      @apply m-6;
+  .errors {
+    @apply text-red-500 text-sm;
+
+    h3 {
+      @apply text-lg font-bold;
+    }
+  
+    ul {
+      @apply pl-8;
       @apply list-disc;
+
+      li {
+        @apply pb-2;
+
+        div {
+          @apply flex flex-col;
+
+          small::before {
+            content: 'Found in: ';
+            @apply font-bold;
+          }
+        }
+      }
     }
   }
 }

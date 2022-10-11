@@ -1,14 +1,16 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
+import { useAccount } from 'wagmi';
 import Nav from '../../components/nav/Nav';
 import PermissionRequest from '../../components/PermissionRequest/PermissionRequest';
 import PermissionRequestLinkAndCode from '../../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode';
 import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
 import PermissionsRequestData from '../../lib/types/PermissionsRequestData';
-import styles from '../../styles/UserDashboardLinks.module.scss';
+import styles from '../../styles/manager/CreateApprovalLink.module.scss';
 
 const CreateApprovalLink: NextPage = () => {
+  const { address } = useAccount();
   const [ jsonValidationValue, setJsonValidationValue ] = useState<PermissionsRequestData>();
 
   return (
@@ -23,7 +25,7 @@ const CreateApprovalLink: NextPage = () => {
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="CREATE"
           secondBtnOnClick={() => console.log('Click!')/* TODO: implement this */}
-          subTitle="0xde3B22caAaD25e65C839c2A3d852d665669EdD5c"
+          subTitle={address ?? ''}
         />
         <div className={styles.midContent}>
           <div className={styles.leftSide}>
@@ -37,7 +39,7 @@ const CreateApprovalLink: NextPage = () => {
             <div className={styles.title}>Preview</div>
             {jsonValidationValue ?
               <div className={styles.rightSideContentWrapper}>
-                <PermissionRequest {...jsonValidationValue} />
+                <PermissionRequest {...jsonValidationValue} isPreview={true} />
               </div>
               :
               <strong>Please correct the errors in the code before you can see the preview!</strong>

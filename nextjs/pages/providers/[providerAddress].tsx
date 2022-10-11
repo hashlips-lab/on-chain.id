@@ -4,15 +4,14 @@ import Button from '../../components/Button/Button';
 import Nav from '../../components/nav/Nav';
 import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
-import styles from '../../styles/userDashboardProvidersSocialLinks.module.scss';
-import { useAccount } from 'wagmi';
+import styles from '../../styles/provider/ProviderSettings.module.scss';
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import { keyToString } from '../../lib/types/PrivateDataKey';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';
 
-const ProvidersSocialLinks: NextPage = () => {
+const ProviderSettings: NextPage = () => {
   const router = useRouter();
   const { providerAddress } = router.query;
 
@@ -24,7 +23,6 @@ const ProvidersSocialLinks: NextPage = () => {
     isWritePermissionsLoading,
     noExpirationValue,
     disableProvider,
-    isDisableProviderLoading,
   } = useOnChainIdContext();
 
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
@@ -179,4 +177,4 @@ const ProvidersSocialLinks: NextPage = () => {
   );
 };
 
-export default ProvidersSocialLinks;
+export default ProviderSettings;
