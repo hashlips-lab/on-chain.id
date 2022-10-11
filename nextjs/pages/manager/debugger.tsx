@@ -25,7 +25,7 @@ const Debugger: NextPage = () => {
       <RightSideContentBox>
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
-          firstBtnContent="TEST"
+          firstBtnContent="DEBUGGER"
           firstBtnOnClick={
             () => console.log("Click!") /* TODO: implement this */
           }
