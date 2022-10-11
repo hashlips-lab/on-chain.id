@@ -1,19 +1,19 @@
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useAccount } from "wagmi";
-import Nav from "../../components/nav/Nav";
-import PermissionRequest from "../../components/PermissionRequest/PermissionRequest";
-import PermissionRequestLinkAndCode from "../../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode";
-import RightSideContentBox from "../../components/RightSideContentBox/RightSideContentBox";
-import TopNavBar from "../../components/TopNavBar/TopNavBar";
-import PermissionsRequestData from "../../lib/types/PermissionsRequestData";
-import styles from "../../styles/manager/CreateApprovalLink.module.scss";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
+import Nav from '../../components/nav/Nav';
+import PermissionRequest from '../../components/PermissionRequest/PermissionRequest';
+import PermissionRequestLinkAndCode from '../../components/PermissionRequestLinkAndCode/PermissionRequestLinkAndCode';
+import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../../components/TopNavBar/TopNavBar';
+import PermissionsRequestData from '../../lib/types/PermissionsRequestData';
+import styles from '../../styles/manager/CreateApprovalLink.module.scss';
 
 const CreateApprovalLink: NextPage = () => {
   const router = useRouter();
   const { address } = useAccount();
-  const [jsonValidationValue, setJsonValidationValue] =
+  const [ jsonValidationValue, setJsonValidationValue ] =
     useState<PermissionsRequestData>();
 
   return (
@@ -23,14 +23,14 @@ const CreateApprovalLink: NextPage = () => {
         <TopNavBar
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="DEBUGGER"
-          firstBtnOnClick={() => router.push("/manager/debugger")}
+          firstBtnOnClick={() => router.push('/manager/debugger')}
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="CREATE"
           secondBtnOnClick={
-            () => console.log("Click!") /* TODO: implement this */
+            () => console.log('Click!') /* TODO: implement this */
           }
-          subTitle={address ?? ""}
+          subTitle={address ?? ''}
           secondBtnDisabled
         />
         <div className={styles.midContent}>

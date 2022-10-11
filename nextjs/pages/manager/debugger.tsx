@@ -1,23 +1,23 @@
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useAccount } from "wagmi";
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
-import Nav from "../../components/nav/Nav";
-import RightSideContentBox from "../../components/RightSideContentBox/RightSideContentBox";
-import TopNavBar from "../../components/TopNavBar/TopNavBar";
-import { AccessDenied, useOnChainIdContext } from "../../lib/OnChainIdContext";
-import { keyToBytes } from "../../lib/types/PrivateDataKey";
-import styles from "../../styles/manager/Debugger.module.scss";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
+import Button from '../../components/Button/Button';
+import Input from '../../components/Input/Input';
+import Nav from '../../components/nav/Nav';
+import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../../components/TopNavBar/TopNavBar';
+import { AccessDenied, useOnChainIdContext } from '../../lib/OnChainIdContext';
+import { keyToBytes } from '../../lib/types/PrivateDataKey';
+import styles from '../../styles/manager/Debugger.module.scss';
 
 const Debugger: NextPage = () => {
   const router = useRouter();
   const { address } = useAccount();
   const { userData, refreshUserData, getUserDataError } = useOnChainIdContext();
-  const [getUserDataAddressInputValue, setGetUserDataAddressInputValue] =
-    useState("");
-  const [getUserDataKeyInputValue, setGetUserDataKeyInputValue] = useState("");
+  const [ getUserDataAddressInputValue, setGetUserDataAddressInputValue ] =
+    useState('');
+  const [ getUserDataKeyInputValue, setGetUserDataKeyInputValue ] = useState('');
 
   return (
     <div className={styles.userDashboardLinks}>
@@ -27,15 +27,15 @@ const Debugger: NextPage = () => {
           firstBtnClass="borderBlueBgWhiteTextBlue"
           firstBtnContent="DEBUGGER"
           firstBtnOnClick={
-            () => console.log("Click!") /* TODO: implement this */
+            () => console.log('Click!') /* TODO: implement this */
           }
           mainTitle="Provider Dashboard"
           secondBtnClass="borderBlueBgBlueTextWhite"
           secondBtnContent="CREATE"
           secondBtnOnClick={
-            () => router.push("/manager/create-link") /* TODO: implement this */
+            () => router.push('/manager/create-link') /* TODO: implement this */
           }
-          subTitle={address ?? ""}
+          subTitle={address ?? ''}
           firstBtnDisabled
         />
         <div className={styles.midContent}>
@@ -85,9 +85,9 @@ const Debugger: NextPage = () => {
             <div className={styles.error}>
               {getUserDataError.name === AccessDenied
                 ? `Access denied or expired: ${String(
-                    getUserDataError.expiration
-                  )}`
-                : "Access denied to this information"}
+                  getUserDataError.expiration
+                )}`
+                : 'Access denied to this information'}
             </div>
           ) : (
             <div className={styles.subList}>

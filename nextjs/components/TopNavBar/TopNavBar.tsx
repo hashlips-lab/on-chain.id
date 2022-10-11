@@ -1,14 +1,14 @@
-import Button, { ButtonProps } from "../Button/Button";
-import styles from "./TopNavBar.module.scss";
+import Button, { ButtonProps } from '../Button/Button';
+import styles from './TopNavBar.module.scss';
 
 interface TopNavBar {
   mainTitle: string;
   subTitle: string;
-  firstBtnClass: ButtonProps["type"];
+  firstBtnClass: ButtonProps['type'];
   firstBtnContent: any;
   firstBtnDisabled?: boolean;
   firstBtnOnClick: () => void;
-  secondBtnClass: ButtonProps["type"];
+  secondBtnClass: ButtonProps['type'];
   secondBtnContent: any;
   secondBtnOnClick: () => void;
   secondBtnDisabled?: boolean;
