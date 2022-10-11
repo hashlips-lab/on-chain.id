@@ -9,29 +9,26 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { UseContractProvider as ContractConfigProvider } from '../lib/ContractConfigContext';
 import { OnChainIdProvider } from '../lib/OnChainIdContext';
-import { sapphireChain,/* sapphireConnectorWrapper,*/ sapphireWrapProvider } from '../lib/SapphireWagmi';
+import { sapphireChainTestnet, sapphireWrapConnector, sapphireWrapProvider } from '../lib/SapphireWagmi';
 import RouteGuard from '../components/RouteGuard/RouteGuard';
 
 const { chains, provider } = configureChains(
-  [ chain.hardhat, sapphireChain ],
+  [ chain.hardhat, sapphireChainTestnet ],
   [ sapphireWrapProvider(publicProvider()) ],
 );
 
-const { connectors } = getDefaultWallets({
+const { connectors, wallets } = getDefaultWallets({
   appName: 'On-chain ID',
   chains,
 });
 
 const wagmiClient = createClient({
   autoConnect: true,
-  // TODO: not working...
-  // eslint-disable-next-line
-  //connectors: () => connectors().map(connector => sapphireConnectorWrapper(connector)),
-  connectors,
+  connectors: () => connectors().map(connector => sapphireWrapConnector(connector)),
   provider,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+function OnChainId({ Component, pageProps }: AppProps) {
   return <WagmiConfig client={wagmiClient}>
     <RainbowKitProvider chains={chains}>
       <RouteGuard>
@@ -45,4 +42,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   </WagmiConfig>;
 }
 
-export default MyApp;
+export default OnChainId;
