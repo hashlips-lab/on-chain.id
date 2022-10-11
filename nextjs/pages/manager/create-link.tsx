@@ -21,7 +21,7 @@ const CreateApprovalLink: NextPage = () => {
       <Nav />
       <RightSideContentBox>
         <TopNavBar
-          mainTitle="Provider Dashboard"
+          mainTitle="Create approval link"
           subTitle={address ?? ''}
           firstBtnClass="borderBlueBgBlueTextWhite"
           firstBtnContent="CREATE LINK"
