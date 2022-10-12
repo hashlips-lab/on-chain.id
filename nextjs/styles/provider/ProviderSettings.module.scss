@@ -63,6 +63,10 @@
             .icon {
               @apply flex justify-center items-center;
               @apply mr-[1.5rem];
+
+              .iconStyle {
+                @apply w-[60px];
+              }
             }
 
             .info {

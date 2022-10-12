@@ -9,7 +9,7 @@
     @apply flex flex-col;
 
     .btnContent {
-      @apply flex justify-between content-center;
+      @apply flex justify-evenly items-center;
     }
 
     .subBtnTitleWrapper {
@@ -38,13 +38,15 @@
         .listItem {
           @apply flex justify-between content-center flex-col;
           @apply mb-[1.5rem];
+          @apply p-4;
+          @apply border-2 border-slate-300 rounded;
 
           @screen sm {
             @apply flex-row
           }
 
           .keyText {
-            @apply font-urbanist font-medium text-[1.5rem] leading-[1.8125rem];
+            @apply font-urbanist font-medium text-[1.5rem];
             @apply break-all;
             @apply mb-[1.25rem];
             @apply mr-[1.25rem];

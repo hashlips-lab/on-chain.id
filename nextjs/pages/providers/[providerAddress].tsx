@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { keyToString } from '../../lib/types/PrivateDataKey';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';
-import KnownServicesIcons from '../../lib/KnownServicesIcons';
+import ServiceIcon from '../../components/ServicesIcons/ServiceIcon';
 import BackArrow from '../../assets/images/icon/backArrow.svg';
 import CloseRed from '../../assets/images/icon/closeRed.svg';
 import { ethers } from 'ethers';
@@ -152,7 +152,7 @@ const ProviderSettings: NextPage = () => {
                       <div className={`${styles.listItem}`}>
                         <div className={styles.social}>
                           <div className={styles.icon}>
-                            <Image src={KnownServicesIcons[keyToString(permissionsEntry.key)].src} width={60} height={60} />
+                            <ServiceIcon serviceKey={keyToString(permissionsEntry.key)} className={styles.iconStyle} />
                           </div>
                           <div className={styles.info}>
                             <span className={styles.title}>

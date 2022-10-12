@@ -68,14 +68,12 @@ const Providers: NextPage = () => {
                         >
                           <div className={styles.btnContent}>
                             <span>REMOVE</span>
-                            <div>
-                              <Image
-                                src={CloseRedIcon.src}
-                                width={16}
-                                height={16}
-                                alt="Remove"
-                              />
-                            </div>
+                            <Image
+                              src={CloseRedIcon.src}
+                              width={16}
+                              height={16}
+                              alt="Remove"
+                            />
                           </div>
                         </Button>
                       </div>

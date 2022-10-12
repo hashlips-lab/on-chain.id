@@ -13,6 +13,7 @@ import {
   PrivateDataEntry,
 } from '../lib/OnChainIdContext';
 import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
+import ServiceIcon from '../components/ServicesIcons/ServiceIcon';
 import { Bytes } from 'ethers';
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 import UpArrow from '../assets/images/icon/upArrow.svg';
@@ -273,6 +274,7 @@ const Dashboard: NextPage = () => {
                 key={`private-data-${index}`}
                 className="flex flex-row mb-8 p-2 border-2 border-slate-300 rounded gap-4"
               >
+                <ServiceIcon serviceKey={keyToString(data.key)} className={styles.privateDataIcon} />
                 <div className="flex flex-col flex-1 gap-2">
                   <code className="px-2 text-md">{keyToString(data.key)}</code>
 
