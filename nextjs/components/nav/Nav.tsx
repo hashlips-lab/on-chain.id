@@ -4,20 +4,31 @@ import styles from './Nav.module.scss';
 import MainIcon from '../../assets/images/icon/nav/white/main.svg';
 import PersonIcon from '../../assets/images/icon/nav/white/person.svg';
 import PersonInfoIcon from '../../assets/images/icon/nav/white/personInfo.svg';
-import RightArrowIcon from '../../assets/images/icon/nav/white/rightArrow.svg';
 
-import MainIconGreen from '../../assets/images/icon/nav/green/main.svg';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import PersonIconGreen from '../../assets/images/icon/nav/green/person.svg';
 import PersonInfoIconGreen from '../../assets/images/icon/nav/green/personInfo.svg';
-import RightArrowIconGreen from '../../assets/images/icon/nav/green/rightArrow.svg';
-import { useRouter } from 'next/router';
 
 interface NavProps {
   activeNav?: 'person' | 'info';
 }
 
 const Nav = ({ activeNav = 'person' }: NavProps) => {
+  const [ activeNavigation, setActiveNavigation ] = useState(activeNav);
+
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.asPath === '/') {
+      setActiveNavigation('person');
+    } else if (
+      router.asPath === '/manager/create-link' ||
+      router.asPath === '/manager/debugger'
+    ) {
+      setActiveNavigation('info');
+    }
+  }, []);
 
   return (
     <div className={styles.nav}>
@@ -26,7 +37,7 @@ const Nav = ({ activeNav = 'person' }: NavProps) => {
           <Image src={MainIcon.src} width={36} height={36} alt="On chain ID" />
         </li>
         <li onClick={() => router.push('/')}>
-          {activeNav === 'person' ? (
+          {activeNavigation === 'person' ? (
             <Image
               src={PersonIconGreen.src}
               width={36}
@@ -57,7 +68,7 @@ const Nav = ({ activeNav = 'person' }: NavProps) => {
           )}
         </li>
         <li onClick={() => router.push('/manager/create-link')}>
-          {activeNav === 'info' ? (
+          {activeNavigation === 'info' ? (
             <Image
               src={PersonInfoIconGreen.src}
               width={36}

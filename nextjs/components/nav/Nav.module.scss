@@ -1,10 +1,13 @@
 .nav {
   @apply flex;
   @apply bg-[#0075FF];
-  @apply px-[1.5rem] py-[2.25rem];
+  @apply p-[1.125rem];
 
   @screen xl {
+    @apply px-[1.5rem] py-[2.25rem];
     @apply min-h-screen;
+    @apply fixed;
+    @apply max-w-[5.5rem];
   }
 
   ul {
@@ -13,6 +16,8 @@
 
     @screen xl {
       @apply flex-col;
+      @apply max-h-screen;
+
     }
 
     li {
