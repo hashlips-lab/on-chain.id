@@ -161,9 +161,9 @@ const ProviderSettings: NextPage = () => {
                             <span className={styles.description}>
                               Access&nbsp;
                               {editablePermissions[index] ? (
-                                <span className="text-green-700">granted</span>
+                                <strong className="text-green-700">granted</strong>
                               ) : (
-                                <span className="text-red-700">denied</span>
+                                <strong className="text-red-700">denied</strong>
                               )}
                             </span>
                           </div>
@@ -171,7 +171,7 @@ const ProviderSettings: NextPage = () => {
 
                         <div className={styles.btnWrapper}>
                           <Button
-                            type="borderWhiteBgWhiteTextBlue"
+                            type="borderBlueBgWhiteTextBlue"
                             onClick={() => togglePermissions(index)}
                             size="sm"
                           >

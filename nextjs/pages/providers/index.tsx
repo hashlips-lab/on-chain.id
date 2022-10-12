@@ -42,7 +42,7 @@ const Providers: NextPage = () => {
             <div className={styles.title}>Manage access permissions</div>
           </div>
 
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-8">
             <Button
               loading={areAllowedProvidersRefreshing}
               disabled={areAllowedProvidersRefreshing}
