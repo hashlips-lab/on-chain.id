@@ -1,17 +1,17 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import Button from '../../components/Button/Button';
-import Nav from '../../components/nav/Nav';
-import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
-import TopNavBar from '../../components/TopNavBar/TopNavBar';
-import styles from '../../styles/provider/ProviderSettings.module.scss';
+import Button from '../components/Button/Button';
+import Nav from '../components/nav/Nav';
+import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../components/TopNavBar/TopNavBar';
+import styles from '../styles/provider/ProviderSettings.module.scss';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { keyToString } from '../../lib/types/PrivateDataKey';
-import { useOnChainIdContext } from '../../lib/OnChainIdContext';
-import ServiceIcon from '../../components/ServicesIcons/ServiceIcon';
-import BackArrow from '../../assets/images/icon/backArrow.svg';
-import CloseRed from '../../assets/images/icon/closeRed.svg';
+import { keyToString } from '../lib/types/PrivateDataKey';
+import { useOnChainIdContext } from '../lib/OnChainIdContext';
+import ServiceIcon from '../components/ServicesIcons/ServiceIcon';
+import BackArrow from '../assets/images/icon/backArrow.svg';
+import CloseRed from '../assets/images/icon/closeRed.svg';
 import { ethers } from 'ethers';
 
 const ProviderSettings: NextPage = () => {

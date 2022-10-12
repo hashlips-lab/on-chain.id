@@ -1,16 +1,15 @@
 import type { NextPage } from 'next';
-import Button from '../../components/Button/Button';
-import Nav from '../../components/nav/Nav';
-import RightSideContentBox from '../../components/RightSideContentBox/RightSideContentBox';
-import TopNavBar from '../../components/TopNavBar/TopNavBar';
-import styles from '../../styles/providers/Providers.module.scss';
+import Button from '../components/Button/Button';
+import Nav from '../components/nav/Nav';
+import RightSideContentBox from '../components/RightSideContentBox/RightSideContentBox';
+import TopNavBar from '../components/TopNavBar/TopNavBar';
+import styles from '../styles/providers/Providers.module.scss';
 import Image from 'next/image';
-import { useEffect } from 'react';
-import { useOnChainIdContext } from '../../lib/OnChainIdContext';
+import { useOnChainIdContext } from '../lib/OnChainIdContext';
 import router from 'next/router';
 import { useAccount } from 'wagmi';
 
-import CloseRedIcon from '../../assets/images/icon/closeRed.svg';
+import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 
 const Providers: NextPage = () => {
   const {
@@ -82,7 +81,7 @@ const Providers: NextPage = () => {
                           loading={false}
                           disabled={false}
                           type="borderBlueBgWhiteTextBlue"
-                          onClick={() => router.push(`/providers/${provider}`)}
+                          onClick={() => router.push({ pathname: '/provider', query: { providerAddress: provider } })}
                           size="sm"
                         >
                           VIEW
