@@ -23,7 +23,7 @@
 
       .title {
         @apply flex;
-        @apply font-poppins font-semibold text-[24px] leading-[36px];
+        @apply font-poppins font-semibold text-[1.5rem] leading-[2.25rem];
         @apply mb-[0.75rem];
         @apply break-all;
       }
@@ -32,7 +32,7 @@
         @apply flex flex-col;
 
         @screen sm {
-          @apply ml-[20px];
+          @apply ml-[1.25rem];
         }
 
         @screen lg {
@@ -48,7 +48,7 @@
 
         .buttonNew,
         .buttonUpdate {
-          @apply mb-[20px];
+          @apply mb-[1.25rem];
 
           @screen sm {
             @apply mb-0;
@@ -57,19 +57,19 @@
 
         .buttonNew {
           @screen sm {
-            @apply min-w-[300px];
+            @apply min-w-[18.75rem];
           }
         }
 
         .buttonUpdate {
           @screen sm {
-            @apply min-w-[141px];
+            @apply min-w-[8.8125rem];
           }
         }
 
         .buttonUpdateAll {
           @screen sm {
-            @apply min-w-[167px];
+            @apply min-w-[10.4375rem];
           }
         }
       }
@@ -95,7 +95,7 @@
                 @apply w-full;
 
                 @screen sm {
-                  @apply max-w-[96px];
+                  @apply max-w-[6rem];
                 }
               }
             }
