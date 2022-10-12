@@ -40,7 +40,7 @@ const PermissionRequestLinkAndCode = ({
           <Link href={{
             pathname: '/approve',
             query: {
-              providerAddress: jsonValidationValue.providerAddress,
+              addr: jsonValidationValue.providerAddress,
               p: jsonValidationValue.requiredPermissions,
             },
           }}>

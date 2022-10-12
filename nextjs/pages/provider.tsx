@@ -16,7 +16,7 @@ import { ethers } from 'ethers';
 
 const ProviderSettings: NextPage = () => {
   const router = useRouter();
-  const { providerAddress } = router.query as { providerAddress?: string };
+  const { addr:providerAddress } = router.query as { addr?: string };
 
   const {
     onChainPermissions,

@@ -81,7 +81,7 @@ const Providers: NextPage = () => {
                           loading={false}
                           disabled={false}
                           type="borderBlueBgWhiteTextBlue"
-                          onClick={() => router.push({ pathname: '/provider', query: { providerAddress: provider } })}
+                          onClick={() => router.push({ pathname: '/provider', query: { addr: provider } })}
                           size="sm"
                         >
                           VIEW
