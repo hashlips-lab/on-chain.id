@@ -215,6 +215,7 @@ const Dashboard: NextPage = () => {
               >
                 <div className="flex flex-col flex-1 gap-2">
                   <div className="flex flex-row flex-1 gap-2 items-center">
+                    <ServiceIcon serviceKey={keyToString(newPrivateData[index].key)} className={styles.privateDataIcon} />
                     <div className="flex flex-col gap-1 flex-1">
                       <code className="text-sm">Key</code>
                       <input

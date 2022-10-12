@@ -15,14 +15,14 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (
-      !Array.isArray(query.providerAddress) &&
-      typeof query.providerAddress === 'string' &&
-      ethers.utils.isAddress(query.providerAddress ?? '') &&
+      !Array.isArray(query.addr) &&
+      typeof query.addr === 'string' &&
+      ethers.utils.isAddress(query.addr ?? '') &&
       query.p &&
       query.p.length > 0
     ) {
       setData({
-        providerAddress: query.providerAddress,
+        providerAddress: query.addr,
         requiredPermissions: Array.isArray(query.p) ? query.p : [ query.p ],
         isPreview: false,
       });

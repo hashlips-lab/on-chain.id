@@ -16,7 +16,7 @@ const PermissionRequest = ({ providerAddress, requiredPermissions, isPreview }: 
 
   useEffect(() => {
     if (writePermissionsResult) {
-      router.push(`/providers/${providerAddress}`);
+      router.push({ pathname: '/provider', query: { addr: providerAddress } });
     }
   }, [ writePermissionsResult ]);
 
