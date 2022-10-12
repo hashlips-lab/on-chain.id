@@ -14,7 +14,7 @@ import RouteGuard from '../components/RouteGuard/RouteGuard';
 import Head from 'next/head';
 
 const { chains, provider } = configureChains(
-  [ chain.hardhat, sapphireChainTestnet ],
+  [ sapphireChainTestnet, chain.hardhat ],
   [ sapphireWrapProvider(publicProvider()) ],
 );
 
