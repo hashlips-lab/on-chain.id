@@ -1,0 +1,9 @@
+.serviceIcon {
+  @apply flex inset-0 justify-center items-center;
+  @apply w-full h-full aspect-square;
+  @apply bg-[#0075FF];
+  @apply text-white;
+  @apply font-bold;
+  @apply text-lg;
+  @apply rounded-md;
+}

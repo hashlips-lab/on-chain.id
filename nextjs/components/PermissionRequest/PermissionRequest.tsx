@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import PermissionsRequestData from '../../lib/types/PermissionsRequestData';
 
 import CheckBoxChecked from '../../assets/images/icon/check.svg';
-import KnownServicesIcons from '../../lib/KnownServicesIcons';
+import ServiceIcon from '../ServicesIcons/ServiceIcon';
 import { useOnChainIdContext } from '../../lib/OnChainIdContext';
 import { keyToBytes } from '../../lib/types/PrivateDataKey';
 import { useEffect } from 'react';
@@ -36,7 +36,7 @@ const PermissionRequest = ({ providerAddress, requiredPermissions, isPreview }: 
             <li key={index}>
               <div className={styles.socialList}>
                 <div className={styles.socialIcon}>
-                  <Image src={KnownServicesIcons[key].src} width={48} height={48} alt={`Icon for ${key}`} />
+                  <ServiceIcon serviceKey={key} className={styles.iconStyle}/>
                 </div>
 
                 <div className={styles.socialBox}>

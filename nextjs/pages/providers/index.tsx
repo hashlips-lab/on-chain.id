@@ -42,7 +42,7 @@ const Providers: NextPage = () => {
             <div className={styles.title}>Manage access permissions</div>
           </div>
 
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-8">
             <Button
               loading={areAllowedProvidersRefreshing}
               disabled={areAllowedProvidersRefreshing}
@@ -68,14 +68,12 @@ const Providers: NextPage = () => {
                         >
                           <div className={styles.btnContent}>
                             <span>REMOVE</span>
-                            <div>
-                              <Image
-                                src={CloseRedIcon.src}
-                                width={16}
-                                height={16}
-                                alt="Remove"
-                              />
-                            </div>
+                            <Image
+                              src={CloseRedIcon.src}
+                              width={16}
+                              height={16}
+                              alt="Remove"
+                            />
                           </div>
                         </Button>
                       </div>

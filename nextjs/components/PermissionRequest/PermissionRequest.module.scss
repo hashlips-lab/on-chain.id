@@ -46,6 +46,10 @@
         .socialIcon {
           @apply flex items-center;
           @apply mr-[1.5rem];
+
+          .iconStyle {
+            @apply w-[48px];
+          }
         }
 
         .socialBox {

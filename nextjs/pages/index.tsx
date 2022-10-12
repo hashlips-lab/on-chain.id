@@ -13,6 +13,7 @@ import {
   PrivateDataEntry,
 } from '../lib/OnChainIdContext';
 import { keyToBytes, keyToString } from '../lib/types/PrivateDataKey';
+import ServiceIcon from '../components/ServicesIcons/ServiceIcon';
 import { Bytes } from 'ethers';
 import CloseRedIcon from '../assets/images/icon/closeRed.svg';
 import UpArrow from '../assets/images/icon/upArrow.svg';
@@ -81,12 +82,8 @@ const Dashboard: NextPage = () => {
   };
 
   // Write private data (general)
-  const [ onChainPrivateDataKeysSet, setOnChainPrivateDataKeysSet ] = useState<
-    Set<string>
-  >(new Set<string>());
-  const [ newPrivateDataKeysSet, setNePrivateDataKeysSet ] = useState<
-    Set<string>
-  >(new Set<string>());
+  const [ onChainPrivateDataKeysSet, setOnChainPrivateDataKeysSet ] = useState<Set<string>>(new Set<string>());
+  const [ newPrivateDataKeysSet, setNePrivateDataKeysSet ] = useState<Set<string>>(new Set<string>());
 
   useEffect(() => {
     setOnChainPrivateDataKeysSet(
@@ -214,14 +211,14 @@ const Dashboard: NextPage = () => {
             {newPrivateData.map((data, index) => (
               <li
                 key={`private-data-${index}`}
-                className="flex flex-row mb-4 p-2 border border-black rounded gap-4"
+                className="flex flex-row mb-8 p-2 border-2 border-slate-300 rounded gap-4"
               >
                 <div className="flex flex-col flex-1 gap-2">
                   <div className="flex flex-row flex-1 gap-2 items-center">
                     <div className="flex flex-col gap-1 flex-1">
                       <code className="text-sm">Key</code>
                       <input
-                        className="px-2 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300 h-10 font-semibold"
+                        className="px-2 rounded bg-slate-100 border-2 border-slate-300 invalid:bg-red-300 h-10 font-semibold"
                         type="text"
                         onChange={(e) =>
                           updateNewPrivateDataKey(
@@ -236,7 +233,7 @@ const Dashboard: NextPage = () => {
                     <div className="flex flex-col gap-1 flex-1">
                       <code className="text-sm">Value</code>
                       <input
-                        className="px-2 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300 h-10 font-semibold"
+                        className="px-2 rounded bg-slate-100 border-2 border-slate-300 invalid:bg-red-300 h-10 font-semibold"
                         type="text"
                         onChange={(e) =>
                           updateNewPrivateData(index, e.target.value)
@@ -275,13 +272,14 @@ const Dashboard: NextPage = () => {
             {onChainPrivateData.map((data, index) => (
               <li
                 key={`private-data-${index}`}
-                className="flex flex-row mb-4 p-2 border border-black rounded gap-4"
+                className="flex flex-row mb-8 p-2 border-2 border-slate-300 rounded gap-4"
               >
+                <ServiceIcon serviceKey={keyToString(data.key)} className={styles.privateDataIcon} />
                 <div className="flex flex-col flex-1 gap-2">
                   <code className="px-2 text-md">{keyToString(data.key)}</code>
 
                   <input
-                    className="px-2 rounded bg-slate-100 border border-slate-500 invalid:bg-red-300 h-10 font-semibold"
+                    className="px-2 rounded bg-slate-100 border-2 border-slate-300 invalid:bg-red-300 h-10 font-semibold"
                     type="text"
                     onChange={(e) =>
                       updateEditablePrivateData(index, e.target.value)
