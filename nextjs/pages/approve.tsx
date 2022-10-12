@@ -3,10 +3,10 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import ModalWrapper from '../../components/Modal/ModalWrapper/ModalWrapper';
-import NewProviderRequestModal from '../../components/Modal/NewProviderRequestModal/NewProviderRequestModal';
-import PermissionsRequestData from '../../lib/types/PermissionsRequestData';
-import styles from '../../styles/Home.module.scss';
+import ModalWrapper from '../components/Modal/ModalWrapper/ModalWrapper';
+import NewProviderRequestModal from '../components/Modal/NewProviderRequestModal/NewProviderRequestModal';
+import PermissionsRequestData from '../lib/types/PermissionsRequestData';
+import styles from '../styles/Home.module.scss';
 
 const Home: NextPage = () => {
   const router = useRouter();

@@ -38,8 +38,11 @@ const PermissionRequestLinkAndCode = ({
       {jsonValidationValue &&
         <div className={styles.link}>
           <Link href={{
-            pathname: `/approve/${jsonValidationValue.providerAddress}`,
-            query: { p: jsonValidationValue.requiredPermissions },
+            pathname: '/approve',
+            query: {
+              providerAddress: jsonValidationValue.providerAddress,
+              p: jsonValidationValue.requiredPermissions,
+            },
           }}>
             <a ref={linkElement} target="_blank" rel="noreferrer">{permissionsRequestLink}</a>
           </Link>
