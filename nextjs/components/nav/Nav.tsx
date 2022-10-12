@@ -1,32 +1,32 @@
-import Image from "next/image";
-import styles from "./Nav.module.scss";
+import Image from 'next/image';
+import styles from './Nav.module.scss';
 
-import MainIcon from "../../assets/images/icon/nav/white/main.svg";
-import PersonIcon from "../../assets/images/icon/nav/white/person.svg";
-import PersonInfoIcon from "../../assets/images/icon/nav/white/personInfo.svg";
+import MainIcon from '../../assets/images/icon/nav/white/main.svg';
+import PersonIcon from '../../assets/images/icon/nav/white/person.svg';
+import PersonInfoIcon from '../../assets/images/icon/nav/white/personInfo.svg';
 
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import PersonIconGreen from "../../assets/images/icon/nav/green/person.svg";
-import PersonInfoIconGreen from "../../assets/images/icon/nav/green/personInfo.svg";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import PersonIconGreen from '../../assets/images/icon/nav/green/person.svg';
+import PersonInfoIconGreen from '../../assets/images/icon/nav/green/personInfo.svg';
 
 interface NavProps {
-  activeNav?: "person" | "info";
+  activeNav?: 'person' | 'info';
 }
 
-const Nav = ({ activeNav = "person" }: NavProps) => {
-  const [activeNavigation, setActiveNavigation] = useState(activeNav);
+const Nav = ({ activeNav = 'person' }: NavProps) => {
+  const [ activeNavigation, setActiveNavigation ] = useState(activeNav);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (router.asPath === "/") {
-      setActiveNavigation("person");
+    if (router.asPath === '/') {
+      setActiveNavigation('person');
     } else if (
-      router.asPath === "/manager/create-link" ||
-      router.asPath === "/manager/debugger"
+      router.asPath === '/manager/create-link' ||
+      router.asPath === '/manager/debugger'
     ) {
-      setActiveNavigation("info");
+      setActiveNavigation('info');
     }
   }, []);
 
@@ -36,8 +36,8 @@ const Nav = ({ activeNav = "person" }: NavProps) => {
         <li>
           <Image src={MainIcon.src} width={36} height={36} alt="On chain ID" />
         </li>
-        <li onClick={() => router.push("/")}>
-          {activeNavigation === "person" ? (
+        <li onClick={() => router.push('/')}>
+          {activeNavigation === 'person' ? (
             <Image
               src={PersonIconGreen.src}
               width={36}
@@ -67,8 +67,8 @@ const Nav = ({ activeNav = "person" }: NavProps) => {
             </>
           )}
         </li>
-        <li onClick={() => router.push("/manager/create-link")}>
-          {activeNavigation === "info" ? (
+        <li onClick={() => router.push('/manager/create-link')}>
+          {activeNavigation === 'info' ? (
             <Image
               src={PersonInfoIconGreen.src}
               width={36}
