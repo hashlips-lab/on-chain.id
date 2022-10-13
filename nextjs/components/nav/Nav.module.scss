@@ -21,7 +21,7 @@
     }
 
     li {
-      @apply cursor-pointer;
+      @apply first:cursor-auto cursor-pointer;
 
       .active {
         @apply hidden #{!important};
