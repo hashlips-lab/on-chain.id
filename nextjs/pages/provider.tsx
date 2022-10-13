@@ -16,25 +16,29 @@ import { ethers } from 'ethers';
 
 const ProviderSettings: NextPage = () => {
   const router = useRouter();
-  const { addr:providerAddress } = router.query as { addr?: string };
+  const { addr: providerAddress } = router.query as { addr?: string };
 
   const {
+    noExpirationValue,
+
     onChainPermissions,
     onChainPermissionsProvider,
     refreshOnChainPermissions,
     areOnChainPermissionsRefreshing,
+
     writePermissions,
     isWritePermissionsLoading,
-    noExpirationValue,
+
     disableProvider,
     disableProviderResult,
+    isDisableProviderLoading,
   } = useOnChainIdContext();
 
   const [ editablePermissions, setEditablePermissions ] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (disableProviderResult) {
-      router.back();
+      router.push('/providers');
     }
   }, [ disableProviderResult ]);
 
@@ -112,6 +116,7 @@ const ProviderSettings: NextPage = () => {
                     type="borderRedBgWhiteTextRed"
                     onClick={() => disableProvider(String(providerAddress))}
                     size="sm"
+                    disabled={areOnChainPermissionsRefreshing || isWritePermissionsLoading || isDisableProviderLoading}
                   >
                     <div className={styles.btnContent}>
                       <span>REMOVE PROVIDER</span>
@@ -126,7 +131,12 @@ const ProviderSettings: NextPage = () => {
                   <br />
                   <br />
                   <Button
-                    disabled={isWritePermissionsLoading || !permissionsChanged()}
+                    disabled={
+                      areOnChainPermissionsRefreshing ||
+                      isWritePermissionsLoading ||
+                      isDisableProviderLoading ||
+                      !permissionsChanged()
+                    }
                     type="borderBlueBgBlueTextWhite"
                     onClick={handleWritePermissionsClick}
                     size="sm"
@@ -139,13 +149,17 @@ const ProviderSettings: NextPage = () => {
               <div className="flex justify-center mb-4">
                 <Button
                   loading={areOnChainPermissionsRefreshing}
-                  disabled={areOnChainPermissionsRefreshing}
+                  disabled={areOnChainPermissionsRefreshing || isWritePermissionsLoading || isDisableProviderLoading}
                   type="borderBlueBgBlueTextWhite"
                   onClick={() => refreshOnChainPermissions(String(providerAddress))}
                   size="sm"
                 >Refresh provider permissions</Button>
               </div>
-              <ul>
+              <ul className={(
+                areOnChainPermissionsRefreshing ||
+                isWritePermissionsLoading ||
+                isDisableProviderLoading
+              ) ? 'animate-pulse' : ''}>
                 {onChainPermissions.map((permissionsEntry, index) => {
                   return (
                     <li key={index}>
@@ -174,6 +188,11 @@ const ProviderSettings: NextPage = () => {
                             type="borderBlueBgWhiteTextBlue"
                             onClick={() => togglePermissions(index)}
                             size="sm"
+                            disabled={
+                              areOnChainPermissionsRefreshing ||
+                              isWritePermissionsLoading ||
+                              isDisableProviderLoading
+                            }
                           >
                             <div className={styles.btnContent}>
                               <span>TOGGLE</span>

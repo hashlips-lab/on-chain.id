@@ -16,6 +16,7 @@ const Providers: NextPage = () => {
     allowedProviders,
     refreshAllowedProviders,
     areAllowedProvidersRefreshing,
+
     disableProvider,
     isDisableProviderLoading,
   } = useOnChainIdContext();
@@ -44,13 +45,13 @@ const Providers: NextPage = () => {
           <div className="flex justify-center mb-8">
             <Button
               loading={areAllowedProvidersRefreshing}
-              disabled={areAllowedProvidersRefreshing}
+              disabled={areAllowedProvidersRefreshing || isDisableProviderLoading}
               type="borderBlueBgBlueTextWhite"
               onClick={() => refreshAllowedProviders()}
               size="sm"
             >Refresh providers</Button>
           </div>
-          <ul>
+          <ul className={(areAllowedProvidersRefreshing || isDisableProviderLoading) ? 'animate-pulse' : ''}>
             {allowedProviders.map((provider, index) => {
               return (
                 <li key={index}>
@@ -60,7 +61,7 @@ const Providers: NextPage = () => {
                       <div className={styles.firstBtn}>
                         <Button
                           loading={isDisableProviderLoading}
-                          disabled={isDisableProviderLoading}
+                          disabled={areAllowedProvidersRefreshing || isDisableProviderLoading}
                           type="borderRedBgWhiteTextRed"
                           onClick={() => disableProvider(provider)}
                           size="sm"
@@ -78,8 +79,6 @@ const Providers: NextPage = () => {
                       </div>
                       <div className={styles.secondBtn}>
                         <Button
-                          loading={false}
-                          disabled={false}
                           type="borderBlueBgWhiteTextBlue"
                           onClick={() => router.push({ pathname: '/provider', query: { addr: provider } })}
                           size="sm"
