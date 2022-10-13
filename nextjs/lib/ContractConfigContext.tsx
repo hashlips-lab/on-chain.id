@@ -2,6 +2,7 @@ import { ContractInterface } from  'ethers';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from  'react';
 import { useAccount, useContract, useNetwork, useSigner } from 'wagmi';
 import onChainId from '../../hardhat/artifacts/contracts/OnChainId.sol/OnChainId.json';
+import { OnChainId as OnChainIdContract } from '../../hardhat/typechain-types';
 import * as sapphire from '@oasisprotocol/sapphire-paratime';
 
 const CONTRACT_ADDRESSES = new Map<number, string>([
@@ -17,7 +18,7 @@ interface Props {
 type ContractConfigBuilder = (contractConfiguration: any) => any;
 
 interface UseContractInterface {
-  onChainIdContract: any,
+  onChainIdContract: OnChainIdContract,
   onChainIdContractConfigBuilder: ContractConfigBuilder;
 }
 

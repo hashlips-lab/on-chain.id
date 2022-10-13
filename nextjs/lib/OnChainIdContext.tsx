@@ -144,7 +144,7 @@ export function OnChainIdProvider({ children }: Props) {
   // getData
   const [ getDataArgs, setGetDataArgs ] = useState<{ userAddress: string, key: Bytes }>();
   const [ debouncedGetDataArgs ] = useDebounce(getDataArgs, 500);
-  const [ getData, setGetData ] = useState<PrivateDataEntry[]>();
+  const [ getData, setGetData ] = useState<string>();
   const [ getDataError, setGetDataError ] = useState<any>(null);
 
   const getDataRefetch = async () => {
@@ -352,10 +352,13 @@ export function OnChainIdProvider({ children }: Props) {
   }));
   const {
     write: writePrivateDataWrite,
-    isLoading: writePrivateDataIsLoading,
+    isLoading: writePrivateDataIsLoadingA,
     data: writePrivateDataTx,
   } = useContractWrite(writePrivateDataConfig);
-  const { data: writePrivateDataResult } = useWaitForTransaction({ hash: writePrivateDataTx?.hash });
+  const {
+    data: writePrivateDataResult,
+    isLoading: writePrivateDataIsLoadingB,
+  } = useWaitForTransaction({ hash: writePrivateDataTx?.hash });
 
   const writePrivateData = (newData?: PrivateDataEntry[]) => {
     if (!newData) {
@@ -370,7 +373,7 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   useEffect(() => {
-    if (!writePrivateDataIsLoading && writePrivateDataArgs && writePrivateDataWrite) {
+    if (!writePrivateDataIsLoadingA && !writePrivateDataIsLoadingB && writePrivateDataArgs && writePrivateDataWrite) {
       writePrivateDataWrite();
     }
   }, [ writePrivateDataArgs, writePrivateDataWrite ]);
@@ -379,7 +382,18 @@ export function OnChainIdProvider({ children }: Props) {
     if (writePrivateDataResult) {
       setWritePrivateDataArgs(undefined);
 
-      refreshPrivateData(getPrivateDataProgress?.entriesPerPage);
+      // Update UI without refetching...
+      if (getPrivateDataProgress && writePrivateDataArgs) {
+        const updatedDataMap = new Map(writePrivateDataArgs.data.map(entry => [ keyToString(entry.key), entry ]));
+        const oldDataMap = new Map(getPrivateDataProgress.currentData.map(entry => [ keyToString(entry.key), entry ]));
+
+        setGetPrivateDataProgress({
+          ...getPrivateDataProgress,
+          currentData: writePrivateDataArgs.data.filter(entry => !oldDataMap.has(keyToString(entry.key))).concat(
+            getPrivateDataProgress.currentData.map(entry => updatedDataMap.get(keyToString(entry.key)) ?? entry),
+          ),
+        });
+      }
     }
   }, [ writePrivateDataResult ]);
 
@@ -390,15 +404,15 @@ export function OnChainIdProvider({ children }: Props) {
     args: [ writeDeleteDataArgs && ethers.utils.hexlify(writeDeleteDataArgs?.key) ],
     enabled: Boolean(writeDeleteDataArgs?.key),
   }));
-  const { write: deleteDataWrite, isLoading: deleteDataIsLoading, data: deleteDataTx } = useContractWrite(deleteDataConfig);
-  const { data: deleteDataResult } = useWaitForTransaction({ hash: deleteDataTx?.hash });
+  const { write: deleteDataWrite, isLoading: deleteDataIsLoadingA, data: deleteDataTx } = useContractWrite(deleteDataConfig);
+  const { data: deleteDataResult, isLoading: deleteDataIsLoadingB } = useWaitForTransaction({ hash: deleteDataTx?.hash });
 
   const deleteData = (key: Bytes) => {
     setWriteDeleteDataArgs({ key });
   };
 
   useEffect(() => {
-    if (!deleteDataIsLoading && writeDeleteDataArgs && deleteDataWrite) {
+    if (!deleteDataIsLoadingA && !deleteDataIsLoadingB && writeDeleteDataArgs && deleteDataWrite) {
       deleteDataWrite();
     }
   }, [ writeDeleteDataArgs, deleteDataWrite ]);
@@ -406,7 +420,16 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     if (deleteDataResult) {
       setWriteDeleteDataArgs(undefined);
-      refreshPrivateData(getPrivateDataProgress?.entriesPerPage);
+
+      // Update UI without refetching...
+      if (getPrivateDataProgress && writeDeleteDataArgs) {
+        setGetPrivateDataProgress({
+          ...getPrivateDataProgress,
+          currentData: getPrivateDataProgress.currentData.filter(
+            entry => keyToString(entry.key) !== keyToString(writeDeleteDataArgs.key),
+          ),
+        });
+      }
     }
   }, [ deleteDataResult ]);
 
@@ -454,10 +477,13 @@ export function OnChainIdProvider({ children }: Props) {
   }));
   const {
     write: writePermissionsWrite,
-    isLoading: writePermissionsIsLoading,
+    isLoading: writePermissionsIsLoadingA,
     data: writePermissionsTx,
   } = useContractWrite(writePermissionsConfig);
-  const { data: writePermissionsResult } = useWaitForTransaction({ hash: writePermissionsTx?.hash });
+  const {
+    data: writePermissionsResult,
+    isLoading: writePermissionsIsLoadingB,
+  } = useWaitForTransaction({ hash: writePermissionsTx?.hash });
 
   const writePermissions = (newWritePermissionsArgs?: WritePermissionsArgs) => {
     if (!newWritePermissionsArgs) {
@@ -483,18 +509,46 @@ export function OnChainIdProvider({ children }: Props) {
   };
 
   useEffect(() => {
-    if (!writePermissionsIsLoading && writePermissionsArgs && writePermissionsWrite) {
+    if (!writePermissionsIsLoadingA && !writePermissionsIsLoadingB && writePermissionsArgs && writePermissionsWrite) {
       writePermissionsWrite();
     }
   }, [ writePermissionsArgs, writePermissionsWrite ]);
 
   useEffect(() => {
     if (writePermissionsResult) {
-      const updatedProviderAddress = writePermissionsArgs?.providerAddress;
       setWritePermissionsArgs(undefined);
 
-      if (updatedProviderAddress) {
-        refreshPermissions(updatedProviderAddress, getPermissionsProgress?.entriesPerPage);
+      // Update UI without refetching...
+      if (getPermissionsProgress && writePermissionsArgs) {
+        const updatedPermissionsKeysSet = new Set(writePermissionsArgs.updatedPermissions.map(
+          entry => keyToString(entry.key),
+        ));
+
+        setGetPermissionsProgress({
+          ...getPermissionsProgress,
+          currentData: writePermissionsArgs.updatedPermissions.concat(
+            getPermissionsProgress.currentData.filter(entry => !updatedPermissionsKeysSet.has(keyToString(entry.key))),
+          ),
+        });
+      }
+
+      // Update UI without refetching...
+      if (getPermissionsProgress && writePermissionsArgs) {
+        const updatedPermissionsMap = new Map(
+          writePermissionsArgs.updatedPermissions.map(entry => [ keyToString(entry.key), entry ]),
+        );
+        const oldPermissionsMap = new Map(
+          getPermissionsProgress.currentData.map(entry => [ keyToString(entry.key), entry ]),
+        );
+
+        setGetPermissionsProgress({
+          ...getPermissionsProgress,
+          currentData:
+            writePermissionsArgs.updatedPermissions.filter(entry => !oldPermissionsMap.has(keyToString(entry.key)))
+              .concat(
+                getPermissionsProgress.currentData.map(entry => updatedPermissionsMap.get(keyToString(entry.key)) ?? entry),
+              ),
+        });
       }
     }
   }, [ writePermissionsResult ]);
@@ -508,17 +562,20 @@ export function OnChainIdProvider({ children }: Props) {
   }));
   const {
     write: disableProviderWrite,
-    isLoading: disableProviderIsLoading,
+    isLoading: disableProviderIsLoadingA,
     data: disableProviderTx,
   } = useContractWrite(disableProviderConfig);
-  const { data: disableProviderResult } = useWaitForTransaction({ hash: disableProviderTx?.hash });
+  const {
+    data: disableProviderResult,
+    isLoading: disableProviderIsLoadingB,
+  } = useWaitForTransaction({ hash: disableProviderTx?.hash });
 
   const disableProvider = (providerAddress: string) => {
     setDisableProviderArgs({ providerAddress });
   };
 
   useEffect(() => {
-    if (!disableProviderIsLoading && disableProviderArgs && disableProviderWrite) {
+    if (!disableProviderIsLoadingA && !disableProviderIsLoadingB && disableProviderArgs && disableProviderWrite) {
       disableProviderWrite();
     }
   }, [ disableProviderArgs, disableProviderWrite ]);
@@ -526,7 +583,16 @@ export function OnChainIdProvider({ children }: Props) {
   useEffect(() => {
     if (disableProviderResult) {
       setDisableProviderArgs(undefined);
-      refreshAllowedProviders(getAllowedProvidersProgress?.providersPerPage);
+
+      // Update UI without refetching...
+      if (getAllowedProvidersProgress && disableProviderArgs) {
+        setGetAllowedProvidersProgress({
+          ...getAllowedProvidersProgress,
+          currentData: getAllowedProvidersProgress.currentData.filter(
+            entry => entry !== disableProviderArgs.providerAddress,
+          ),
+        });
+      }
     }
   }, [ disableProviderResult ]);
 
@@ -558,19 +624,19 @@ export function OnChainIdProvider({ children }: Props) {
 
     writePrivateData,
     writePrivateDataResult,
-    isWritePrivateDataLoading: writePrivateDataIsLoading,
+    isWritePrivateDataLoading: writePrivateDataIsLoadingA || writePrivateDataIsLoadingB,
 
     deleteUserData: deleteData,
     deleteDataResult,
-    isDeleteUserDataLoading: deleteDataIsLoading,
+    isDeleteUserDataLoading: deleteDataIsLoadingA || deleteDataIsLoadingB,
 
     writePermissions,
     writePermissionsResult,
-    isWritePermissionsLoading: writePermissionsIsLoading,
+    isWritePermissionsLoading: writePermissionsIsLoadingA || writePermissionsIsLoadingB,
 
     disableProvider,
     disableProviderResult,
-    isDisableProviderLoading: disableProviderIsLoading,
+    isDisableProviderLoading: disableProviderIsLoadingA || disableProviderIsLoadingB,
   };
 
   return (

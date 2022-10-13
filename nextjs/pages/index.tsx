@@ -163,6 +163,7 @@ const Dashboard: NextPage = () => {
                   type="borderWhiteBgWhiteTextBlue"
                   onClick={() => addNewPrivateData()}
                   size="sm"
+                  disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
                 >
                   <div className={styles.btnContent}>
                     <span> ➕ ADD NEW</span>
@@ -172,7 +173,7 @@ const Dashboard: NextPage = () => {
 
               <div className={styles.buttonUpdateAll}>
                 <Button
-                  disabled={isWritePrivateDataLoading || !privateDataChanged()}
+                  disabled={isWritePrivateDataLoading || isDeleteUserDataLoading || !privateDataChanged()}
                   type="borderBlueBgBlueTextWhite"
                   onClick={handleWritePrivateDataClick}
                   size="sm"
@@ -196,13 +197,13 @@ const Dashboard: NextPage = () => {
           <div className="flex justify-center">
             <Button
               loading={isOnChainPrivateDataRefreshing}
-              disabled={isOnChainPrivateDataRefreshing}
+              disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
               type="borderBlueBgBlueTextWhite"
               onClick={() => refreshOnChainPrivateData()}
               size="sm"
             >Refresh on-chain private data</Button>
           </div>
-          <ul className="my-4">
+          <ul className={`my-4 ${(isWritePrivateDataLoading || isDeleteUserDataLoading) && 'animate-pulse'}`}>
             {newPrivateData.length !== newPrivateDataKeysSet.size && (
               <div className="text-red-500 mb-5">
                 New data contains duplicates!
@@ -228,6 +229,7 @@ const Dashboard: NextPage = () => {
                           )
                         }
                         value={keyToString(newPrivateData[index].key)}
+                        disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
                         required
                       />
                     </div>
@@ -240,6 +242,7 @@ const Dashboard: NextPage = () => {
                           updateNewPrivateData(index, e.target.value)
                         }
                         value={newPrivateData[index].data ?? ''}
+                        disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
                         required
                       />
                     </div>
@@ -255,6 +258,7 @@ const Dashboard: NextPage = () => {
                     type="borderRedBgWhiteTextRed"
                     onClick={() => removeNewPrivateData(index)}
                     size="sm"
+                    disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
                   >
                     <div className={styles.btnContent}>
                       <div>
@@ -286,13 +290,14 @@ const Dashboard: NextPage = () => {
                       updateEditablePrivateData(index, e.target.value)
                     }
                     value={editablePrivateData[index] ?? ''}
+                    disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
                     required
                   />
                 </div>
                 <div className="flex flex-shrink">
                   <Button
                     loading={isDeleteUserDataLoading}
-                    disabled={isDeleteUserDataLoading}
+                    disabled={isWritePrivateDataLoading || isDeleteUserDataLoading}
                     type="borderRedBgWhiteTextRed"
                     onClick={() => deleteUserData(data.key)}
                     size="sm"

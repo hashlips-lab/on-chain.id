@@ -8,7 +8,7 @@ import NewProviderRequestModal from '../components/Modal/NewProviderRequestModal
 import PermissionsRequestData from '../lib/types/PermissionsRequestData';
 import styles from '../styles/Home.module.scss';
 
-const Home: NextPage = () => {
+const ApprovalRequestPage: NextPage = () => {
   const router = useRouter();
   const query = router.query;
   const [ data, setData ] = useState<PermissionsRequestData>();
@@ -45,4 +45,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default ApprovalRequestPage;
